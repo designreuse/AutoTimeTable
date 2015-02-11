@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.optaplanner</groupId>
+        <artifactId>optaplanner</artifactId>
+        <version>6.2.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>optaplanner-webexamples</artifactId>
+    <packaging>war</packaging>
+
+    <name>OptaPlanner webexamples</name>
+    <description>
+        OptaPlanner solves planning problems.
+        This lightweight, embeddable planning engine implements powerful and scalable algorithms
+        to optimize business resource scheduling and planning.
+
+        This module contains the web examples which demonstrate how to use it in a war file.
+    </description>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.cargo</groupId>
+                <artifactId>cargo-maven2-plugin</artifactId>
+                <version>1.3.2</version>
+                <configuration>
+ 
+                    <!-- Container configuration -->
+                    <container>
+                        <containerId>tomcat7x</containerId>
+                        <type>remote</type>
+                    </container>
+ 
+                    <!-- Configuration to use with the container -->
+                    <configuration>
+                        <type>runtime</type>
+                        <properties>
+                            <cargo.hostname>178.62.73.224</cargo.hostname>
+                            <cargo.servlet.port>8080</cargo.servlet.port>
+                            <cargo.remote.username>kazablanka</cargo.remote.username>
+                            <cargo.remote.password>#dna.32.nS</cargo.remote.password>
+                        </properties>
+                    </configuration>
+ 
+                    <!-- Deployer configuration -->
+                    <deployer>
+                        <type>remote</type>
+                    </deployer>
+ 
+                    <!-- Deployables configuration -->
+                    <deployables>
+                        <deployable>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>${project.artifactId}</artifactId>
+                            <type>war</type>
+                            <properties>
+                                <context>/${project.artifactId}</context>
+                            </properties>
+                        </deployable>
+                    </deployables>
+ 
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <!-- Internal dependencies -->
+        <dependency>
+            <groupId>org.optaplanner</groupId>
+            <artifactId>optaplanner-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.optaplanner</groupId>
+            <artifactId>optaplanner-benchmark</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.optaplanner</groupId>
+            <artifactId>optaplanner-examples</artifactId>
+        </dependency>
+        <!-- External dependencies -->
+        <!-- Commons -->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+        <!-- Logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- Xstream -->
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.spec.javax.servlet</groupId>
+            <artifactId>jboss-servlet-api_3.0_spec</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.spec.javax.servlet.jsp</groupId>
+            <artifactId>jboss-jsp-api_2.2_spec</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+
+    </dependencies>
+
+</project>
