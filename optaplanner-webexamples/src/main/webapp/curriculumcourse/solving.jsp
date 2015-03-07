@@ -41,5 +41,4 @@
 <script src="../twitterbootstrap/js/jquery.js"></script>
 <script src="../twitterbootstrap/js/bootstrap.js"></script>
 </body>
-</body>
 </html>

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.optaplanner.webexamples.curriculumcourse;
+package org.optaplanner.curriculumcourse;
 
 import java.awt.Color;
 import java.io.BufferedReader;
@@ -30,6 +30,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.optaplanner.curriculumcourse.addinfo.AddInfo;
+import org.optaplanner.curriculumcourse.addinfo.AddInfoFromFile;
 import org.optaplanner.examples.curriculumcourse.domain.Course;
 import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
 import org.optaplanner.examples.curriculumcourse.domain.Day;
@@ -38,68 +40,42 @@ import org.optaplanner.examples.curriculumcourse.domain.Timeslot;
 import org.optaplanner.examples.curriculumcourse.domain.Lecture;
 
 /**
+ * Ders programı daha önce çözülmemişse çalışacak kısım. ctt dosyasının yanı
+ * sıra gerekli olan diğer bilgileri tc dosyasından çeker tc dosyasındakileri
+ * veri tabanına ekler.
  *
  * @author gurhan
  */
-@WebServlet("/CurriculumCourseLoadedServlet")
+@WebServlet("/curriculumcourse/CurriculumCourseLoadedServlet")
 public class CurriculumCourseLoadedServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        
+        req.setCharacterEncoding("utf-8");
+        resp.setCharacterEncoding("utf-8");
+        String contentName = req.getParameter("content");
+        String path = req.getServletContext().getRealPath("/");
         HttpSession session = req.getSession();
-        new CurriculumCourseWebAction().setup(session);
+        new CurriculumCourseWebAction().setup(session, contentName);
+        session.setAttribute("content", contentName);
         CourseSchedule solution = (CourseSchedule) session.getAttribute(CurriculumCourseSessionAttributeName.SHOWN_SOLUTION);
         solution.getLectureList().get(1).getLectureIndexInCourse();
+
         List<Course> courses = solution.getCourseList();
         List<Day> days = solution.getDayList();
         List<Room> rooms = solution.getRoomList();
         List<Timeslot> timeSlots = solution.getTimeslotList();
-        
-        HashMap<String, Color> colorOfCourses = createColors(courses);
-        HashMap<String, String> courseNames = new HashMap<String, String>();
-        HashMap<String, String> teacherNames = new HashMap<String, String>();
-        BufferedReader br ;
-        Lecture.ROOM_DEP = new HashMap<String, ArrayList<String>>();
-        try {
-            String line;
-            String active = "";
-            br = new BufferedReader(new FileReader(session.getServletContext().getRealPath("/") + File.separator + "import" + File.separator + "tc01.ctt"));
-            System.out.println("loadaeddaa:"+session.getServletContext().getRealPath("/"));
-            while ((line = br.readLine()) != null) {
-                if (line.equals("COURSE_NAMES:")) {
-                    active = "course";
-                    continue;
-                } else if (line.equals("TEACHER_NAMES:")) {
-                    active = "teacher";
-                    continue;
-                } else if (line.equals("ROOM_DEPS:")) {
-                    active = "room";
-                    continue;
-                }
-                if (active.equals("room")) {
-                    String[] s = line.split(" ");
-                    String course = s[0];
-                    ArrayList<String> courseRooms = new ArrayList<String>();
-                    for (int i = 1; i < s.length; i++) {
-                        courseRooms.add(s[i]);
-                    }
-                    
-                    Lecture.ROOM_DEP.put(course, courseRooms);
-                } else {
-                    String code = line.substring(0, line.indexOf(" "));
-                    String name = line.substring(line.indexOf(" ") + 1);
-                    if (active.equals("course")) {
-                        courseNames.put(code, name);
-                    } else if (active.equals("teacher")) {
-                        teacherNames.put(code, name);
-                    }
-                }
 
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        HashMap<String, Color> colorOfCourses = createColors(courses);
+
+        HashMap<String, String> courseNames;
+        HashMap<String, String> teacherNames;
+        Lecture.ROOM_DEP = new HashMap<String, ArrayList<String>>();
+
+        AddInfo addInfo = new AddInfoFromFile(contentName, path, solution);
+        addInfo.readyInfo();
+        teacherNames = addInfo.getTeacherNames();
+        courseNames = addInfo.getCourseNames();
 
         session.setAttribute("teacherNames", teacherNames);
         session.setAttribute("courseNames", courseNames);
@@ -107,7 +83,7 @@ public class CurriculumCourseLoadedServlet extends HttpServlet {
         session.setAttribute("timeSlots", timeSlots);
         session.setAttribute("days", days);
         session.setAttribute("rooms", rooms);
-        resp.sendRedirect("curriculumcourse/loaded.jsp");
+        resp.sendRedirect("loaded.jsp");
     }
 
     private HashMap<String, Color> createColors(List<Course> courses) {

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.optaplanner.webexamples.curriculumcourse;
+package org.optaplanner.curriculumcourse;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -38,14 +38,14 @@ public class CurriculumCourseWebAction {
 
     private static ExecutorService solvingExecutor = Executors.newFixedThreadPool(4);
 
-    public void setup(HttpSession session) throws FileNotFoundException, IOException {
+    public void setup(HttpSession session, String contentName) throws FileNotFoundException, IOException {
         terminateEarly(session);
         SolverFactory solverFactory = SolverFactory.createFromXmlResource("org/optaplanner/examples/curriculumcourse/solver/curriculumCourseSolverConfig.xml");
         Solver solver = solverFactory.buildSolver();
         session.setAttribute(CurriculumCourseSessionAttributeName.SOLVER, solver);
 
         CurriculumCourseImporter.CurriculumCourseInputBuilder course = new CurriculumCourseImporter.CurriculumCourseInputBuilder();
-        File file = new File(session.getServletContext().getRealPath("/") + File.separator + "import" + File.separator + "comp01.ctt");
+        File file = new File(session.getServletContext().getRealPath("/") + File.separator + "import" + File.separator + contentName +".ctt");
         course.setInputFile(file);
         course.setBufferedReader(new BufferedReader(new FileReader(file)));
         CourseSchedule solution = (CourseSchedule) course.readSolution();
@@ -55,10 +55,7 @@ public class CurriculumCourseWebAction {
     public void solve(final HttpSession session) {
         final Solver solver = (Solver) session.getAttribute(CurriculumCourseSessionAttributeName.SOLVER);
         final CourseSchedule unsolvedSolution = (CourseSchedule) session.getAttribute(CurriculumCourseSessionAttributeName.SHOWN_SOLUTION);
-        System.out.println("solve calisti");
-        if(solver.isSolving()){
-            System.out.println("helloss");
-        }
+      
         solver.addEventListener(new SolverEventListener<CourseSchedule>() {
 
             @Override

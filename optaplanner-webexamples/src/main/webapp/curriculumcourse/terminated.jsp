@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="org.optaplanner.webexamples.curriculumcourse.CurriculumCourseWebAction" %>
+<%@ page import="org.optaplanner.curriculumcourse.CurriculumCourseWebAction" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,7 +25,7 @@
       </header>
       <p>Problem sonlandırıldı.</p>
       <div>
-        <button class="btn" onclick="window.location.href='../CurriculumCourseLoadedServlet'"><i class="icon-fast-backward"></i> Tekrar Başlatın</button>
+        <button class="btn" onclick="window.location.href='CurriculumCourseLoadedServlet'"><i class="icon-fast-backward"></i> Tekrar Başlatın</button>
       </div>
       <jsp:include page="curriculumCoursePage.jsp"/>
     </div>

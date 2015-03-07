@@ -24,5 +24,8 @@ public class CurriculumCourseDao extends XStreamSolutionDao {
     public CurriculumCourseDao() {
         super("curriculumcourse", CourseSchedule.class);
     }
+    public CurriculumCourseDao(String path) {
+        super(path, CourseSchedule.class);
+    }
 
 }

@@ -1,6 +1,4 @@
-
-
-<%@page import="org.optaplanner.webexamples.curriculumcourse.CurriculumCourseWebAction"%>
+<%@page import="org.optaplanner.curriculumcourse.CurriculumCourseWebAction"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     new CurriculumCourseWebAction().solve(session);

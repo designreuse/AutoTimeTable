@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.optaplanner.webexamples.curriculumcourse;
+package org.optaplanner.curriculumcourse;
 
-import com.google.gson.Gson;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -32,13 +31,14 @@ import org.optaplanner.examples.curriculumcourse.domain.Lecture;
 import org.optaplanner.examples.curriculumcourse.domain.Period;
 import org.optaplanner.examples.curriculumcourse.domain.Room;
 import org.optaplanner.examples.curriculumcourse.domain.Timeslot;
+import org.optaplanner.examples.curriculumcourse.persistence.CurriculumCourseDao;
 import org.optaplanner.examples.curriculumcourse.persistence.CurriculumCourseExporter;
 
 /**
  *
  * @author gurhan
  */
-@WebServlet("/CurriculumCourseSaveServlet")
+@WebServlet("/curriculumcourse/CurriculumCourseSaveServlet")
 public class CurriculumCourseSaveServlet extends HttpServlet {
 
     private CourseSchedule solution;
@@ -56,6 +56,7 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("utf-8");
         HttpSession session = request.getSession();
         solution = (CourseSchedule) session.getAttribute(CurriculumCourseSessionAttributeName.SHOWN_SOLUTION);
 
@@ -63,13 +64,12 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
         if (changeList != null && changeList.length > 0) {
             saveChanges(changeList);
         }
-        CurriculumCourseExporter.CurriculumCourseOutputBuilder outputBuilder = new CurriculumCourseExporter.CurriculumCourseOutputBuilder();
-        outputBuilder.setSolution(solution);
-        System.out.println("saveda:" + session.getServletContext().getRealPath("/"));
-        BufferedWriter bw = new BufferedWriter(new FileWriter(session.getServletContext().getRealPath("/") + File.separator + "import" + File.separator + "tc01-sol.ctt"));
-        outputBuilder.setBufferedWriter(bw);
-        outputBuilder.writeSolution();
-        bw.close();
+        String content = (String) request.getSession().getAttribute("content");
+        String path = request.getServletContext().getRealPath("/")+"export";
+        File file = new File (path + File.separator + content + ".xml");
+        CurriculumCourseDao dao = new CurriculumCourseDao(path);
+        dao.writeSolution(solution, file);
+        response.sendRedirect("index.jsp");
 
     }
 

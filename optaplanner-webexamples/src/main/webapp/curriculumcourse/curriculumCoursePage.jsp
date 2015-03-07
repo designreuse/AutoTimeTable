@@ -3,8 +3,8 @@
 <%@page import="org.optaplanner.examples.curriculumcourse.domain.Room"%>
 <%@page import="org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore"%>
 <%@page import="org.optaplanner.examples.curriculumcourse.domain.CourseSchedule"%>
-<%@page import="org.optaplanner.webexamples.curriculumcourse.CurriculumCourseSessionAttributeName"%>
-<%@page import="org.optaplanner.webexamples.curriculumcourse.CurriculumCourseWebAction"%>
+<%@page import="org.optaplanner.curriculumcourse.CurriculumCourseSessionAttributeName"%>
+<%@page import="org.optaplanner.curriculumcourse.CurriculumCourseWebAction"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -17,7 +17,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <script src="../twitterbootstrap/js/jquery.js"></script>
-    <link href='../css/style.css' rel='styleSheet' type='text/css' />
+    <link href='../website/css/optaplannerWebexamples.css' rel='styleSheet' type='text/css' />
     <title>JSP Page</title>
 </head>
 
@@ -131,7 +131,7 @@
 
 
 <body>
-    <form action="../CurriculumCourseSaveServlet" method="post">
+    <form action="CurriculumCourseSaveServlet" method="post">
         <input type="hidden" id="changeList" name="changeList"/>
         <c:if test="${solver.solving == false}">
             <input type="submit" value="Dışarı Aktar" id="exportButton"/>

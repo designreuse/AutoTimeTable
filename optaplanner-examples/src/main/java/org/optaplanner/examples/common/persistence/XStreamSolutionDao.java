@@ -29,7 +29,7 @@ public abstract class XStreamSolutionDao extends AbstractSolutionDao {
         super(dirName);
         xStreamSolutionFileIO = new XStreamSolutionFileIO(xStreamAnnotations);
     }
-
+    
     public String getFileExtension() {
         return xStreamSolutionFileIO.getOutputFileExtension();
     }

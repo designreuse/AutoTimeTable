@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.optaplanner.webexamples.curriculumcourse;
+package org.optaplanner.curriculumcourse;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -21,21 +21,19 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author gurhan
  */
-@WebServlet("/CurriculumCourseTerminateEarlyServlet")
-public class CurriculumCourseTerminateEarlyServlet extends HttpServlet {
+@WebServlet("/curriculumcourse/CurriculumCourseSolveServlet")
+public class CurriculumCourseSolveServlet extends HttpServlet{
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-       HttpSession session = req.getSession();
-        new CurriculumCourseWebAction().terminateEarly(session);
-        resp.sendRedirect("curriculumcourse/terminated.jsp");
-
+        
+        new CurriculumCourseWebAction().solve(req.getSession());
+        resp.sendRedirect("solving.jsp");
     }
-
+    
 }
