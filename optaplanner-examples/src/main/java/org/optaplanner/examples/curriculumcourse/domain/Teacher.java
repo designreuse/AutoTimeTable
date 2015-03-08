@@ -23,7 +23,10 @@ import org.optaplanner.examples.common.domain.AbstractPersistable;
 public class Teacher extends AbstractPersistable {
 
     private String code;
-
+    
+    private String name;
+    private String surname;
+    
     public String getCode() {
         return code;
     }
@@ -36,9 +39,27 @@ public class Teacher extends AbstractPersistable {
         return code;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+    
+    
+
     @Override
     public String toString() {
-        return code;
+        return code + " : " + name + " " + surname;
     }
 
 }

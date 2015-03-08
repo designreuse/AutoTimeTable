@@ -91,10 +91,13 @@ public class CurriculumCourseImporter extends AbstractTxtSolutionImporter {
                     schedule, courseMap, curriculumListSize);
             readUnavailablePeriodPenaltyList(
                     schedule, courseMap, periodMap, unavailablePeriodPenaltyListSize);
+            readTeacherName(schedule);
             readEmptyLine();
             readConstantLine("END\\.");
             createLectureList(schedule);
-
+            for (Teacher t : schedule.getTeacherList()) {
+                System.out.println(t);
+            }
             int possibleForOneLectureSize = schedule.getPeriodList().size() * schedule.getRoomList().size();
             BigInteger possibleSolutionSize = BigInteger.valueOf(possibleForOneLectureSize).pow(
                     schedule.getLectureList().size());
@@ -112,7 +115,28 @@ public class CurriculumCourseImporter extends AbstractTxtSolutionImporter {
             return schedule;
         }
         
-
+        private  void readTeacherName(CourseSchedule schedule) throws IOException{
+            readEmptyLine();
+            readConstantLine("TEACHER_NAMES:");
+            List<Teacher>  teachers = schedule.getTeacherList();
+            for(int i = 0; i < teachers.size(); i++) {
+                String line = bufferedReader.readLine();
+                String [] lineTokens = splitBySpacesOrTabs(line);
+                String code = lineTokens[0];
+                for(Teacher teacher : teachers) {
+                    if (teacher.getCode().equals(code)) {
+                        if(lineTokens.length == 3) {
+                            teacher.setName(lineTokens[1]);
+                            teacher.setSurname(lineTokens[2]);
+                        } else {
+                            teacher.setName(lineTokens[1] + " " + lineTokens[2]);
+                            teacher.setSurname(lineTokens[3]);
+                        }
+                        break;
+                    }
+                }
+            }   
+        }
         private Map<String, Course> readCourseListAndTeacherList(
                 CourseSchedule schedule, int courseListSize) throws IOException {
             Map<String, Course> courseMap = new HashMap<String, Course>(courseListSize);
