@@ -92,12 +92,11 @@ public class CurriculumCourseImporter extends AbstractTxtSolutionImporter {
             readUnavailablePeriodPenaltyList(
                     schedule, courseMap, periodMap, unavailablePeriodPenaltyListSize);
             readTeacherName(schedule);
+            readCourseName(schedule, courseMap);
             readEmptyLine();
             readConstantLine("END\\.");
             createLectureList(schedule);
-            for (Teacher t : schedule.getTeacherList()) {
-                System.out.println(t);
-            }
+      
             int possibleForOneLectureSize = schedule.getPeriodList().size() * schedule.getRoomList().size();
             BigInteger possibleSolutionSize = BigInteger.valueOf(possibleForOneLectureSize).pow(
                     schedule.getLectureList().size());
@@ -136,6 +135,24 @@ public class CurriculumCourseImporter extends AbstractTxtSolutionImporter {
                     }
                 }
             }   
+        }
+        
+        private void readCourseName(CourseSchedule schedule, 
+                Map<String, Course> courseMap) throws IOException {
+            readEmptyLine();
+            readConstantLine("COURSE_NAMES:");
+            for(int i = 0; i < schedule.getCourseList().size(); i++) {
+                String line = bufferedReader.readLine();
+                String [] lineTokens = splitBySpacesOrTabs(line);
+                String code = lineTokens[0];
+                Course course = courseMap.get(code);
+                String courseName = "";
+                for(int j = 1; j < lineTokens.length; j++) {
+                    courseName += lineTokens[j] + " ";
+                }
+                courseName = courseName.substring(0,courseName.length()-1);
+                course.setName(courseName);
+            }
         }
         private Map<String, Course> readCourseListAndTeacherList(
                 CourseSchedule schedule, int courseListSize) throws IOException {

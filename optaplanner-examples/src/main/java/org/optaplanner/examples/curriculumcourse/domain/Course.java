@@ -25,7 +25,8 @@ import org.optaplanner.examples.common.domain.AbstractPersistable;
 public class Course extends AbstractPersistable {
 
     private String code;
-
+    private String name;
+    
     private Teacher teacher;
     private int lectureSize;
     private int minWorkingDaySize;
@@ -40,6 +41,16 @@ public class Course extends AbstractPersistable {
     public void setCode(String code) {
         this.code = code;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    
 
     public Teacher getTeacher() {
         return teacher;
@@ -83,7 +94,7 @@ public class Course extends AbstractPersistable {
 
     @Override
     public String toString() {
-        return code + "{" + teacher + "}";
+        return code + ": " + name + " {" + teacher + "}";
     }
 
 }
