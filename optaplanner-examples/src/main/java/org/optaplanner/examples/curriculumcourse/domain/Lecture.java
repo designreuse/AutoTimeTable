@@ -133,20 +133,10 @@ public class Lecture extends AbstractPersistable {
                 && r.getCode().equals(room.getCode()) ? true : false;
     }
     
-    public boolean isCorrectRoom(Room r) {
-        try{
-        if(ROOM_DEP != null &&ROOM_DEP.isEmpty() == false && this.course.getCode() != null){
-            
-            if(ROOM_DEP.keySet().contains(this.getCourse().getCode())) {
-                String key = this.course.getCode();
-                String value = r.getCode();
-                return ROOM_DEP.get(key).contains(value);
-            }
-            return true;
-        }
-        return true;
-        }catch(Exception e){
-            e.printStackTrace();
+    public boolean isCorrectRoom() {
+        try {
+            return course.getRoomDeps().contains(room);
+        }catch (NullPointerException e) {
             return false;
         }
     }

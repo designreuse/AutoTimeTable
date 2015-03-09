@@ -32,6 +32,8 @@ public class Course extends AbstractPersistable {
     private int minWorkingDaySize;
 
     private List<Curriculum> curriculumList;
+    private List<Room> roomDeps;
+    
     private int studentSize;
 
     public String getCode() {
@@ -50,8 +52,6 @@ public class Course extends AbstractPersistable {
         this.name = name;
     }
     
-    
-
     public Teacher getTeacher() {
         return teacher;
     }
@@ -80,6 +80,14 @@ public class Course extends AbstractPersistable {
         return curriculumList;
     }
 
+    public List<Room> getRoomDeps() {
+        return roomDeps;
+    }
+
+    public void setRoomDeps(List<Room> roomDeps) {
+        this.roomDeps = roomDeps;
+    }
+    
     public void setCurriculumList(List<Curriculum> curriculumList) {
         this.curriculumList = curriculumList;
     }

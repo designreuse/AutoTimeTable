@@ -83,7 +83,7 @@ public class CurriculumCourseImporter extends AbstractTxtSolutionImporter {
 
             Map<String, Course> courseMap = readCourseListAndTeacherList(
                     schedule, courseListSize);
-            readRoomList(
+            Map<String, Room> roomMap = readRoomList(
                     schedule, roomListSize);
             Map<List<Integer>, Period> periodMap = createPeriodListAndDayListAndTimeslotList(
                     schedule, dayListSize, timeslotListSize);
@@ -93,7 +93,11 @@ public class CurriculumCourseImporter extends AbstractTxtSolutionImporter {
                     schedule, courseMap, periodMap, unavailablePeriodPenaltyListSize);
             readTeacherName(schedule);
             readCourseName(schedule, courseMap);
-            readEmptyLine();
+            readRoomDeps(schedule, courseMap, roomMap);
+            //readRoomDeps fonksiyonunda satırı okuduktan sonra hata oluştuğu için
+            //bir satır fazla okumuş oluyo ve END. bitişinin üstündeki boş satıra
+            //gelmiş oluyor dolayısıyla bi daha boş satır okumasına gerek yok.
+            //readEmptyLine();
             readConstantLine("END\\.");
             createLectureList(schedule);
       
@@ -154,6 +158,33 @@ public class CurriculumCourseImporter extends AbstractTxtSolutionImporter {
                 course.setName(courseName);
             }
         }
+        
+        private void readRoomDeps(CourseSchedule schedule, 
+                Map<String, Course> courseMap, Map<String,Room> roomMap) throws IOException {
+            readEmptyLine();
+            readConstantLine("ROOM_DEPS:");
+            while(true) {
+                try {
+                    ArrayList<Room> rooms = new ArrayList<Room>();
+                    String line = bufferedReader.readLine();
+                    System.out.println("ssss:" + line);
+                    String [] lineTokens = splitBySpacesOrTabs(line);
+                    String code = lineTokens[0];
+                    for(int i = 1; i < lineTokens.length; i++) {
+                        Room room = roomMap.get(lineTokens[i]);
+                        System.out.println("room:"+room.getLabel());
+                        rooms.add(room);
+                        
+                    }
+                    Course course = courseMap.get(code);
+                    course.setRoomDeps(rooms);
+                   
+                }catch (Exception e) {
+                    System.out.println("HataBurda:"+e.getMessage());
+                    return;
+                }
+            }
+        }
         private Map<String, Course> readCourseListAndTeacherList(
                 CourseSchedule schedule, int courseListSize) throws IOException {
             Map<String, Course> courseMap = new HashMap<String, Course>(courseListSize);
@@ -194,8 +225,9 @@ public class CurriculumCourseImporter extends AbstractTxtSolutionImporter {
             return teacher;
         }
 
-        private void readRoomList(CourseSchedule schedule, int roomListSize)
+        private Map<String, Room> readRoomList(CourseSchedule schedule, int roomListSize)
                 throws IOException {
+            Map<String, Room> roomMap = new HashMap<String, Room>();
             readEmptyLine();
             readConstantLine("ROOMS:");
             List<Room> roomList = new ArrayList<Room>(roomListSize);
@@ -208,9 +240,10 @@ public class CurriculumCourseImporter extends AbstractTxtSolutionImporter {
                 room.setCode(lineTokens[0]);
                 room.setCapacity(Integer.parseInt(lineTokens[1]));
                 roomList.add(room);
+                roomMap.put(room.getCode(), room);
             }
-            System.out.println("Dosya yolu: " + new File(".").getAbsolutePath());
             schedule.setRoomList(roomList);
+            return roomMap;
         }
      
         private Map<List<Integer>, Period> createPeriodListAndDayListAndTimeslotList(

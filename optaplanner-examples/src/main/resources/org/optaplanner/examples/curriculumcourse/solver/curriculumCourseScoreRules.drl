@@ -171,8 +171,7 @@ end
 rule "isCorrectRoom"
     when
         
-        $room : Room(label != null)
-        Lecture (room == $room,isCorrectRoom($room), room != null)
+        Lecture (isCorrectRoom())
     then
         scoreHolder.addSoftConstraintMatch(kcontext,100)
 end
