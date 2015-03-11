@@ -18,8 +18,6 @@ package org.optaplanner.examples.curriculumcourse.domain;
 import java.util.List;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import java.util.ArrayList;
-import java.util.HashMap;
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
 import org.optaplanner.examples.common.domain.AbstractPersistable;
@@ -27,11 +25,12 @@ import org.optaplanner.examples.curriculumcourse.domain.solver.LectureDifficulty
 import org.optaplanner.examples.curriculumcourse.domain.solver.MovableLectureSelectionFilter;
 import org.optaplanner.examples.curriculumcourse.domain.solver.PeriodStrengthWeightFactory;
 import org.optaplanner.examples.curriculumcourse.domain.solver.RoomStrengthWeightFactory;
+
 @PlanningEntity(difficultyWeightFactoryClass = LectureDifficultyWeightFactory.class,
         movableEntitySelectionFilter = MovableLectureSelectionFilter.class)
 @XStreamAlias("Lecture")
 public class Lecture extends AbstractPersistable {
-    public static  HashMap<String, ArrayList<String>> ROOM_DEP ;
+
     public static String contextPath;
     private Course course;
     private int lectureIndexInCourse;
@@ -132,13 +131,13 @@ public class Lecture extends AbstractPersistable {
                 && p.getTimeslot().getTimeslotIndex() == period.getTimeslot().getTimeslotIndex() + 1
                 && r.getCode().equals(room.getCode()) ? true : false;
     }
-    
+
     public boolean isCorrectRoom() {
         try {
             return course.getRoomDeps().contains(room);
-        }catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             return false;
         }
     }
-   
+
 }

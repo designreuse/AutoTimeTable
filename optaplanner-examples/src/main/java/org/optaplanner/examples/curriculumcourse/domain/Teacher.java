@@ -59,7 +59,7 @@ public class Teacher extends AbstractPersistable {
 
     @Override
     public String toString() {
-        return code + " : " + name + " " + surname;
+        return  name + " " + surname;
     }
 
 }

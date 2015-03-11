@@ -102,7 +102,7 @@ public class Course extends AbstractPersistable {
 
     @Override
     public String toString() {
-        return code + ": " + name + " {" + teacher + "}";
+        return  code + "{" + teacher + "}";
     }
 
 }

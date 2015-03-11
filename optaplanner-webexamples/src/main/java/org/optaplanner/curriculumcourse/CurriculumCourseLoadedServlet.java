@@ -16,11 +16,7 @@
 package org.optaplanner.curriculumcourse;
 
 import java.awt.Color;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -30,14 +26,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.optaplanner.curriculumcourse.addinfo.AddInfo;
-import org.optaplanner.curriculumcourse.addinfo.AddInfoFromFile;
 import org.optaplanner.examples.curriculumcourse.domain.Course;
 import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
 import org.optaplanner.examples.curriculumcourse.domain.Day;
 import org.optaplanner.examples.curriculumcourse.domain.Room;
+import org.optaplanner.examples.curriculumcourse.domain.Teacher;
 import org.optaplanner.examples.curriculumcourse.domain.Timeslot;
-import org.optaplanner.examples.curriculumcourse.domain.Lecture;
 
 /**
  * Ders programı daha önce çözülmemişse çalışacak kısım. ctt dosyasının yanı
@@ -68,17 +62,8 @@ public class CurriculumCourseLoadedServlet extends HttpServlet {
 
         HashMap<String, Color> colorOfCourses = createColors(courses);
 
-        HashMap<String, String> courseNames;
-        HashMap<String, String> teacherNames;
-        Lecture.ROOM_DEP = new HashMap<String, ArrayList<String>>();
 
-        AddInfo addInfo = new AddInfoFromFile(contentName, path, solution);
-        addInfo.readyInfo();
-        teacherNames = addInfo.getTeacherNames();
-        courseNames = addInfo.getCourseNames();
 
-        session.setAttribute("teacherNames", teacherNames);
-        session.setAttribute("courseNames", courseNames);
         session.setAttribute("colorOfCourses", colorOfCourses);
         session.setAttribute("timeSlots", timeSlots);
         session.setAttribute("days", days);
@@ -108,5 +93,5 @@ public class CurriculumCourseLoadedServlet extends HttpServlet {
         }
         return colorsOfCourses;
     }
-
+  
 }

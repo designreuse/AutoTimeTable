@@ -54,7 +54,7 @@
         timeSlotIndex = ${lecture.period.timeslot.timeslotIndex};
         row = (perSize * dayIndex) + timeSlotIndex;
         cell = $('table tbody tr:eq(' + row + ') td:eq(' + col + ')');
-        s = "${courseNames[lecture.course.code]} <br /> ${teacherNames[lecture.course.teacher.code]}<br /> ${lecture.course.lectureSize} : ${lecture.lectureIndexInCourse} <br />";
+        s = "${lecture.course.name} <br /> ${lecture.course.teacher.name}  ${lecture.course.teacher.surname} <br /> ${lecture.course.lectureSize} : ${lecture.lectureIndexInCourse} <br />";
         <c:forEach var = "curriculum" items = "${lecture.course.curriculumList}" >
         s += "${curriculum.toString()}, ";
         </c:forEach >
