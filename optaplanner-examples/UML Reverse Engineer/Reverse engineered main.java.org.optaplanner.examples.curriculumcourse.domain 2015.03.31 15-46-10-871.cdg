@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="Reverse engineered main.java.org.optaplanner.examples.curriculumcourse.domain 2015.03.31 15-46-10-871">
+  <ClassDiagramComponents>
+    <Class xPosition="20.0" yPosition="20.0" package="org.optaplanner.examples.curriculumcourse.domain" name="Day" visibility="publıc">
+      <Constructors/>
+      <Fields>
+        <Field name="WEEKDAYS" visibility="prıvate" type="String[]" isStatic="true" isFinal="true"/>
+        <Field name="dayIndex" visibility="prıvate" type="int"/>
+        <Field name="periodList" visibility="prıvate" type="List&lt;Period&gt;"/>
+      </Fields>
+      <Methods>
+        <Method name="getDayIndex" visibility="publıc" returnType="int"/>
+        <Method name="setDayIndex" visibility="publıc" returnType="void">
+          <Argument type="int" name="dayIndex"/>
+        </Method>
+        <Method name="getPeriodList" visibility="publıc" returnType="List&lt;Period&gt;"/>
+        <Method name="setPeriodList" visibility="publıc" returnType="void">
+          <Argument type="List&lt;Period&gt;" name="periodList"/>
+        </Method>
+        <Method name="getLabel" visibility="publıc" returnType="String"/>
+        <Method name="toString" visibility="publıc" returnType="String"/>
+      </Methods>
+    </Class>
+    <Class xPosition="320.0" yPosition="20.0" package="org.optaplanner.examples.curriculumcourse.domain" name="Period" visibility="publıc">
+      <Constructors/>
+      <Fields>
+        <Field name="day" visibility="prıvate" type="Day"/>
+        <Field name="timeslot" visibility="prıvate" type="Timeslot"/>
+      </Fields>
+      <Methods>
+        <Method name="getDay" visibility="publıc" returnType="Day"/>
+        <Method name="setDay" visibility="publıc" returnType="void">
+          <Argument type="Day" name="day"/>
+        </Method>
+        <Method name="getTimeslot" visibility="publıc" returnType="Timeslot"/>
+        <Method name="setTimeslot" visibility="publıc" returnType="void">
+          <Argument type="Timeslot" name="timeslot"/>
+        </Method>
+        <Method name="getLabel" visibility="publıc" returnType="String"/>
+        <Method name="toString" visibility="publıc" returnType="String"/>
+      </Methods>
+    </Class>
+    <Class xPosition="620.0" yPosition="20.0" package="org.optaplanner.examples.curriculumcourse.domain" name="Timeslot" visibility="publıc">
+      <Constructors/>
+      <Fields>
+        <Field name="timeslotIndex" visibility="prıvate" type="int"/>
+      </Fields>
+      <Methods>
+        <Method name="getTimeslotIndex" visibility="publıc" returnType="int"/>
+        <Method name="setTimeslotIndex" visibility="publıc" returnType="void">
+          <Argument type="int" name="timeslotIndex"/>
+        </Method>
+        <Method name="getLabel" visibility="publıc" returnType="String"/>
+        <Method name="toString" visibility="publıc" returnType="String"/>
+      </Methods>
+    </Class>
+    <Class xPosition="920.0" yPosition="20.0" package="org.optaplanner.examples.curriculumcourse.domain" name="Teacher" visibility="publıc">
+      <Constructors/>
+      <Fields>
+        <Field name="code" visibility="prıvate" type="String"/>
+        <Field name="name" visibility="prıvate" type="String"/>
+        <Field name="surname" visibility="prıvate" type="String"/>
+      </Fields>
+      <Methods>
+        <Method name="getCode" visibility="publıc" returnType="String"/>
+        <Method name="setCode" visibility="publıc" returnType="void">
+          <Argument type="String" name="code"/>
+        </Method>
+        <Method name="getLabel" visibility="publıc" returnType="String"/>
+        <Method name="getName" visibility="publıc" returnType="String"/>
+        <Method name="setName" visibility="publıc" returnType="void">
+          <Argument type="String" name="name"/>
+        </Method>
+        <Method name="getSurname" visibility="publıc" returnType="String"/>
+        <Method name="setSurname" visibility="publıc" returnType="void">
+          <Argument type="String" name="surname"/>
+        </Method>
+        <Method name="toString" visibility="publıc" returnType="String"/>
+      </Methods>
+    </Class>
+    <Class xPosition="20.0" yPosition="420.0" package="org.optaplanner.examples.curriculumcourse.domain" name="CourseSchedule" visibility="publıc">
+      <Constructors/>
+      <Fields>
+        <Field name="name" visibility="prıvate" type="String"/>
+        <Field name="teacherList" visibility="prıvate" type="List&lt;Teacher&gt;"/>
+        <Field name="curriculumList" visibility="prıvate" type="List&lt;Curriculum&gt;"/>
+        <Field name="courseList" visibility="prıvate" type="List&lt;Course&gt;"/>
+        <Field name="dayList" visibility="prıvate" type="List&lt;Day&gt;"/>
+        <Field name="timeslotList" visibility="prıvate" type="List&lt;Timeslot&gt;"/>
+        <Field name="periodList" visibility="prıvate" type="List&lt;Period&gt;"/>
+        <Field name="roomList" visibility="prıvate" type="List&lt;Room&gt;"/>
+        <Field name="unavailablePeriodPenaltyList" visibility="prıvate" type="List&lt;UnavailablePeriodPenalty&gt;"/>
+        <Field name="lectureList" visibility="prıvate" type="List&lt;Lecture&gt;"/>
+        <Field name="score" visibility="prıvate" type="HardSoftScore"/>
+      </Fields>
+      <Methods>
+        <Method name="getName" visibility="publıc" returnType="String"/>
+        <Method name="setName" visibility="publıc" returnType="void">
+          <Argument type="String" name="name"/>
+        </Method>
+        <Method name="getTeacherList" visibility="publıc" returnType="List&lt;Teacher&gt;"/>
+        <Method name="setTeacherList" visibility="publıc" returnType="void">
+          <Argument type="List&lt;Teacher&gt;" name="teacherList"/>
+        </Method>
+        <Method name="getCurriculumList" visibility="publıc" returnType="List&lt;Curriculum&gt;"/>
+        <Method name="setCurriculumList" visibility="publıc" returnType="void">
+          <Argument type="List&lt;Curriculum&gt;" name="curriculumList"/>
+        </Method>
+        <Method name="getCourseList" visibility="publıc" returnType="List&lt;Course&gt;"/>
+        <Method name="setCourseList" visibility="publıc" returnType="void">
+          <Argument type="List&lt;Course&gt;" name="courseList"/>
+        </Method>
+        <Method name="getDayList" visibility="publıc" returnType="List&lt;Day&gt;"/>
+        <Method name="setDayList" visibility="publıc" returnType="void">
+          <Argument type="List&lt;Day&gt;" name="dayList"/>
+        </Method>
+        <Method name="getTimeslotList" visibility="publıc" returnType="List&lt;Timeslot&gt;"/>
+        <Method name="setTimeslotList" visibility="publıc" returnType="void">
+          <Argument type="List&lt;Timeslot&gt;" name="timeslotList"/>
+        </Method>
+        <Method name="getPeriodList" visibility="publıc" returnType="List&lt;Period&gt;"/>
+        <Method name="setPeriodList" visibility="publıc" returnType="void">
+          <Argument type="List&lt;Period&gt;" name="periodList"/>
+        </Method>
+        <Method name="getRoomList" visibility="publıc" returnType="List&lt;Room&gt;"/>
+        <Method name="setRoomList" visibility="publıc" returnType="void">
+          <Argument type="List&lt;Room&gt;" name="roomList"/>
+        </Method>
+        <Method name="getUnavailablePeriodPenaltyList" visibility="publıc" returnType="List&lt;UnavailablePeriodPenalty&gt;"/>
+        <Method name="setUnavailablePeriodPenaltyList" visibility="publıc" returnType="void">
+          <Argument type="List&lt;UnavailablePeriodPenalty&gt;" name="unavailablePeriodPenaltyList"/>
+        </Method>
+        <Method name="getLectureList" visibility="publıc" returnType="List&lt;Lecture&gt;"/>
+        <Method name="setLectureList" visibility="publıc" returnType="void">
+          <Argument type="List&lt;Lecture&gt;" name="lectureList"/>
+        </Method>
+        <Method name="getScore" visibility="publıc" returnType="HardSoftScore"/>
+        <Method name="setScore" visibility="publıc" returnType="void">
+          <Argument type="HardSoftScore" name="score"/>
+        </Method>
+        <Method name="getProblemFacts" visibility="publıc" returnType="Collection&lt;? extends Object&gt;"/>
+        <Method name="precalculateCourseConflictList" visibility="prıvate" returnType="List&lt;CourseConflict&gt;"/>
+      </Methods>
+    </Class>
+    <Class xPosition="320.0" yPosition="420.0" package="org.optaplanner.examples.curriculumcourse.domain" name="UnavailablePeriodPenalty" visibility="publıc">
+      <Constructors/>
+      <Fields>
+        <Field name="course" visibility="prıvate" type="Course"/>
+        <Field name="period" visibility="prıvate" type="Period"/>
+      </Fields>
+      <Methods>
+        <Method name="getCourse" visibility="publıc" returnType="Course"/>
+        <Method name="setCourse" visibility="publıc" returnType="void">
+          <Argument type="Course" name="course"/>
+        </Method>
+        <Method name="getPeriod" visibility="publıc" returnType="Period"/>
+        <Method name="setPeriod" visibility="publıc" returnType="void">
+          <Argument type="Period" name="period"/>
+        </Method>
+        <Method name="toString" visibility="publıc" returnType="String"/>
+      </Methods>
+    </Class>
+    <Class xPosition="620.0" yPosition="420.0" package="org.optaplanner.examples.curriculumcourse.domain" name="Lecture" visibility="publıc">
+      <Constructors/>
+      <Fields>
+        <Field name="course" visibility="prıvate" type="Course"/>
+        <Field name="lectureIndexInCourse" visibility="prıvate" type="int"/>
+        <Field name="locked" visibility="prıvate" type="boolean"/>
+        <Field name="period" visibility="prıvate" type="Period"/>
+        <Field name="room" visibility="prıvate" type="Room"/>
+      </Fields>
+      <Methods>
+        <Method name="getCourse" visibility="publıc" returnType="Course"/>
+        <Method name="setCourse" visibility="publıc" returnType="void">
+          <Argument type="Course" name="course"/>
+        </Method>
+        <Method name="getLectureIndexInCourse" visibility="publıc" returnType="int"/>
+        <Method name="setLectureIndexInCourse" visibility="publıc" returnType="void">
+          <Argument type="int" name="lectureIndexInCourse"/>
+        </Method>
+        <Method name="isLocked" visibility="publıc" returnType="boolean"/>
+        <Method name="setLocked" visibility="publıc" returnType="void">
+          <Argument type="boolean" name="locked"/>
+        </Method>
+        <Method name="getPeriod" visibility="publıc" returnType="Period"/>
+        <Method name="setPeriod" visibility="publıc" returnType="void">
+          <Argument type="Period" name="period"/>
+        </Method>
+        <Method name="getRoom" visibility="publıc" returnType="Room"/>
+        <Method name="setRoom" visibility="publıc" returnType="void">
+          <Argument type="Room" name="room"/>
+        </Method>
+        <Method name="getTeacher" visibility="publıc" returnType="Teacher"/>
+        <Method name="getStudentSize" visibility="publıc" returnType="int"/>
+        <Method name="getCurriculumList" visibility="publıc" returnType="List&lt;Curriculum&gt;"/>
+        <Method name="getDay" visibility="publıc" returnType="Day"/>
+        <Method name="getTimeslotIndex" visibility="publıc" returnType="int"/>
+        <Method name="getLabel" visibility="publıc" returnType="String"/>
+        <Method name="toString" visibility="publıc" returnType="String"/>
+        <Method name="isImmediatlyAfter" visibility="publıc" returnType="boolean">
+          <Argument type="Period" name="p"/>
+          <Argument type="Room" name="r"/>
+        </Method>
+        <Method name="isCorrectRoom" visibility="publıc" returnType="boolean"/>
+      </Methods>
+    </Class>
+    <Class xPosition="920.0" yPosition="420.0" package="org.optaplanner.examples.curriculumcourse.domain" name="Curriculum" visibility="publıc">
+      <Constructors/>
+      <Fields>
+        <Field name="code" visibility="prıvate" type="String"/>
+      </Fields>
+      <Methods>
+        <Method name="getCode" visibility="publıc" returnType="String"/>
+        <Method name="setCode" visibility="publıc" returnType="void">
+          <Argument type="String" name="code"/>
+        </Method>
+        <Method name="getLabel" visibility="publıc" returnType="String"/>
+        <Method name="toString" visibility="publıc" returnType="String"/>
+      </Methods>
+    </Class>
+    <Class xPosition="20.0" yPosition="820.0" package="org.optaplanner.examples.curriculumcourse.domain" name="Room" visibility="publıc">
+      <Constructors/>
+      <Fields>
+        <Field name="code" visibility="prıvate" type="String"/>
+        <Field name="capacity" visibility="prıvate" type="int"/>
+      </Fields>
+      <Methods>
+        <Method name="getCode" visibility="publıc" returnType="String"/>
+        <Method name="setCode" visibility="publıc" returnType="void">
+          <Argument type="String" name="code"/>
+        </Method>
+        <Method name="getCapacity" visibility="publıc" returnType="int"/>
+        <Method name="setCapacity" visibility="publıc" returnType="void">
+          <Argument type="int" name="capacity"/>
+        </Method>
+        <Method name="getLabel" visibility="publıc" returnType="String"/>
+        <Method name="toString" visibility="publıc" returnType="String"/>
+      </Methods>
+    </Class>
+    <Class xPosition="320.0" yPosition="820.0" package="org.optaplanner.examples.curriculumcourse.domain.solver" name="RoomStrengthWeightFactory" visibility="publıc">
+      <Constructors/>
+      <Fields/>
+      <Methods>
+        <Method name="createSorterWeight" visibility="publıc" returnType="Comparable">
+          <Argument type="CourseSchedule" name="schedule"/>
+          <Argument type="Room" name="room"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="620.0" yPosition="820.0" package="org.optaplanner.examples.curriculumcourse.domain.solver" name="LectureDifficultyWeightFactory" visibility="publıc">
+      <Constructors/>
+      <Fields/>
+      <Methods>
+        <Method name="createSorterWeight" visibility="publıc" returnType="Comparable">
+          <Argument type="CourseSchedule" name="schedule"/>
+          <Argument type="Lecture" name="lecture"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="920.0" yPosition="820.0" package="org.optaplanner.examples.curriculumcourse.domain.solver" name="PeriodStrengthWeightFactory" visibility="publıc">
+      <Constructors/>
+      <Fields/>
+      <Methods>
+        <Method name="createSorterWeight" visibility="publıc" returnType="Comparable">
+          <Argument type="CourseSchedule" name="schedule"/>
+          <Argument type="Period" name="period"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="20.0" yPosition="1220.0" package="org.optaplanner.examples.curriculumcourse.domain.solver" name="CourseSequentialRequirement" visibility="publıc">
+      <Constructors>
+        <Constructor name="CourseSequentialRequirement" visibility="publıc">
+          <Argument type="Course" name="course"/>
+        </Constructor>
+      </Constructors>
+      <Fields>
+        <Field name="course" visibility="prıvate" type="Course" isFinal="true"/>
+      </Fields>
+      <Methods>
+        <Method name="getCourse" visibility="publıc" returnType="Course"/>
+        <Method name="hashCode" visibility="publıc" returnType="int"/>
+        <Method name="equals" visibility="publıc" returnType="boolean">
+          <Argument type="Object" name="o"/>
+        </Method>
+        <Method name="toString" visibility="publıc" returnType="String"/>
+        <Method name="compareTo" visibility="publıc" returnType="int">
+          <Argument type="CourseSequentialRequirement" name="other"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="320.0" yPosition="1220.0" package="org.optaplanner.examples.curriculumcourse.domain.solver" name="MovableLectureSelectionFilter" visibility="publıc">
+      <Constructors/>
+      <Fields/>
+      <Methods>
+        <Method name="accept" visibility="publıc" returnType="boolean">
+          <Argument type="ScoreDirector" name="scoreDirector"/>
+          <Argument type="Lecture" name="lecture"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="620.0" yPosition="1220.0" package="org.optaplanner.examples.curriculumcourse.domain.solver" name="CourseConflict" visibility="publıc">
+      <Constructors>
+        <Constructor name="CourseConflict" visibility="publıc">
+          <Argument type="Course" name="leftCourse"/>
+          <Argument type="Course" name="rightCourse"/>
+          <Argument type="int" name="conflictCount"/>
+        </Constructor>
+      </Constructors>
+      <Fields>
+        <Field name="leftCourse" visibility="prıvate" type="Course" isFinal="true"/>
+        <Field name="rightCourse" visibility="prıvate" type="Course" isFinal="true"/>
+        <Field name="conflictCount" visibility="prıvate" type="int" isFinal="true"/>
+      </Fields>
+      <Methods>
+        <Method name="getLeftCourse" visibility="publıc" returnType="Course"/>
+        <Method name="getRightCourse" visibility="publıc" returnType="Course"/>
+        <Method name="getConflictCount" visibility="publıc" returnType="int"/>
+        <Method name="equals" visibility="publıc" returnType="boolean">
+          <Argument type="Object" name="o"/>
+        </Method>
+        <Method name="hashCode" visibility="publıc" returnType="int"/>
+        <Method name="compareTo" visibility="publıc" returnType="int">
+          <Argument type="CourseConflict" name="other"/>
+        </Method>
+        <Method name="toString" visibility="publıc" returnType="String"/>
+      </Methods>
+    </Class>
+    <Class xPosition="920.0" yPosition="1220.0" package="org.optaplanner.examples.curriculumcourse.domain" name="Course" visibility="publıc">
+      <Constructors/>
+      <Fields>
+        <Field name="code" visibility="prıvate" type="String"/>
+        <Field name="name" visibility="prıvate" type="String"/>
+        <Field name="teacher" visibility="prıvate" type="Teacher"/>
+        <Field name="lectureSize" visibility="prıvate" type="int"/>
+        <Field name="minWorkingDaySize" visibility="prıvate" type="int"/>
+        <Field name="curriculumList" visibility="prıvate" type="List&lt;Curriculum&gt;"/>
+        <Field name="roomDeps" visibility="prıvate" type="List&lt;Room&gt;"/>
+        <Field name="studentSize" visibility="prıvate" type="int"/>
+      </Fields>
+      <Methods>
+        <Method name="getCode" visibility="publıc" returnType="String"/>
+        <Method name="setCode" visibility="publıc" returnType="void">
+          <Argument type="String" name="code"/>
+        </Method>
+        <Method name="getName" visibility="publıc" returnType="String"/>
+        <Method name="setName" visibility="publıc" returnType="void">
+          <Argument type="String" name="name"/>
+        </Method>
+        <Method name="getTeacher" visibility="publıc" returnType="Teacher"/>
+        <Method name="setTeacher" visibility="publıc" returnType="void">
+          <Argument type="Teacher" name="teacher"/>
+        </Method>
+        <Method name="getLectureSize" visibility="publıc" returnType="int"/>
+        <Method name="setLectureSize" visibility="publıc" returnType="void">
+          <Argument type="int" name="lectureSize"/>
+        </Method>
+        <Method name="getMinWorkingDaySize" visibility="publıc" returnType="int"/>
+        <Method name="setMinWorkingDaySize" visibility="publıc" returnType="void">
+          <Argument type="int" name="minWorkingDaySize"/>
+        </Method>
+        <Method name="getCurriculumList" visibility="publıc" returnType="List&lt;Curriculum&gt;"/>
+        <Method name="getRoomDeps" visibility="publıc" returnType="List&lt;Room&gt;"/>
+        <Method name="setRoomDeps" visibility="publıc" returnType="void">
+          <Argument type="List&lt;Room&gt;" name="roomDeps"/>
+        </Method>
+        <Method name="setCurriculumList" visibility="publıc" returnType="void">
+          <Argument type="List&lt;Curriculum&gt;" name="curriculumList"/>
+        </Method>
+        <Method name="getStudentSize" visibility="publıc" returnType="int"/>
+        <Method name="setStudentSize" visibility="publıc" returnType="void">
+          <Argument type="int" name="studentSize"/>
+        </Method>
+        <Method name="toString" visibility="publıc" returnType="String"/>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <UseRelation source="CourseSchedule" target="Course" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="CourseSequentialRequirement" target="Course" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="CourseSchedule" target="Period" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="roomDeps" source="Course" target="Room" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List"/>
+    <UseRelation source="Lecture" target="Period" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Lecture" target="Curriculum" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="roomList" source="CourseSchedule" target="Room" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List"/>
+    <UseRelation source="Lecture" target="Room" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Period" target="Timeslot" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Day" target="Period" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="dayList" source="CourseSchedule" target="Day" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List"/>
+    <UseRelation source="Course" target="Room" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="CourseSchedule" target="Day" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Lecture" target="Teacher" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="unavailablePeriodPenaltyList" source="CourseSchedule" target="UnavailablePeriodPenalty" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List"/>
+    <HasRelation name="course" source="CourseSequentialRequirement" target="Course" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="LectureDifficultyWeightFactory" target="Course" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="periodList" source="CourseSchedule" target="Period" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List"/>
+    <UseRelation source="UnavailablePeriodPenalty" target="Course" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Lecture" target="Course" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="room" source="Lecture" target="Room" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="course" source="UnavailablePeriodPenalty" target="Course" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="timeslot" source="Period" target="Timeslot" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="curriculumList" source="Course" target="Curriculum" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List"/>
+    <HasRelation name="period" source="Lecture" target="Period" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="timeslotList" source="CourseSchedule" target="Timeslot" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List"/>
+    <UseRelation source="MovableLectureSelectionFilter" target="Lecture" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Lecture" target="Day" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="period" source="UnavailablePeriodPenalty" target="Period" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="PeriodStrengthWeightFactory" target="Course" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Period" target="Day" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="UnavailablePeriodPenalty" target="Period" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="CourseSchedule" target="Teacher" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="CourseSchedule" target="Lecture" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="day" source="Period" target="Day" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="teacher" source="Course" target="Teacher" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="CourseSchedule" target="Timeslot" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="RoomStrengthWeightFactory" target="Course" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="curriculumList" source="CourseSchedule" target="Curriculum" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List"/>
+    <HasRelation name="lectureList" source="CourseSchedule" target="Lecture" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List"/>
+    <UseRelation source="CourseSchedule" target="Curriculum" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="course" source="Lecture" target="Course" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="CourseSchedule" target="Room" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="periodList" source="Day" target="Period" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List"/>
+    <UseRelation source="CourseSchedule" target="UnavailablePeriodPenalty" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="leftCourse" source="CourseConflict" target="Course" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="rightCourse" source="CourseConflict" target="Course" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Course" target="Teacher" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Course" target="Curriculum" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="CourseConflict" target="Course" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="teacherList" source="CourseSchedule" target="Teacher" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List"/>
+    <HasRelation name="courseList" source="CourseSchedule" target="Course" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List"/>
+  </ClassDiagramRelations>
+</ClassDiagram>

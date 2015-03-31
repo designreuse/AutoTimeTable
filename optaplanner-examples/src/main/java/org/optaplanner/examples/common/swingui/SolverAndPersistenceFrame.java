@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.optaplanner.examples.common.swingui;
 
 import java.awt.BorderLayout;
@@ -50,7 +49,6 @@ import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileFilter;
-
 import org.apache.commons.io.FilenameUtils;
 import org.optaplanner.core.api.domain.solution.Solution;
 import org.optaplanner.core.api.score.FeasibilityScore;
@@ -62,16 +60,12 @@ import org.slf4j.LoggerFactory;
 public class SolverAndPersistenceFrame extends JFrame {
 
     protected final transient Logger logger = LoggerFactory.getLogger(getClass());
-
     public static final ImageIcon OPTA_PLANNER_ICON = new ImageIcon(
             SolverAndPersistenceFrame.class.getResource("optaPlannerIcon.png"));
-
     private final String titlePrefix;
     private final SolutionBusiness solutionBusiness;
-
     private SolutionPanel solutionPanel;
     private ConstraintMatchesDialog constraintMatchesDialog;
-
     private JPanel quickOpenUnsolvedPanel;
     private List<Action> quickOpenUnsolvedActionList;
     private JPanel quickOpenSolvedPanel;
@@ -107,7 +101,7 @@ public class SolverAndPersistenceFrame extends JFrame {
         solutionBusiness.registerForBestSolutionChanges(this);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                // This async, so it doesn't stop the solving immediately
+// This async, so it doesn't stop the solving immediately
                 solutionBusiness.terminateSolvingEarly();
             }
         });
@@ -173,7 +167,7 @@ public class SolverAndPersistenceFrame extends JFrame {
         JScrollPane scrollPane = new JScrollPane(panel);
         scrollPane.getVerticalScrollBar().setUnitIncrement(25);
         scrollPane.setMinimumSize(new Dimension(100, 80));
-        // Size fits into screen resolution 1024*768
+// Size fits into screen resolution 1024*768
         scrollPane.setPreferredSize(new Dimension(180, 200));
         JPanel titlePanel = new JPanel(new BorderLayout());
         titlePanel.add(scrollPane, BorderLayout.CENTER);
@@ -219,13 +213,11 @@ public class SolverAndPersistenceFrame extends JFrame {
                 setCursor(Cursor.getDefaultCursor());
             }
         }
-
     }
 
     private JComponent createToolBar() {
         JToolBar toolBar = new JToolBar("File operations");
         toolBar.setFloatable(false);
-
         importAction = new ImportAction();
         importAction.setEnabled(solutionBusiness.hasImporter());
         toolBar.add(new JButton(importAction));
@@ -239,12 +231,10 @@ public class SolverAndPersistenceFrame extends JFrame {
         exportAction.setEnabled(false);
         toolBar.add(new JButton(exportAction));
         toolBar.addSeparator();
-
         progressBar = new JProgressBar(0, 100);
         progressBar.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
         toolBar.add(progressBar);
         toolBar.addSeparator();
-
         solveAction = new SolveAction();
         solveAction.setEnabled(false);
         solveButton = new JButton(solveAction);
@@ -270,7 +260,6 @@ public class SolverAndPersistenceFrame extends JFrame {
             Solution planningProblem = solutionBusiness.getSolution();
             new SolveWorker(planningProblem).execute();
         }
-
     }
 
     protected class SolveWorker extends SwingWorker<Solution, Void> {
@@ -300,7 +289,6 @@ public class SolverAndPersistenceFrame extends JFrame {
                 resetScreen();
             }
         }
-
     }
 
     private class TerminateSolvingEarlyAction extends AbstractAction {
@@ -313,10 +301,9 @@ public class SolverAndPersistenceFrame extends JFrame {
         public void actionPerformed(ActionEvent e) {
             terminateSolvingEarlyAction.setEnabled(false);
             progressBar.setString("Terminating...");
-            // This async, so it doesn't stop the solving immediately
+// This async, so it doesn't stop the solving immediately
             solutionBusiness.terminateSolvingEarly();
         }
-
     }
 
     private class OpenAction extends AbstractAction {
@@ -351,7 +338,6 @@ public class SolverAndPersistenceFrame extends JFrame {
                 }
             }
         }
-
     }
 
     private class SaveAction extends AbstractAction {
@@ -392,7 +378,6 @@ public class SolverAndPersistenceFrame extends JFrame {
                 SolverAndPersistenceFrame.this.validate();
             }
         }
-
     }
 
     private class ImportAction extends AbstractAction {
@@ -439,7 +424,7 @@ public class SolverAndPersistenceFrame extends JFrame {
             if (approved == JFileChooser.APPROVE_OPTION) {
                 setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 try {
-                    System.out.println("dosya ismi:"+fileChooser.getSelectedFile());
+                    System.out.println("dosya ismi:" + fileChooser.getSelectedFile());
                     solutionBusiness.importSolution(fileChooser.getSelectedFile());
                     setSolutionLoaded();
                 } finally {
@@ -447,7 +432,6 @@ public class SolverAndPersistenceFrame extends JFrame {
                 }
             }
         }
-
     }
 
     private class ExportAction extends AbstractAction {
@@ -477,7 +461,7 @@ public class SolverAndPersistenceFrame extends JFrame {
         public void actionPerformed(ActionEvent e) {
             fileChooser.setSelectedFile(new File(solutionBusiness.getExportDataDir(),
                     FilenameUtils.getBaseName(solutionBusiness.getSolutionFileName())
-                            + "." + solutionBusiness.getExportFileSuffix()
+                    + "." + solutionBusiness.getExportFileSuffix()
             ));
             int approved = fileChooser.showSaveDialog(SolverAndPersistenceFrame.this);
             if (approved == JFileChooser.APPROVE_OPTION) {
@@ -489,14 +473,13 @@ public class SolverAndPersistenceFrame extends JFrame {
                 }
             }
         }
-
     }
 
     private JPanel createMiddlePanel() {
         middlePanel = new JPanel(new CardLayout());
         ImageIcon usageExplanationIcon = new ImageIcon(getClass().getResource(solutionPanel.getUsageExplanationPath()));
         JLabel usageExplanationLabel = new JLabel(usageExplanationIcon);
-        // Allow splitPane divider to be moved to the right
+// Allow splitPane divider to be moved to the right
         usageExplanationLabel.setMinimumSize(new Dimension(100, 100));
         middlePanel.add(usageExplanationLabel, "usageExplanationPanel");
         JComponent wrappedSolutionPanel;
@@ -536,7 +519,6 @@ public class SolverAndPersistenceFrame extends JFrame {
             constraintMatchesDialog.resetContentPanel();
             constraintMatchesDialog.setVisible(true);
         }
-
     }
 
     private void setSolutionLoaded() {
@@ -592,5 +574,4 @@ public class SolverAndPersistenceFrame extends JFrame {
             return feasibilityScore.isFeasible() ? TangoColorFactory.CHAMELEON_3 : TangoColorFactory.SCARLET_3;
         }
     }
-
 }

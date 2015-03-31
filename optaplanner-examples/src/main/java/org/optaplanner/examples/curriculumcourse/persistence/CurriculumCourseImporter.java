@@ -16,7 +16,8 @@
 
 package org.optaplanner.examples.curriculumcourse.persistence;
 
-import java.io.File;
+import java.io.File; 
+import org.optaplanner.examples.common.persistence.AbstractTxtSolutionImporter.TxtInputBuilder;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;

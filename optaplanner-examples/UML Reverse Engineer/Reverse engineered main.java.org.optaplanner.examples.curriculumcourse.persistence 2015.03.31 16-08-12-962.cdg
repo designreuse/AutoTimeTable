@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="Reverse engineered main.java.org.optaplanner.examples.curriculumcourse.persistence 2015.03.31 16-08-12-962">
+  <ClassDiagramComponents>
+    <Class xPosition="20.0" yPosition="20.0" package="org.optaplanner.examples.curriculumcourse.persistence" name="CurriculumCourseDao" visibility="publıc">
+      <Constructors>
+        <Constructor name="CurriculumCourseDao" visibility="publıc"/>
+        <Constructor name="CurriculumCourseDao" visibility="publıc">
+          <Argument type="String" name="path"/>
+        </Constructor>
+      </Constructors>
+      <Fields/>
+      <Methods/>
+    </Class>
+    <Class xPosition="320.0" yPosition="20.0" package="org.optaplanner.examples.curriculumcourse.persistence" name="CurriculumCourseImporter" visibility="publıc">
+      <Constructors>
+        <Constructor name="CurriculumCourseImporter" visibility="publıc"/>
+      </Constructors>
+      <Fields>
+        <Field name="INPUT_FILE_SUFFIX" visibility="prıvate" type="String" isStatic="true" isFinal="true"/>
+        <Field name="SPLIT_REGEX" visibility="prıvate" type="String" isStatic="true" isFinal="true"/>
+      </Fields>
+      <Methods>
+        <Method name="main" visibility="publıc" returnType="void" isStatic="true">
+          <Argument type="String[]" name="args"/>
+        </Method>
+        <Method name="getInputFileSuffix" visibility="publıc" returnType="String"/>
+        <Method name="createTxtInputBuilder" visibility="publıc" returnType="TxtInputBuilder"/>
+      </Methods>
+    </Class>
+    <Class xPosition="620.0" yPosition="20.0" package="org.optaplanner.examples.curriculumcourse.persistence" name="CurriculumCourseExporter" visibility="publıc">
+      <Constructors>
+        <Constructor name="CurriculumCourseExporter" visibility="publıc"/>
+      </Constructors>
+      <Fields>
+        <Field name="OUTPUT_FILE_SUFFIX" visibility="prıvate" type="String" isStatic="true" isFinal="true"/>
+      </Fields>
+      <Methods>
+        <Method name="main" visibility="publıc" returnType="void" isStatic="true">
+          <Argument type="String[]" name="args"/>
+        </Method>
+        <Method name="getOutputFileSuffix" visibility="publıc" returnType="String"/>
+        <Method name="createTxtOutputBuilder" visibility="publıc" returnType="TxtOutputBuilder"/>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations/>
+</ClassDiagram>

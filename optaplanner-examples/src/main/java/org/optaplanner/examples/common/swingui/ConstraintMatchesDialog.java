@@ -16,7 +16,7 @@
 
 package org.optaplanner.examples.common.swingui;
 
-import java.awt.Dimension;
+import java.awt.Dimension; 
 import java.util.List;
 import java.util.Set;
 import javax.swing.JDialog;

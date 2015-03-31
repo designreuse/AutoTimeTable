@@ -19,20 +19,30 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.optaplanner.examples.curriculumcourse.domain.Course;
 import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
 import org.optaplanner.examples.curriculumcourse.domain.Day;
 import org.optaplanner.examples.curriculumcourse.domain.Lecture;
 import org.optaplanner.examples.curriculumcourse.domain.Period;
 import org.optaplanner.examples.curriculumcourse.domain.Room;
+import org.optaplanner.examples.curriculumcourse.domain.Teacher;
 import org.optaplanner.examples.curriculumcourse.domain.Timeslot;
 import org.optaplanner.examples.curriculumcourse.persistence.CurriculumCourseDao;
-import org.optaplanner.examples.curriculumcourse.persistence.CurriculumCourseExporter;
 
 /**
  *
@@ -65,10 +75,32 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
             saveChanges(changeList);
         }
         String content = (String) request.getSession().getAttribute("content");
-        String path = request.getServletContext().getRealPath("/")+"export";
-        File file = new File (path + File.separator + content + ".xml");
+        String path = request.getServletContext().getRealPath("/") + "export";
+        File file = new File(path + File.separator + content + ".xml");
         CurriculumCourseDao dao = new CurriculumCourseDao(path);
         dao.writeSolution(solution, file);
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("optaplanner-web-pu");
+        EntityManager em = emf.createEntityManager();
+        
+        EntityType<Day> Course_ = m.entity(Day.class);
+        for(Course c : solution.getCourseList()) {
+            if(em.find(Course.class, c.getId()) != null) {
+                em.persist(c);
+                
+            }
+            em.find(Course.class, c.getId());
+        }
+        for (Teacher t : solution.getTeacherList()) {
+            if (em.find(Teacher.class, t.getId()) != null) {
+                em.persist(t);
+            }
+            em.find(Teacher.class, t.getId());
+        }
+        em.getTransaction().begin();
+        em.persist(solution);
+        em.getTransaction().commit();
+        em.close();
+
         response.sendRedirect("index.jsp");
 
     }
@@ -111,15 +143,15 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
     }
 
     private String[] convertToList(String s) {
-       
+
         s = s.substring(1, s.length() - 1);
-        System.out.println("fafa:"+s.length());
-        if(s.length() == 0) {
+        System.out.println("fafa:" + s.length());
+        if (s.length() == 0) {
             return null;
         }
         s = s.replace("\"", "");
         String[] array = s.split(",");
-        System.out.println("sizess:"+array.length);
+        System.out.println("sizess:" + array.length);
         return array;
     }
 

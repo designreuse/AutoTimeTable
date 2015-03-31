@@ -16,7 +16,8 @@
 
 package org.optaplanner.examples.curriculumcourse.persistence;
 
-import java.io.IOException;
+import java.io.IOException; 
+import org.optaplanner.examples.common.persistence.AbstractTxtSolutionExporter.TxtOutputBuilder;
 
 import org.optaplanner.core.api.domain.solution.Solution;
 import org.optaplanner.examples.common.persistence.AbstractTxtSolutionExporter;

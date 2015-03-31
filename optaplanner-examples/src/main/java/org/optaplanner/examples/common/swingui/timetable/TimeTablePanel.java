@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.optaplanner.examples.common.swingui.timetable;
 
 import java.awt.Dimension;
@@ -24,10 +23,9 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JViewport;
 import javax.swing.Scrollable;
-
 import org.optaplanner.examples.common.swingui.SolutionPanel;
 
-public class TimeTablePanel<XObject, YObject> extends JPanel implements Scrollable  {
+public class TimeTablePanel<XObject, YObject> extends JPanel implements Scrollable {
 
     private TimeTableLayout layout = new TimeTableLayout();
     private Map<Object, Integer> xMap = new HashMap<Object, Integer>();
@@ -43,10 +41,9 @@ public class TimeTablePanel<XObject, YObject> extends JPanel implements Scrollab
         xMap.clear();
         yMap.clear();
     }
-
-    // ************************************************************************
-    // Define methods
-    // ************************************************************************
+// ************************************************************************
+// Define methods
+// ************************************************************************
 
     public void defineColumnHeaderByKey(HeaderColumnKey xObject) {
         int x = layout.addColumn();
@@ -77,10 +74,9 @@ public class TimeTablePanel<XObject, YObject> extends JPanel implements Scrollab
         int y = layout.addRow(height);
         yMap.put(yObject, y);
     }
-
-    // ************************************************************************
-    // Add methods
-    // ************************************************************************
+// ************************************************************************
+// Add methods
+// ************************************************************************
 
     public void addCornerHeader(HeaderColumnKey xObject, HeaderRowKey yObject, JComponent component) {
         int x = xMap.get(xObject);
@@ -131,10 +127,9 @@ public class TimeTablePanel<XObject, YObject> extends JPanel implements Scrollab
         int y2 = yMap.get(yObject2);
         add(component, new TimeTableLayoutConstraints(x1, y1, x2 - x1 + 1, y2 - y1 + 1));
     }
-
-    // ************************************************************************
-    // Scrollable methods
-    // ************************************************************************
+// ************************************************************************
+// Scrollable methods
+// ************************************************************************
 
     public Dimension getPreferredScrollableViewportSize() {
         return SolutionPanel.PREFERRED_SCROLLABLE_VIEWPORT_SIZE;
@@ -163,6 +158,7 @@ public class TimeTablePanel<XObject, YObject> extends JPanel implements Scrollab
     }
 
     public static enum HeaderColumnKey {
+
         HEADER_COLUMN_GROUP2,
         HEADER_COLUMN_GROUP1,
         HEADER_COLUMN,
@@ -170,10 +166,10 @@ public class TimeTablePanel<XObject, YObject> extends JPanel implements Scrollab
     }
 
     public static enum HeaderRowKey {
+
         HEADER_ROW_GROUP2,
         HEADER_ROW_GROUP1,
         HEADER_ROW,
         TRAILING_HEADER_ROW;
     }
-
 }
