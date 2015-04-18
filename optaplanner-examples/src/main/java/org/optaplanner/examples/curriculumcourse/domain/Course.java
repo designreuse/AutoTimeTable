@@ -47,13 +47,13 @@ public class Course extends AbstractPersistable {
     @Column(name = "minWorkingDaySize")
     private int minWorkingDaySize;
 
-    @OneToMany(cascade = {CascadeType.PERSIST})
+    @OneToMany(cascade = {CascadeType.ALL})
     @JoinTable(name = "coursesCurriculums",
             joinColumns = @JoinColumn(name = "course"),
             inverseJoinColumns = @JoinColumn(name = "curricula"))
     private List<Curriculum> curriculumList;
 
-    @OneToMany(cascade = {CascadeType.PERSIST})
+    @OneToMany(cascade = {CascadeType.ALL})
     @JoinTable(name = "roomDependencies",
             joinColumns = @JoinColumn(name = "course"),
             inverseJoinColumns = @JoinColumn(name = "room"))

@@ -43,7 +43,7 @@ public class Day extends AbstractPersistable {
     @JoinColumn(name = "dayIndex")
     private int dayIndex;
     
-    @OneToMany(cascade = {CascadeType.PERSIST})
+    @OneToMany(cascade = {CascadeType.ALL})
     @JoinTable(name = "dayPeriodList",
             joinColumns = @JoinColumn(name = "day"),
             inverseJoinColumns = @JoinColumn(name = "period"))
