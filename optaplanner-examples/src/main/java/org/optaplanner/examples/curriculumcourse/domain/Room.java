@@ -21,11 +21,17 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import org.optaplanner.examples.common.domain.AbstractPersistable;
 
 @Entity(name = "Room")
 @Table(name = "Room")
+@NamedQueries({
+    @NamedQuery(name = "Room.findByCode",
+           query = "SELECT r FROM Room r WHERE r.code= :code" )
+})
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @XStreamAlias("Room")
 public class Room extends AbstractPersistable {

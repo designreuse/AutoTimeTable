@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-  <persistence-unit name="org.optaplanner_optaplanner-examples_jar_6.2.0-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
+  <persistence-unit name="curriculum-pu" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>org.optaplanner.examples.curriculumcourse.domain.Course</class>
+    <class>org.optaplanner.examples.curriculumcourse.domain.CourseSchedule</class>
+    <class>org.optaplanner.examples.curriculumcourse.domain.Curriculum</class>
+    <class>org.optaplanner.examples.curriculumcourse.domain.Day</class>
+    <class>org.optaplanner.examples.curriculumcourse.domain.Lecture</class>
+    <class>org.optaplanner.examples.curriculumcourse.domain.Period</class>
+    <class>org.optaplanner.examples.curriculumcourse.domain.Room</class>
+    <class>org.optaplanner.examples.curriculumcourse.domain.Teacher</class>
+    <class>org.optaplanner.examples.curriculumcourse.domain.Timeslot</class>
+    <class>org.optaplanner.examples.curriculumcourse.domain.UnavailablePeriodPenalty</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/CurriculumCourse?useUnicode=true&amp;characterEncoding=UTF-8"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

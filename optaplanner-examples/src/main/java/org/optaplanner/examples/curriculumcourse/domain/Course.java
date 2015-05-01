@@ -25,12 +25,19 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import org.optaplanner.examples.common.domain.AbstractPersistable;
 
 @Entity(name = "Course")
 @Table(name = "Course")
+@NamedQueries({
+   @NamedQuery(
+        name = "Course.findCourseByCode", 
+        query = "SELECT c FROM Course c WHERE c.code = :code")
+})
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @XStreamAlias("Course")
 public class Course extends AbstractPersistable {

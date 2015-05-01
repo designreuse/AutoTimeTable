@@ -31,7 +31,7 @@ public abstract class AbstractPersistable implements Serializable, Comparable<Ab
     
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
     protected AbstractPersistable() {

@@ -27,12 +27,18 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import org.optaplanner.examples.common.domain.AbstractPersistable;
 
 @Entity(name = "Day")
 @Table(name = "Day")
+@NamedQueries({
+    @NamedQuery(name = "Day.findByIndex",
+            query = "SELECT d FROM Day d WHERE d.dayIndex=:dayIndex")
+})
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @XStreamAlias("Day")
 public class Day extends AbstractPersistable {
@@ -40,7 +46,7 @@ public class Day extends AbstractPersistable {
     @ElementCollection
     private static final String[] WEEKDAYS = {"Mo", "Tu", "We", "Th", "Fr"};
 
-    @JoinColumn(name = "dayIndex")
+    @JoinColumn(name = "dayIndex", unique = true)
     private int dayIndex;
     
     @OneToMany(cascade = {CascadeType.ALL})

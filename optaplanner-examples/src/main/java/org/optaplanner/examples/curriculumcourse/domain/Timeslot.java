@@ -21,16 +21,22 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import org.optaplanner.examples.common.domain.AbstractPersistable;
 
 @Entity(name = "Timeslot")
 @Table(name = "Timeslot")
+@NamedQueries({
+    @NamedQuery(name = "Timeslot.findByIndex",
+            query = "SELECT t FROM Timeslot t WHERE t.timeslotIndex=:timeslotIndex")
+})
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @XStreamAlias("Timeslot")
 public class Timeslot extends AbstractPersistable {
     
-    @Column(name = "timeslotIndex")
+    @Column(name = "timeslotIndex", unique = true)
     private int timeslotIndex;
 
     public int getTimeslotIndex() {

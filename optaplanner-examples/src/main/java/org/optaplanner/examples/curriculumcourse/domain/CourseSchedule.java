@@ -51,56 +51,56 @@ public class CourseSchedule extends AbstractPersistable implements Solution<Hard
     @Column(name = "name")
     private String name;
 
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = {CascadeType.PERSIST})
     @JoinTable(name = "scheduleTeacherList",
             joinColumns = @JoinColumn(name = "schedule"),
             inverseJoinColumns = @JoinColumn(name = "teacher"))
     private List<Teacher> teacherList;
     
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = {CascadeType.PERSIST})
     @JoinTable(name = "scheduleCurriculumList",
             joinColumns = @JoinColumn(name = "schedule"),
             inverseJoinColumns = @JoinColumn(name = "curricula"))
     private List<Curriculum> curriculumList;
     
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = {CascadeType.PERSIST})
     @JoinTable(name = "scheduleCourseList",
             joinColumns = @JoinColumn(name = "schedule"),
             inverseJoinColumns = @JoinColumn(name = "course"))
     private List<Course> courseList;
     
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = {CascadeType.PERSIST})
     @JoinTable(name = "scheduleDayList",
             joinColumns = @JoinColumn(name = "schedule"),
             inverseJoinColumns = @JoinColumn(name = "day"))
     private List<Day> dayList;
     
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = {CascadeType.PERSIST})
     @JoinTable(name = "scheduleTimeslotList",
             joinColumns = @JoinColumn(name = "schedule"),
             inverseJoinColumns = @JoinColumn(name = "timeslot"))
     private List<Timeslot> timeslotList;
     
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = {CascadeType.PERSIST})
     @JoinTable(name = "schedulePeriodList",
             joinColumns = @JoinColumn(name = "schedule"),
             inverseJoinColumns = @JoinColumn(name = "period"))
     private List<Period> periodList;
     
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = {CascadeType.PERSIST})
     @JoinTable(name = "scheduleRoomLilst",
             joinColumns = @JoinColumn(name = "schedule"),
             inverseJoinColumns = @JoinColumn(name = "room"))
     private List<Room> roomList;
 
     
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = {CascadeType.PERSIST})
     @JoinTable(name = "schedulePeriodPenaltyList",
             joinColumns = @JoinColumn(name = "schedule"),
             inverseJoinColumns = @JoinColumn(name = "periodPenalty"))
     private List<UnavailablePeriodPenalty> unavailablePeriodPenaltyList;
 
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = {CascadeType.PERSIST})
     @JoinTable(name = "scheduleLectureList",
             joinColumns = @JoinColumn(name = "schedule"),
             inverseJoinColumns = @JoinColumn(name = "lecture"))

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.optaplanner.examples.curriculumcourse.domain;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -21,23 +20,29 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import org.optaplanner.examples.common.domain.AbstractPersistable;
 
 @Entity(name = "Teacher")
 @Table(name = "Teacher")
+@NamedQueries({
+    @NamedQuery(name = "Teacher.findTeacherByCode",
+            query = "SELECT t FROM Teacher t WHERE t.code=:code")
+})
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @XStreamAlias("Teacher")
 public class Teacher extends AbstractPersistable {
 
     @Column(name = "code", unique = true)
     private String code;
-    
+
     @Column(name = "name")
     private String name;
     @Column(name = "surname")
     private String surname;
-    
+
     public String getCode() {
         return code;
     }
@@ -65,12 +70,10 @@ public class Teacher extends AbstractPersistable {
     public void setSurname(String surname) {
         this.surname = surname;
     }
-    
-    
 
     @Override
     public String toString() {
-        return  name + " " + surname;
+        return name + " " + surname;
     }
 
 }

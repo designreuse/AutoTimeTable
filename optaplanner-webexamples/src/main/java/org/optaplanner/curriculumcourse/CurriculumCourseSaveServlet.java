@@ -15,19 +15,8 @@
  */
 package org.optaplanner.curriculumcourse;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import javax.persistence.metamodel.EntityType;
-import javax.persistence.metamodel.Metamodel;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -36,12 +25,20 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.optaplanner.examples.curriculumcourse.domain.Course;
 import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
+import org.optaplanner.examples.curriculumcourse.domain.Curriculum;
 import org.optaplanner.examples.curriculumcourse.domain.Day;
 import org.optaplanner.examples.curriculumcourse.domain.Lecture;
 import org.optaplanner.examples.curriculumcourse.domain.Period;
 import org.optaplanner.examples.curriculumcourse.domain.Room;
 import org.optaplanner.examples.curriculumcourse.domain.Teacher;
 import org.optaplanner.examples.curriculumcourse.domain.Timeslot;
+import org.optaplanner.curriculumcourse.dao.CourseDao;
+import org.optaplanner.curriculumcourse.dao.CourseScheduleDao;
+import org.optaplanner.curriculumcourse.dao.CurriculumDao;
+import org.optaplanner.curriculumcourse.dao.DayDao;
+import org.optaplanner.curriculumcourse.dao.RoomDao;
+import org.optaplanner.curriculumcourse.dao.TeacherDao;
+import org.optaplanner.curriculumcourse.dao.TimeslotDao;
 import org.optaplanner.examples.curriculumcourse.persistence.CurriculumCourseDao;
 
 /**
@@ -52,6 +49,13 @@ import org.optaplanner.examples.curriculumcourse.persistence.CurriculumCourseDao
 public class CurriculumCourseSaveServlet extends HttpServlet {
 
     private CourseSchedule solution;
+    private TeacherDao teacherDao;
+    private CourseDao courseDao;
+    private CurriculumDao curriculumDao;
+    private DayDao dayDao;
+    private TimeslotDao tsDao;
+    private CourseScheduleDao csDao;
+    private RoomDao roomDao;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -68,8 +72,16 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("utf-8");
         HttpSession session = request.getSession();
-        solution = (CourseSchedule) session.getAttribute(CurriculumCourseSessionAttributeName.SHOWN_SOLUTION);
 
+        solution = (CourseSchedule) session.getAttribute(CurriculumCourseSessionAttributeName.SHOWN_SOLUTION);
+        teacherDao = new TeacherDao();
+        courseDao = new CourseDao();
+        curriculumDao = new CurriculumDao();
+        dayDao = new DayDao();
+        tsDao = new TimeslotDao();
+        csDao = new CourseScheduleDao();
+        roomDao = new RoomDao();
+        
         String[] changeList = convertToList(request.getParameter("changeList"));
         if (changeList != null && changeList.length > 0) {
             saveChanges(changeList);
@@ -79,28 +91,67 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
         File file = new File(path + File.separator + content + ".xml");
         CurriculumCourseDao dao = new CurriculumCourseDao(path);
         dao.writeSolution(solution, file);
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("optaplanner-web-pu");
-        EntityManager em = emf.createEntityManager();
-        
-        EntityType<Day> Course_ = m.entity(Day.class);
-        for(Course c : solution.getCourseList()) {
-            if(em.find(Course.class, c.getId()) != null) {
-                em.persist(c);
-                
-            }
-            em.find(Course.class, c.getId());
-        }
-        for (Teacher t : solution.getTeacherList()) {
-            if (em.find(Teacher.class, t.getId()) != null) {
-                em.persist(t);
-            }
-            em.find(Teacher.class, t.getId());
-        }
-        em.getTransaction().begin();
-        em.persist(solution);
-        em.getTransaction().commit();
-        em.close();
 
+        System.out.println(csDao.isObjectManaged(solution) + ":sasas");
+        
+        for (Course c : solution.getCourseList()) {
+            Course managedCourse = courseDao.findCourseByCode(c.getCode());
+            if (managedCourse != null) {
+                c.setId(managedCourse.getId());
+            }
+
+        }
+
+        for (int i = 0; i < solution.getTeacherList().size(); i++) {
+            Teacher managedTeacher = teacherDao.findTeacherByCode(solution.getTeacherList().get(i).getCode());
+            if (managedTeacher != null) {
+                solution.getTeacherList().set(i, managedTeacher);
+                
+                System.out.println(solution.getTeacherList().get(i) + "->managed:"+teacherDao.isObjectManaged(solution.getTeacherList().get(0)));
+            } else {
+                solution.getTeacherList().set(i, teacherDao.save(solution.getTeacherList().get(i)));
+                System.out.println("->managed değil");
+            }
+        }
+        
+        for (Teacher t : solution.getTeacherList()) {
+            Teacher managedTeacher = teacherDao.findTeacherByCode(t.getCode());
+            if(managedTeacher != null) {
+                t.setId(managedTeacher.getId());
+            }
+        }
+        System.out.println("csss"+teacherDao.isObjectManaged(solution.getTeacherList().get(3)));
+
+        for (Curriculum c : solution.getCurriculumList()) {
+            Curriculum managedCurriculum = curriculumDao.findCurriculumByCode(c.getCode());
+            if (managedCurriculum != null) {
+               c.setId(managedCurriculum.getId());
+            }
+        }
+
+        for (Day d : solution.getDayList()) {
+            Day managedDay = dayDao.findDayByIndex(d.getDayIndex());
+            if (managedDay != null) {
+               d.setId(managedDay.getId());
+            }
+        }
+
+        for (Timeslot t : solution.getTimeslotList()) {
+            Timeslot managetTimeslot = tsDao.findTimeslotByIndex(t.getTimeslotIndex());
+            if (managetTimeslot != null) {
+                t.setId(managetTimeslot.getId());
+            }
+        }
+        
+        for (Room r : solution.getRoomList()){
+            Room managedRoom = roomDao.findRoomByCode(r.getCode());
+            if(managedRoom != null) {
+                System.out.println(managedRoom.getCode()+"->"+managedRoom.getId());
+                r.setId(managedRoom.getId());
+            }
+        }
+        System.out.println("csss"+teacherDao.isObjectManaged(solution.getTeacherList().get(3)));
+        csDao.createOrUpdate(solution);
         response.sendRedirect("index.jsp");
 
     }
@@ -133,7 +184,6 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
 
             for (Lecture l : solution.getLectureList()) {
                 if (l.getCourse().getCode().equals(course) && l.getLectureIndexInCourse() == lectureIndexInCourse) {
-                    System.out.println("Eşleşme Bulundu");
                     l.setRoom(room);
                     l.setPeriod(period);
                     break;
@@ -145,13 +195,11 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
     private String[] convertToList(String s) {
 
         s = s.substring(1, s.length() - 1);
-        System.out.println("fafa:" + s.length());
         if (s.length() == 0) {
             return null;
         }
         s = s.replace("\"", "");
         String[] array = s.split(",");
-        System.out.println("sizess:" + array.length);
         return array;
     }
 

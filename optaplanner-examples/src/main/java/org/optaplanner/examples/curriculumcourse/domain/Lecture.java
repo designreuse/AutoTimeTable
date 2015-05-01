@@ -40,7 +40,7 @@ import org.optaplanner.examples.curriculumcourse.domain.solver.RoomStrengthWeigh
 @XStreamAlias("Lecture")
 public class Lecture extends AbstractPersistable {
 
-    @JoinColumn(name = "ccourseourse")
+    @JoinColumn(name = "course")
     private Course course;
     @Column(name = "lectureIndexInCourse")
     private int lectureIndexInCourse;
