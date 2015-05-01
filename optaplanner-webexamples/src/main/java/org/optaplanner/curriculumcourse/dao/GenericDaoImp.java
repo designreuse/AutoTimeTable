@@ -34,11 +34,17 @@ public class GenericDaoImp<T> extends LoggingMain implements GenericDao<T> {
     protected EntityManagerFactory emf;
     protected EntityManager em;
     protected EntityTransaction tx;
-
-    public GenericDaoImp() {
-        emf = PersistenceSingleton.getEntityManagerFactory();
-        em = PersistenceSingleton.getEntityManager();
-        tx = em.getTransaction();
+    
+    
+    
+    /*
+    Parametre olarak sessiondan gelen entity manageri alsın ve onun üzerinden
+    işlem yapsın.Session entity manager ise context listener kullanılarak yazılsın
+    ve context destroy edilirken silinsin
+    */
+    public GenericDaoImp(EntityManager em) {
+        this.em = em;
+        this.tx = em.getTransaction();
     }
 
     @Override

@@ -15,6 +15,7 @@
  */
 package org.optaplanner.curriculumcourse.dao;
 
+import javax.persistence.EntityManager;
 import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
 
 /**
@@ -22,5 +23,9 @@ import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
  * @author gurhan
  */
 public class CourseScheduleDao extends GenericDaoImp<CourseSchedule>{
+
+    public CourseScheduleDao(EntityManager em) {
+        super(em);
+    }
     
 }

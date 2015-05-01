@@ -17,6 +17,7 @@ package org.optaplanner.curriculumcourse;
 
 import java.io.File;
 import java.io.IOException;
+import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -72,15 +73,15 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("utf-8");
         HttpSession session = request.getSession();
-
+        EntityManager em = (EntityManager)session.getServletContext().getAttribute("entityManager");
         solution = (CourseSchedule) session.getAttribute(CurriculumCourseSessionAttributeName.SHOWN_SOLUTION);
-        teacherDao = new TeacherDao();
-        courseDao = new CourseDao();
-        curriculumDao = new CurriculumDao();
-        dayDao = new DayDao();
-        tsDao = new TimeslotDao();
-        csDao = new CourseScheduleDao();
-        roomDao = new RoomDao();
+        teacherDao = new TeacherDao(em);
+        courseDao = new CourseDao(em);
+        curriculumDao = new CurriculumDao(em);
+        dayDao = new DayDao(em);
+        tsDao = new TimeslotDao(em);
+        csDao = new CourseScheduleDao(em);
+        roomDao = new RoomDao(em);
         
         String[] changeList = convertToList(request.getParameter("changeList"));
         if (changeList != null && changeList.length > 0) {

@@ -15,6 +15,7 @@
  */
 package org.optaplanner.curriculumcourse.dao;
 
+import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import org.optaplanner.examples.curriculumcourse.domain.Timeslot;
 
@@ -23,6 +24,10 @@ import org.optaplanner.examples.curriculumcourse.domain.Timeslot;
  * @author gurhan
  */
 public class TimeslotDao extends GenericDaoImp<Timeslot>{
+
+    public TimeslotDao(EntityManager em) {
+        super(em);
+    }
     
     public Timeslot findTimeslotByIndex(int timeSlotIndex) {
         Query query = em.createNamedQuery("Timeslot.findByIndex", Timeslot.class);

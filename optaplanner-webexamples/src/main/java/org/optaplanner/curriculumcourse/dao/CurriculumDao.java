@@ -15,6 +15,7 @@
  */
 package org.optaplanner.curriculumcourse.dao;
 
+import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import org.optaplanner.examples.curriculumcourse.domain.Curriculum;
 
@@ -23,6 +24,10 @@ import org.optaplanner.examples.curriculumcourse.domain.Curriculum;
  * @author gurhan
  */
 public class CurriculumDao extends GenericDaoImp<Curriculum>{
+
+    public CurriculumDao(EntityManager em) {
+        super(em);
+    }
     
     public Curriculum findCurriculumByCode(String code) {
         Query query = em.createNamedQuery("Curriculum.findByCode", Curriculum.class);

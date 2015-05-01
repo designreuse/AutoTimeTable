@@ -16,6 +16,7 @@
 package org.optaplanner.curriculumcourse.dao;
 
 import java.util.List;
+import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import org.optaplanner.examples.curriculumcourse.domain.Teacher;
 
@@ -24,6 +25,10 @@ import org.optaplanner.examples.curriculumcourse.domain.Teacher;
  * @author gurhan
  */
 public class TeacherDao extends GenericDaoImp<Teacher> {
+
+    public TeacherDao(EntityManager em) {
+        super(em);
+    }
 
     public Teacher findTeacherByCode(String code) {
 

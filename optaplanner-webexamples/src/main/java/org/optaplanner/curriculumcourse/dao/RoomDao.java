@@ -16,6 +16,7 @@
 package org.optaplanner.curriculumcourse.dao;
 
 import java.util.List;
+import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import org.optaplanner.examples.curriculumcourse.domain.Room;
 import org.optaplanner.examples.curriculumcourse.domain.Teacher;
@@ -25,6 +26,10 @@ import org.optaplanner.examples.curriculumcourse.domain.Teacher;
  * @author gurhan
  */
 public class RoomDao extends GenericDaoImp<Room>{
+
+    public RoomDao(EntityManager em) {
+        super(em);
+    }
     public Room findRoomByCode(String code) {
 
         try {

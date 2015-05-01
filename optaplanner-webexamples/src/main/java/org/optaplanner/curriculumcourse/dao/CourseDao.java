@@ -16,6 +16,7 @@
 package org.optaplanner.curriculumcourse.dao;
 
 import java.util.List;
+import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import org.optaplanner.examples.curriculumcourse.domain.Course;
 
@@ -24,6 +25,10 @@ import org.optaplanner.examples.curriculumcourse.domain.Course;
  * @author gurhan
  */
 public class CourseDao extends GenericDaoImp<Course>{
+
+    public CourseDao(EntityManager em) {
+        super(em);
+    }
     
     public Course findCourseByCode(String code) {
         
