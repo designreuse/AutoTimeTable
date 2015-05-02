@@ -20,15 +20,20 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import javax.persistence.EntityManager;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
+import org.optaplanner.curriculumcourse.dao.CourseScheduleDao;
 import org.optaplanner.examples.curriculumcourse.domain.Course;
 import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
 import org.optaplanner.examples.curriculumcourse.domain.Day;
+import org.optaplanner.examples.curriculumcourse.domain.Lecture;
 import org.optaplanner.examples.curriculumcourse.domain.Room;
 import org.optaplanner.examples.curriculumcourse.domain.Timeslot;
 
@@ -42,32 +47,74 @@ import org.optaplanner.examples.curriculumcourse.domain.Timeslot;
 @WebServlet("/curriculumcourse/CurriculumCourseLoadedServlet")
 public class CurriculumCourseLoadedServlet extends HttpServlet {
 
+    CourseSchedule solution;
+    List<Course> courses;
+    List<Day> days;
+    List<Room> rooms;
+    List<Timeslot> timeSlots;
+    HardSoftScore score;
+    List<Lecture> lectures;
+    HashMap<String, Color> colorOfCourses;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("utf-8");
         resp.setCharacterEncoding("utf-8");
-        String contentName = req.getParameter("content");
-        String path = req.getServletContext().getRealPath("/");
         HttpSession session = req.getSession();
-        new CurriculumCourseWebAction().setup(session, contentName);
-        session.setAttribute("content", contentName);
-        CourseSchedule solution = (CourseSchedule) session.getAttribute(CurriculumCourseSessionAttributeName.SHOWN_SOLUTION);
-        solution.getLectureList().get(1).getLectureIndexInCourse();
 
-        List<Course> courses = solution.getCourseList();
-        List<Day> days = solution.getDayList();
-        List<Room> rooms = solution.getRoomList();
-        List<Timeslot> timeSlots = solution.getTimeslotList();
-
-        HashMap<String, Color> colorOfCourses = createColors(courses);
+        String contentName = req.getParameter("content");
+        String type = req.getParameter("type");
 
 
+        if (type.equals("new")) {
+            String path = req.getServletContext().getRealPath("/");
+            new CurriculumCourseWebAction().setup(session, contentName);
+            session.setAttribute("content", contentName);
 
-        session.setAttribute("colorOfCourses", colorOfCourses);
-        session.setAttribute("timeSlots", timeSlots);
-        session.setAttribute("days", days);
-        session.setAttribute("rooms", rooms);
-        resp.sendRedirect("loaded.jsp");
+            solution = (CourseSchedule) session.getAttribute(CurriculumCourseSessionAttributeName.SHOWN_SOLUTION);
+
+            courses = solution.getCourseList();
+            days = solution.getDayList();
+            rooms = solution.getRoomList();
+            timeSlots = solution.getTimeslotList();
+            score = solution.getScore();
+            lectures = solution.getLectureList();
+
+            colorOfCourses = createColors(courses);
+
+            session.setAttribute("colorOfCourses", colorOfCourses);
+            session.setAttribute("timeSlots", timeSlots);
+            session.setAttribute("days", days);
+            session.setAttribute("rooms", rooms);
+
+            resp.sendRedirect("loaded.jsp");
+        } else {
+            
+            EntityManager em = (EntityManager) session.getServletContext().getAttribute("entityManager");
+            CourseScheduleDao csDao = new CourseScheduleDao(em);
+            
+            solution = csDao.findCourseScheduleByName(contentName);
+            System.out.println(solution.getLectureList().get(1).getPeriod()+":"+solution.getLectureList().get(1).getCourse());
+            courses = solution.getCourseList();
+            days = solution.getDayList();
+            rooms = solution.getRoomList();
+            timeSlots = solution.getTimeslotList();
+            score = solution.getScore();
+            lectures = solution.getLectureList();
+
+            colorOfCourses = createColors(courses);
+
+            req.setAttribute("score", score);
+            req.setAttribute("lectures", lectures);
+            req.setAttribute("colorOfCourses", colorOfCourses);
+            req.setAttribute("timeSlots", timeSlots);
+            req.setAttribute("days", days);
+            req.setAttribute("rooms", rooms);
+            
+            RequestDispatcher rd = req.getRequestDispatcher("solutionView.jsp");
+            rd.forward(req, resp);
+        }
+
     }
 
     private HashMap<String, Color> createColors(List<Course> courses) {
@@ -92,5 +139,5 @@ public class CurriculumCourseLoadedServlet extends HttpServlet {
         }
         return colorsOfCourses;
     }
-  
+
 }

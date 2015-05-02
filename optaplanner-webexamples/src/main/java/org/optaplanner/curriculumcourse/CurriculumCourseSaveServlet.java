@@ -37,6 +37,7 @@ import org.optaplanner.curriculumcourse.dao.CourseDao;
 import org.optaplanner.curriculumcourse.dao.CourseScheduleDao;
 import org.optaplanner.curriculumcourse.dao.CurriculumDao;
 import org.optaplanner.curriculumcourse.dao.DayDao;
+import org.optaplanner.curriculumcourse.dao.LectureDao;
 import org.optaplanner.curriculumcourse.dao.RoomDao;
 import org.optaplanner.curriculumcourse.dao.TeacherDao;
 import org.optaplanner.curriculumcourse.dao.TimeslotDao;
@@ -57,6 +58,7 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
     private TimeslotDao tsDao;
     private CourseScheduleDao csDao;
     private RoomDao roomDao;
+    private LectureDao lectureDao;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -73,7 +75,7 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("utf-8");
         HttpSession session = request.getSession();
-        EntityManager em = (EntityManager)session.getServletContext().getAttribute("entityManager");
+        EntityManager em = (EntityManager) session.getServletContext().getAttribute("entityManager");
         solution = (CourseSchedule) session.getAttribute(CurriculumCourseSessionAttributeName.SHOWN_SOLUTION);
         teacherDao = new TeacherDao(em);
         courseDao = new CourseDao(em);
@@ -82,58 +84,71 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
         tsDao = new TimeslotDao(em);
         csDao = new CourseScheduleDao(em);
         roomDao = new RoomDao(em);
-        
+        lectureDao = new LectureDao(em);
+
         String[] changeList = convertToList(request.getParameter("changeList"));
         if (changeList != null && changeList.length > 0) {
             saveChanges(changeList);
         }
         String content = (String) request.getSession().getAttribute("content");
-        String path = request.getServletContext().getRealPath("/") + "export";
-        File file = new File(path + File.separator + content + ".xml");
-        CurriculumCourseDao dao = new CurriculumCourseDao(path);
-        dao.writeSolution(solution, file);
+       // String path = request.getServletContext().getRealPath("/") + "export";
+        //File file = new File(path + File.separator + content + ".xml");
+       // CurriculumCourseDao dao = new CurriculumCourseDao(path);
+       //dao.writeSolution(solution, file);
 
-        System.out.println(csDao.isObjectManaged(solution) + ":sasas");
-        
+        readySubClasses(solution);
+        checkScheduleName(solution);
+        csDao.createOrUpdate(solution);
+
+        response.sendRedirect("index.jsp");
+
+    }
+
+    /**
+     * Alt sınıflardan idleri çeker.
+     *
+     * @param solution
+     */
+    private void readySubClasses(CourseSchedule solution) {
+
         for (Course c : solution.getCourseList()) {
             Course managedCourse = courseDao.findCourseByCode(c.getCode());
             if (managedCourse != null) {
                 c.setId(managedCourse.getId());
-            }
-
-        }
-
-        for (int i = 0; i < solution.getTeacherList().size(); i++) {
-            Teacher managedTeacher = teacherDao.findTeacherByCode(solution.getTeacherList().get(i).getCode());
-            if (managedTeacher != null) {
-                solution.getTeacherList().set(i, managedTeacher);
-                
-                System.out.println(solution.getTeacherList().get(i) + "->managed:"+teacherDao.isObjectManaged(solution.getTeacherList().get(0)));
             } else {
-                solution.getTeacherList().set(i, teacherDao.save(solution.getTeacherList().get(i)));
-                System.out.println("->managed değil");
+                //optaplanner id atamıssa sil onu bırak eclipselink atsın
+                c.setId(null);
             }
+
         }
-        
+
         for (Teacher t : solution.getTeacherList()) {
             Teacher managedTeacher = teacherDao.findTeacherByCode(t.getCode());
-            if(managedTeacher != null) {
+            if (managedTeacher != null) {
                 t.setId(managedTeacher.getId());
+            }else {
+                //optaplanner id atamıssa sil onu bırak eclipselink atsın
+                t.setId(null);
             }
         }
-        System.out.println("csss"+teacherDao.isObjectManaged(solution.getTeacherList().get(3)));
 
         for (Curriculum c : solution.getCurriculumList()) {
             Curriculum managedCurriculum = curriculumDao.findCurriculumByCode(c.getCode());
             if (managedCurriculum != null) {
-               c.setId(managedCurriculum.getId());
+                c.setId(managedCurriculum.getId());
+            }else {
+                //optaplanner id atamıssa sil onu bırak eclipselink atsın
+                c.setId(null);
             }
         }
 
         for (Day d : solution.getDayList()) {
             Day managedDay = dayDao.findDayByIndex(d.getDayIndex());
             if (managedDay != null) {
-               d.setId(managedDay.getId());
+                d.setId(managedDay.getId());
+            }else {
+                //optaplanner id atamıssa sil onu bırak eclipselink atsın
+                d.setId(null);
             }
         }
 
@@ -141,20 +156,31 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
             Timeslot managetTimeslot = tsDao.findTimeslotByIndex(t.getTimeslotIndex());
             if (managetTimeslot != null) {
                 t.setId(managetTimeslot.getId());
+            }else {
+                //optaplanner id atamıssa sil onu bırak eclipselink atsın
+                t.setId(null);
             }
         }
-        
-        for (Room r : solution.getRoomList()){
-            Room managedRoom = roomDao.findRoomByCode(r.getCode());
-            if(managedRoom != null) {
-                System.out.println(managedRoom.getCode()+"->"+managedRoom.getId());
-                r.setId(managedRoom.getId());
-            }
-        }
-        System.out.println("csss"+teacherDao.isObjectManaged(solution.getTeacherList().get(3)));
-        csDao.createOrUpdate(solution);
-        response.sendRedirect("index.jsp");
 
+        for (Room r : solution.getRoomList()) {
+            Room managedRoom = roomDao.findRoomByCode(r.getCode());
+            if (managedRoom != null) {
+                System.out.println(managedRoom.getCode() + "->" + managedRoom.getId());
+                r.setId(managedRoom.getId());
+            }else {
+                //optaplanner id atamıssa sil onu bırak eclipselink atsın
+                r.setId(null);
+            }
+        }
+        for (Lecture l : solution.getLectureList()) {
+            l.setId(null);
+        }
+    }
+
+    private void checkScheduleName(CourseSchedule solution) {
+        String name = solution.getName();
+        int index = csDao.nextCourseScheduleNameIndex(name);
+        solution.setName(name + " - " + index);
     }
 
     /**

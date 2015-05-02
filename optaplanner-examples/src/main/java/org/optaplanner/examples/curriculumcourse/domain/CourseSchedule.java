@@ -29,6 +29,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty;
@@ -43,6 +45,14 @@ import org.optaplanner.persistence.xstream.impl.score.XStreamScoreConverter;
 
 @Entity(name = "CourseSchedule")
 @Table(name = "CourseSchedule")
+@NamedQueries({
+    @NamedQuery(name = "CourseSchedule.findByName",
+            query = "SELECT cs FROM CourseSchedule cs WHERE cs.name = :name"),
+    @NamedQuery(name = "CourseSchedule.findAll",
+            query = "SELECT cs FROM CourseSchedule cs"),
+    @NamedQuery(name = "CourseSchedule.findLikeNames",
+            query = "SELECT cs FROM CourseSchedule cs WHERE cs.name LIKE :name")
+})
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @PlanningSolution
 @XStreamAlias("CourseSchedule")

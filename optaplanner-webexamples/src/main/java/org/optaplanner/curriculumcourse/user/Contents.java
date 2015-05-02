@@ -18,6 +18,12 @@ package org.optaplanner.curriculumcourse.user;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
+import org.optaplanner.curriculumcourse.dao.CourseScheduleDao;
+import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
 
 /**
  *
@@ -40,47 +46,60 @@ public class Contents {
         this.path = path;
 
     }
-    
-    public void prepareContents() {
-        getContentsByType("import", importContents);
-        getContentsByType("export", exportContents);
-    }
-    
-    private void getContentsByType(String type, ArrayList<String> contents) {
-        final String extension = type.equals("import") ? ".ctt" : ".xml";
-        File directory = new File(path + type);
-        File[] files = directory.listFiles(new FilenameFilter() {
 
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.toLowerCase().endsWith(extension);
-            }
-        });
-        if (files != null) {
-            for (File f : files) {
-                if (!contents.contains(f.getName().substring(0, f.getName().indexOf(extension)))) {
-                    contents.add(f.getName().substring(0, f.getName().indexOf(extension)));
+    public void prepareContents(ServletContext context) {
+        getContentsByType("import", importContents, context);
+        getContentsByType("export", exportContents, context);
+    }
+
+    private void getContentsByType(String type, ArrayList<String> contents, ServletContext context) {
+        if ("import".equals(type)) {
+            final String extension = ".ctt";
+            File directory = new File(path + type);
+            File[] files = directory.listFiles(new FilenameFilter() {
+
+                @Override
+                public boolean accept(File dir, String name) {
+                    return name.toLowerCase().endsWith(extension);
+                }
+            });
+            if (files != null) {
+                for (File f : files) {
+                    if (!contents.contains(f.getName().substring(0, f.getName().indexOf(extension)))) {
+                        contents.add(f.getName().substring(0, f.getName().indexOf(extension)));
+                    }
                 }
             }
+        } else {
+            CourseScheduleDao csDao = new CourseScheduleDao((EntityManager) context.getAttribute("entityManager"));
+            List<CourseSchedule> courseSchedules = csDao.findCourseSchedules(null);
+            for (CourseSchedule c : courseSchedules) {
+                contents.add(c.getName());
+            }
+
         }
     }
+
     /**
      * Liste talep edildiğinde import dizini altında dosya listesi alınır bir
      * arrayliste atılır ve geri döndürülür.
      *
      * @return
      */
-    
-    
-    
     /**
      * Gönderilen içeriğin export dizini altında çözülmüş hali olup olmadığına
      * göre çözülüp çözülmediğini döndürür.
+     *
      * @param contentName
      * @return
      */
     public boolean isSolved(String contentName) {
-        return exportContents.contains(contentName);
+        for (String s : exportContents) {
+            if (s.contains(contentName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public String getPath() {
@@ -98,6 +117,5 @@ public class Contents {
     public ArrayList<String> getExportContents() {
         return exportContents;
     }
-    
 
 }

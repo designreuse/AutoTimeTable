@@ -24,7 +24,7 @@
     <jsp:include page="header.jsp" />
     <div class="row-fluid">
         <header class="main-page-header">
-            ${contents.prepareContents()}
+            ${contents.prepareContents(pageContext.servletContext)}
             <center style="margin-top: 15px"> 
                 <img src="../website/img/atauni.png" alt="Resim Bulunamadı" class="img-circle" /> 
 
@@ -42,7 +42,7 @@
                 <div class="list-group">
                    
                     <c:forEach var="content" items="${contents.importContents}" varStatus="i">
-                        <a href="CurriculumCourseLoadedServlet?content=${content}" class="list-group-item">
+                        <a href="CurriculumCourseLoadedServlet?content=${content}&AMP;type=new" class="list-group-item">
                             ${content}
                             <c:choose>
                                 <c:when test="${contents.isSolved(content) == true}">
@@ -60,7 +60,7 @@
                 <center><h3 class="info-header bg-info">Çözülmüş İçerikler</h3></center>
                 <div class="list-group">
                     <c:forEach var="content" items="${contents.exportContents}">
-                        <a href="#"  class="list-group-item">
+                        <a href="CurriculumCourseLoadedServlet?content=${content}&AMP;type=solved"  class="list-group-item">
                             ${content}
                         </a>
                     </c:forEach>
@@ -70,7 +70,7 @@
     </div>
 </div>
 
-<script src="twitterbootstrap/js/jquery.js"></script>
-<script src="twitterbootstrap/js/bootstrap.js"></script>
+<script src="<%=application.getContextPath()%>/twitterbootstrap/js/jquery.js"></script>
+<script src="<%=application.getContextPath()%>/twitterbootstrap/js/bootstrap.js"></script>
 </body>
 </html>

@@ -15,7 +15,9 @@
  */
 package org.optaplanner.curriculumcourse.dao;
 
+import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
 
 /**
@@ -27,5 +29,38 @@ public class CourseScheduleDao extends GenericDaoImp<CourseSchedule>{
     public CourseScheduleDao(EntityManager em) {
         super(em);
     }
+    
+    public CourseSchedule findCourseScheduleByName(String code) {
+
+        try {
+            return findCourseSchedules(code).get(0);
+        } catch (Exception e) {
+            System.out.println("CourseSchedule dao:" + e.getMessage());
+        }
+        return null;
+    }
+
+    public List<CourseSchedule> findCourseSchedules(String code) {
+        Query query;
+        if (code != null) {
+            query = em.createNamedQuery("CourseSchedule.findByName");
+            query.setParameter("name", code);
+        } else {
+            query = em.createNamedQuery("CourseSchedule.findAll");
+        }
+        try {
+            return query.getResultList();
+        } catch (Exception e) {
+            System.out.println("CourseSchedule dao:" + e.getMessage());
+        }
+        return null;
+    }
+    
+    public int nextCourseScheduleNameIndex(String name) {
+        Query query = em.createNamedQuery("CourseSchedule.findLikeNames");
+        query.setParameter("name", "%"+name+"%");
+        return query.getResultList().size()+1;
+    }
+    
     
 }

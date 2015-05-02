@@ -16,21 +16,16 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <script src="../twitterbootstrap/js/jquery.js"></script>
-        <link href='../website/css/optaplannerWebexamples.css' rel='styleSheet' type='text/css' />
-       
+        <script src="<%=application.getContextPath()%>/twitterbootstrap/js/jquery.js"></script>
+        <link href='<%=application.getContextPath()%>/website/css/optaplannerWebexamples.css' rel='styleSheet' type='text/css' />
+        
         <title>JSP Page</title>
     </head>
 
     <%
 
-        CourseSchedule solution = (CourseSchedule) session.getAttribute(CurriculumCourseSessionAttributeName.SHOWN_SOLUTION);
-        HardSoftScore score = solution.getScore();
-
-        List<Lecture> lectures = solution.getLectureList();
-        session.setAttribute("score", score);
-        session.setAttribute("lectures", lectures);
-
+        HardSoftScore score = (HardSoftScore) request.getAttribute("score");
+        System.out.println(score);
 
     %>
     <script>
@@ -143,6 +138,8 @@
         <c:out value="${rooms.size()}" />
         <c:out value="${timeSlots.size()}" />
         <c:out value="${days.size()}" />
+        <button value="Export png" onClick ="$('#myt').tableExport({type:'png',escape:'false'});" >asda</button>
+        <button value="Export png" onClick ="$('#myt').tableExport({type:'png',escape:'false'})" >asda</button>
         <table border="1" id="myt" class="table table-bordered">
             <thead>
                 <tr>
@@ -179,5 +176,8 @@
 
             </tbody>
         </table>
+        <script src="<%=application.getContextPath()%>/table_export/tableExport.js" ></script>
+        <script src="<%=application.getContextPath()%>/table_export/jquery.base64.js" ></script>
+        <script src="<%=application.getContextPath()%>/table_export/html2canvas.js" ></script>
     </body>
 </html>
