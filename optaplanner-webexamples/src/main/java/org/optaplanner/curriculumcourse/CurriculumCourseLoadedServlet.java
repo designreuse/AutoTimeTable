@@ -104,6 +104,7 @@ public class CurriculumCourseLoadedServlet extends HttpServlet {
 
             colorOfCourses = createColors(courses);
 
+            req.setAttribute("solution", solution);
             req.setAttribute("score", score);
             req.setAttribute("lectures", lectures);
             req.setAttribute("colorOfCourses", colorOfCourses);

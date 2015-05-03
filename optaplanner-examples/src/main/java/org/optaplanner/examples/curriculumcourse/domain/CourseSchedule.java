@@ -104,13 +104,13 @@ public class CourseSchedule extends AbstractPersistable implements Solution<Hard
     private List<Room> roomList;
 
     
-    @OneToMany(cascade = {CascadeType.PERSIST})
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinTable(name = "schedulePeriodPenaltyList",
             joinColumns = @JoinColumn(name = "schedule"),
             inverseJoinColumns = @JoinColumn(name = "periodPenalty"))
     private List<UnavailablePeriodPenalty> unavailablePeriodPenaltyList;
 
-    @OneToMany(cascade = {CascadeType.PERSIST})
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinTable(name = "scheduleLectureList",
             joinColumns = @JoinColumn(name = "schedule"),
             inverseJoinColumns = @JoinColumn(name = "lecture"))

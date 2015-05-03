@@ -24,12 +24,12 @@ import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
  *
  * @author gurhan
  */
-public class CourseScheduleDao extends GenericDaoImp<CourseSchedule>{
+public class CourseScheduleDao extends GenericDaoImp<CourseSchedule> {
 
     public CourseScheduleDao(EntityManager em) {
         super(em);
     }
-    
+
     public CourseSchedule findCourseScheduleByName(String code) {
 
         try {
@@ -55,12 +55,20 @@ public class CourseScheduleDao extends GenericDaoImp<CourseSchedule>{
         }
         return null;
     }
-    
+
     public int nextCourseScheduleNameIndex(String name) {
         Query query = em.createNamedQuery("CourseSchedule.findLikeNames");
-        query.setParameter("name", "%"+name+"%");
-        return query.getResultList().size()+1;
+        query.setParameter("name", "%" + name + "%");
+
+        CourseSchedule cs = (CourseSchedule) query.getResultList().get(query.getResultList().size() - 1);
+        String csName = cs.getName();
+        if (csName.contains("-")) {
+            String index = csName.split("-")[1].trim();
+            return Integer.parseInt(index) + 1;
+        } else {
+            return 1;
+        }
+
     }
-    
-    
+
 }

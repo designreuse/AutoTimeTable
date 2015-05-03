@@ -41,6 +41,7 @@ import org.optaplanner.curriculumcourse.dao.LectureDao;
 import org.optaplanner.curriculumcourse.dao.RoomDao;
 import org.optaplanner.curriculumcourse.dao.TeacherDao;
 import org.optaplanner.curriculumcourse.dao.TimeslotDao;
+import org.optaplanner.examples.curriculumcourse.domain.UnavailablePeriodPenalty;
 import org.optaplanner.examples.curriculumcourse.persistence.CurriculumCourseDao;
 
 /**
@@ -174,6 +175,9 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
         }
         for (Lecture l : solution.getLectureList()) {
             l.setId(null);
+        }
+        for(UnavailablePeriodPenalty up : solution.getUnavailablePeriodPenaltyList()) {
+            up.setId(null);
         }
     }
 
