@@ -19,6 +19,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
+import org.optaplanner.examples.curriculumcourse.domain.Curriculum;
 
 /**
  *
@@ -59,16 +60,29 @@ public class CourseScheduleDao extends GenericDaoImp<CourseSchedule> {
     public int nextCourseScheduleNameIndex(String name) {
         Query query = em.createNamedQuery("CourseSchedule.findLikeNames");
         query.setParameter("name", "%" + name + "%");
-
-        CourseSchedule cs = (CourseSchedule) query.getResultList().get(query.getResultList().size() - 1);
-        String csName = cs.getName();
-        if (csName.contains("-")) {
-            String index = csName.split("-")[1].trim();
-            return Integer.parseInt(index) + 1;
-        } else {
-            return 1;
+        try {
+            CourseSchedule cs = (CourseSchedule) query.getResultList().get(query.getResultList().size() - 1);
+            String csName = cs.getName();
+            if (csName.contains("-")) {
+                String index = csName.split("-")[1].trim();
+                return Integer.parseInt(index) + 1;
+            } else {
+                return 1;
+            }
+        }catch(Exception e) {
         }
+        return 1;
+    }
 
+    public Long nextSaveId() {
+        Query query = em.createNamedQuery("CourseSchedule.findAll", CourseSchedule.class);
+        try {
+            List<CourseSchedule> csList = query.getResultList();
+            return csList.get(csList.size() - 1).getId() + 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1L;
     }
 
 }

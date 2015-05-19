@@ -2,7 +2,7 @@
 <div class="navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <img src="/optaplanner-webexamples/website/img/baum-header.png" alt="Resim Bulunamadı" class="img-rounded">
+            <img src="<%=application.getContextPath()%>/website/img/baum-header.png" alt="Resim Bulunamadı" class="img-rounded">
                 
             </img>
           

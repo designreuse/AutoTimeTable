@@ -17,6 +17,7 @@ package org.optaplanner.curriculumcourse;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -38,6 +39,7 @@ import org.optaplanner.curriculumcourse.dao.CourseScheduleDao;
 import org.optaplanner.curriculumcourse.dao.CurriculumDao;
 import org.optaplanner.curriculumcourse.dao.DayDao;
 import org.optaplanner.curriculumcourse.dao.LectureDao;
+import org.optaplanner.curriculumcourse.dao.PeriodDao;
 import org.optaplanner.curriculumcourse.dao.RoomDao;
 import org.optaplanner.curriculumcourse.dao.TeacherDao;
 import org.optaplanner.curriculumcourse.dao.TimeslotDao;
@@ -60,6 +62,7 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
     private CourseScheduleDao csDao;
     private RoomDao roomDao;
     private LectureDao lectureDao;
+    private PeriodDao periodDao;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -73,11 +76,15 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("utf-8");
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
+
+        //eğer solutioınview sayfasından gelinmişse csname not null olacak
+        String csName = request.getParameter("courseScheduleName");
+
         EntityManager em = (EntityManager) session.getServletContext().getAttribute("entityManager");
-        solution = (CourseSchedule) session.getAttribute(CurriculumCourseSessionAttributeName.SHOWN_SOLUTION);
         teacherDao = new TeacherDao(em);
         courseDao = new CourseDao(em);
         curriculumDao = new CurriculumDao(em);
@@ -86,18 +93,36 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
         csDao = new CourseScheduleDao(em);
         roomDao = new RoomDao(em);
         lectureDao = new LectureDao(em);
+        periodDao = new PeriodDao(em);
 
+        if (csName == null) {
+            solution = (CourseSchedule) session.getAttribute(CurriculumCourseSessionAttributeName.SHOWN_SOLUTION);
+            System.out.println("yeni id:" + solution.getId());
+        } else {
+
+            solution = csDao.findCourseScheduleByName(csName);
+        }
         String[] changeList = convertToList(request.getParameter("changeList"));
+        System.out.println("dizi:" + Arrays.toString(changeList));
         if (changeList != null && changeList.length > 0) {
             saveChanges(changeList);
         }
-        String content = (String) request.getSession().getAttribute("content");
-       // String path = request.getServletContext().getRealPath("/") + "export";
+        // String path = request.getServletContext().getRealPath("/") + "export";
         //File file = new File(path + File.separator + content + ".xml");
-       // CurriculumCourseDao dao = new CurriculumCourseDao(path);
-       //dao.writeSolution(solution, file);
+        // CurriculumCourseDao dao = new CurriculumCourseDao(path);
+        //dao.writeSolution(solution, file);
 
-        readySubClasses(solution);
+        if (csName == null) {
+
+            readySubClasses(solution);
+            setNullLectureAndPenalty(solution);
+
+        } else {
+            csDao.getEm().clear();
+            setNullLectureAndPenalty(solution);
+
+            solution.setId(0L);
+        }
         checkScheduleName(solution);
         csDao.createOrUpdate(solution);
 
@@ -127,7 +152,7 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
             Teacher managedTeacher = teacherDao.findTeacherByCode(t.getCode());
             if (managedTeacher != null) {
                 t.setId(managedTeacher.getId());
-            }else {
+            } else {
                 //optaplanner id atamıssa sil onu bırak eclipselink atsın
                 t.setId(null);
             }
@@ -137,7 +162,7 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
             Curriculum managedCurriculum = curriculumDao.findCurriculumByCode(c.getCode());
             if (managedCurriculum != null) {
                 c.setId(managedCurriculum.getId());
-            }else {
+            } else {
                 //optaplanner id atamıssa sil onu bırak eclipselink atsın
                 c.setId(null);
             }
@@ -147,7 +172,7 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
             Day managedDay = dayDao.findDayByIndex(d.getDayIndex());
             if (managedDay != null) {
                 d.setId(managedDay.getId());
-            }else {
+            } else {
                 //optaplanner id atamıssa sil onu bırak eclipselink atsın
                 d.setId(null);
             }
@@ -157,7 +182,7 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
             Timeslot managetTimeslot = tsDao.findTimeslotByIndex(t.getTimeslotIndex());
             if (managetTimeslot != null) {
                 t.setId(managetTimeslot.getId());
-            }else {
+            } else {
                 //optaplanner id atamıssa sil onu bırak eclipselink atsın
                 t.setId(null);
             }
@@ -168,21 +193,28 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
             if (managedRoom != null) {
                 System.out.println(managedRoom.getCode() + "->" + managedRoom.getId());
                 r.setId(managedRoom.getId());
-            }else {
+            } else {
                 //optaplanner id atamıssa sil onu bırak eclipselink atsın
                 r.setId(null);
             }
         }
+
+    }
+
+    private void setNullLectureAndPenalty(CourseSchedule solution) {
         for (Lecture l : solution.getLectureList()) {
             l.setId(null);
         }
-        for(UnavailablePeriodPenalty up : solution.getUnavailablePeriodPenaltyList()) {
+        for (UnavailablePeriodPenalty up : solution.getUnavailablePeriodPenaltyList()) {
             up.setId(null);
         }
     }
 
     private void checkScheduleName(CourseSchedule solution) {
         String name = solution.getName();
+        if (name.contains("-")) {
+            name = name.substring(0, name.indexOf("-") - 1);
+        }
         int index = csDao.nextCourseScheduleNameIndex(name);
         solution.setName(name + " - " + index);
     }
@@ -199,19 +231,23 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
             int lectureIndexInCourse = Integer.parseInt(args[1]);
 
             String[] timeArgs = args[2].split("x");
-            Day day = new Day();
+
+            Day day;
             int dayIndex = Integer.parseInt(timeArgs[0]);
-            day.setDayIndex(dayIndex);
+            day = dayDao.findDayByIndex(dayIndex);
 
-            Timeslot timeSlot = new Timeslot();
+            Timeslot timeSlot;
             int timeSlotIndex = Integer.parseInt(timeArgs[1]);
-            timeSlot.setTimeslotIndex(timeSlotIndex);
+            timeSlot = tsDao.findTimeslotByIndex(timeSlotIndex);
 
-            Period period = new Period();
-            period.setDay(day);
-            period.setTimeslot(timeSlot);
+            Period period;
+            period = periodDao.findPeriodByIndexes(day.getDayIndex(), timeSlot.getTimeslotIndex());
 
-            Room room = solution.getRoomList().get(Integer.parseInt(timeArgs[2]));
+            System.out.println("bak bura");
+            System.out.println(Arrays.toString(solution.getRoomList().toArray()));
+            String roomCode = solution.getRoomList().get(Integer.parseInt(timeArgs[2])).getCode();
+            Room room;
+            room = roomDao.findRoomByCode(roomCode);
 
             for (Lecture l : solution.getLectureList()) {
                 if (l.getCourse().getCode().equals(course) && l.getLectureIndexInCourse() == lectureIndexInCourse) {

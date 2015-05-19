@@ -15,33 +15,30 @@
  */
 package org.optaplanner.curriculumcourse.dao;
 
-import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import org.optaplanner.examples.curriculumcourse.domain.Curriculum;
+import org.optaplanner.examples.curriculumcourse.domain.Period;
 
 /**
  *
  * @author gurhan
  */
-public class CurriculumDao extends GenericDaoImp<Curriculum>{
+public class PeriodDao extends GenericDaoImp<Period>{
 
-    public CurriculumDao(EntityManager em) {
+    public PeriodDao(EntityManager em) {
         super(em);
     }
     
-    public Curriculum findCurriculumByCode(String code) {
-        Query query = em.createNamedQuery("Curriculum.findByCode", Curriculum.class);
-        query.setParameter("code", code);
+    public Period findPeriodByIndexes(int dayIndex, int timeslotIndex) {
+        Query query = em.createNamedQuery("Period.findByIndex");
+        query.setParameter("dayIndex", dayIndex);
+        query.setParameter("timeslotIndex", timeslotIndex);
         try {
-            return (Curriculum) query.getResultList().get(0);
-        }catch (Exception e) {
-            System.out.println("Curriculum Dao Hata:"+e.getMessage());
+            return (Period) query.getResultList().get(0);
+        } catch (Exception e) {
+            System.out.println("Period dao hata:" + e.getMessage());
         }
         return null;
     }
-    
-    
-    
     
 }

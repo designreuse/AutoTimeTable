@@ -21,11 +21,18 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import org.optaplanner.examples.common.domain.AbstractPersistable;
 
 @Entity(name = "Period")
 @Table(name = "Period")
+@NamedQueries({
+    @NamedQuery(name = "Period.findByIndex",
+            query = "SELECT p FROM Period p WHERE p.day.dayIndex = :dayIndex "
+                    + "and p.timeslot.timeslotIndex = :timeslotIndex")
+})
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @XStreamAlias("Period")
 public class Period extends AbstractPersistable {

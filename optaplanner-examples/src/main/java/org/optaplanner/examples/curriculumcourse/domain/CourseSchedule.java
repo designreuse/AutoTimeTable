@@ -49,7 +49,7 @@ import org.optaplanner.persistence.xstream.impl.score.XStreamScoreConverter;
     @NamedQuery(name = "CourseSchedule.findByName",
             query = "SELECT cs FROM CourseSchedule cs WHERE cs.name = :name"),
     @NamedQuery(name = "CourseSchedule.findAll",
-            query = "SELECT cs FROM CourseSchedule cs"),
+            query = "SELECT cs FROM CourseSchedule cs ORDER BY cs.id"),
     @NamedQuery(name = "CourseSchedule.findLikeNames",
             query = "SELECT cs FROM CourseSchedule cs WHERE cs.name LIKE :name")
 })

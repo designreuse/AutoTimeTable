@@ -13,7 +13,7 @@
     <class>org.optaplanner.examples.curriculumcourse.domain.UnavailablePeriodPenalty</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
-      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+      <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/CurriculumCourse?useUnicode=true&amp;characterEncoding=UTF-8"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

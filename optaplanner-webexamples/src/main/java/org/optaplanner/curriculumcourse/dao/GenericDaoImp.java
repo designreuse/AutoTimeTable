@@ -92,6 +92,12 @@ public class GenericDaoImp<T> extends LoggingMain implements GenericDao<T> {
 
     }
 
+    public EntityManager getEm() {
+        return em;
+    }
+    
+    
+
    
 
 }

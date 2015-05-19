@@ -138,7 +138,7 @@
 
                     <form action="CurriculumCourseSaveServlet" method="post">
                         <input type="hidden" id="changeList" name="changeList"/>
-
+                        <input type="hidden" id="courseScheduleName" name="courseScheduleName" value="${solution.name}" />
                         <input class="btn btn-default" type="submit" value="Değişikleri Kaydet" id="exportButton"/>
                         <!-- 
                             Değşiiklik varsa kaydet butonu çıkacak. Yine kayıt servletine göndersin
