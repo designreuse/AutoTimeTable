@@ -42,7 +42,9 @@ import org.optaplanner.curriculumcourse.dao.LectureDao;
 import org.optaplanner.curriculumcourse.dao.PeriodDao;
 import org.optaplanner.curriculumcourse.dao.RoomDao;
 import org.optaplanner.curriculumcourse.dao.TeacherDao;
+import org.optaplanner.curriculumcourse.dao.TeacherDegreeDao;
 import org.optaplanner.curriculumcourse.dao.TimeslotDao;
+import org.optaplanner.examples.curriculumcourse.domain.TeacherDegree;
 import org.optaplanner.examples.curriculumcourse.domain.UnavailablePeriodPenalty;
 import org.optaplanner.examples.curriculumcourse.persistence.CurriculumCourseDao;
 
@@ -63,6 +65,7 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
     private RoomDao roomDao;
     private LectureDao lectureDao;
     private PeriodDao periodDao;
+    private TeacherDegreeDao tdDao;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -94,6 +97,7 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
         roomDao = new RoomDao(em);
         lectureDao = new LectureDao(em);
         periodDao = new PeriodDao(em);
+        tdDao = new TeacherDegreeDao(em);
 
         if (csName == null) {
             solution = (CourseSchedule) session.getAttribute(CurriculumCourseSessionAttributeName.SHOWN_SOLUTION);
@@ -156,7 +160,9 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
                 //optaplanner id atamıssa sil onu bırak eclipselink atsın
                 t.setId(null);
             }
+            t.setDegree(tdDao.find(TeacherDegree.class, t.getDegree().getId()));
         }
+        
 
         for (Curriculum c : solution.getCurriculumList()) {
             Curriculum managedCurriculum = curriculumDao.findCurriculumByCode(c.getCode());

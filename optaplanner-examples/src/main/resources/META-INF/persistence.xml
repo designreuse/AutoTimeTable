@@ -10,6 +10,7 @@
     <class>org.optaplanner.examples.curriculumcourse.domain.Period</class>
     <class>org.optaplanner.examples.curriculumcourse.domain.Room</class>
     <class>org.optaplanner.examples.curriculumcourse.domain.Teacher</class>
+    <class>org.optaplanner.examples.curriculumcourse.domain.TeacherDegree</class>
     <class>org.optaplanner.examples.curriculumcourse.domain.Timeslot</class>
     <class>org.optaplanner.examples.curriculumcourse.domain.UnavailablePeriodPenalty</class>
     <properties>

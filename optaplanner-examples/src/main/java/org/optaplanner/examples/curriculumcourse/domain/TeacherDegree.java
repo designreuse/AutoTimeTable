@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 JBoss Inc
+ * Copyright 2015 JBoss by Red Hat.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,61 +16,33 @@
 package org.optaplanner.examples.curriculumcourse.domain;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import org.optaplanner.examples.common.domain.AbstractPersistable;
 
-@Entity(name = "Teacher")
-@Table(name = "Teacher")
+/**
+ *
+ * @author gurhan
+ */
+@Entity(name = "TeacherDegree")
+@Table(name = "TeacherDegree")
 @NamedQueries({
-    @NamedQuery(name = "Teacher.findTeacherByCode",
-            query = "SELECT t FROM Teacher t WHERE t.code=:code")
+    @NamedQuery(name = "TeacherDegree.findByShortName",
+            query = "SELECT t FROM TeacherDegree t WHERE t.shortName=:shorName")
 })
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@XStreamAlias("Teacher")
-public class Teacher extends AbstractPersistable {
-
-    @Column(name = "code", unique = true)
-    private String code;
-    
-    @OneToOne(cascade = CascadeType.MERGE)
-    private TeacherDegree degree;
-
+@XStreamAlias("TeacherDegree")
+public class TeacherDegree extends AbstractPersistable{
     @Column(name = "name")
     private String name;
-    @Column(name = "surname")
-    private String surname;
     
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getLabel() {
-        return code;
-    }
-
-    public TeacherDegree getDegree() {
-        if(this.degree == null) {
-            this.degree = new TeacherDegree();
-        }
-        return degree;
-    }
-
-    public void setDegree(TeacherDegree degree) {
-        this.degree = degree;
-    }
+    @Column(name = "shortName")
+    private String shortName;
 
     public String getName() {
         return name;
@@ -80,17 +52,13 @@ public class Teacher extends AbstractPersistable {
         this.name = name;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getShortName() {
+        return shortName;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setShortName(String shorName) {
+        this.shortName = shorName;
     }
-
-    @Override
-    public String toString() {
-        return degree.getShortName()+" "+name + " " + surname;
-    }
-
+    
+    
 }
