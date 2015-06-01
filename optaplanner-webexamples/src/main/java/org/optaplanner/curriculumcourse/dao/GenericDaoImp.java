@@ -15,14 +15,9 @@
  */
 package org.optaplanner.curriculumcourse.dao;
 
-import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Parameter;
-import org.eclipse.persistence.internal.jpa.querydef.ParameterExpressionImpl;
 import org.optaplanner.examples.common.app.LoggingMain;
 
 /**

@@ -77,7 +77,7 @@ public class CurriculumCourseWebAction {
             }
         });
     }
-
+ 
     public void terminateEarly(HttpSession session) {
         final Solver solver = (Solver) session.getAttribute(CurriculumCourseSessionAttributeName.SOLVER);
         if (solver != null) {

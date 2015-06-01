@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.optaplanner.core.api.solver.Solver;
+import org.optaplanner.core.api.solver.SolverFactory;
 import org.optaplanner.examples.curriculumcourse.domain.Course;
 import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
 import org.optaplanner.examples.curriculumcourse.domain.Curriculum;
@@ -162,7 +164,6 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
             }
             t.setDegree(tdDao.find(TeacherDegree.class, t.getDegree().getId()));
         }
-        
 
         for (Curriculum c : solution.getCurriculumList()) {
             Curriculum managedCurriculum = curriculumDao.findCurriculumByCode(c.getCode());

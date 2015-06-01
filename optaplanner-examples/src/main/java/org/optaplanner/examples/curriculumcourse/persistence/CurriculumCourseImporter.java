@@ -80,6 +80,8 @@ public class CurriculumCourseImporter extends AbstractTxtSolutionImporter {
             int curriculumListSize = readIntegerValue("Curricula:");
             // Constraints: 8
             int unavailablePeriodPenaltyListSize = readIntegerValue("Constraints:");
+            // Teacher Day Constraints:
+            int teacherPenaltyListSize = readIntegerValue("TeacherDayConstraints:");
 
             Map<String, Course> courseMap = readCourseListAndTeacherList(
                     schedule, courseListSize);
@@ -93,6 +95,7 @@ public class CurriculumCourseImporter extends AbstractTxtSolutionImporter {
                     schedule, courseMap, periodMap, unavailablePeriodPenaltyListSize);
             readTeacherName(schedule);
             readTeacherDegree(schedule);
+            readTeacherPenaltyList(schedule, periodMap, teacherPenaltyListSize);
             readCourseName(schedule, courseMap);
             readRoomDeps(schedule, courseMap, roomMap);
             //readRoomDeps fonksiyonunda satırı okuduktan sonra hata oluştuğu için
@@ -116,7 +119,7 @@ public class CurriculumCourseImporter extends AbstractTxtSolutionImporter {
                     schedule.getRoomList().size(),
                     schedule.getUnavailablePeriodPenaltyList().size(),
                     getFlooredPossibleSolutionSize(possibleSolutionSize));
-            for(Teacher t : schedule.getTeacherList()) {
+            for (Teacher t : schedule.getTeacherList()) {
                 System.out.println(t.getCode() + "->" + t.getDegree().getId());
             }
             return schedule;
@@ -365,6 +368,49 @@ public class CurriculumCourseImporter extends AbstractTxtSolutionImporter {
                 penaltyList.add(penalty);
             }
             schedule.setUnavailablePeriodPenaltyList(penaltyList);
+        }
+
+        private void readTeacherPenaltyList(CourseSchedule schedule, Map<List<Integer>, Period> periodMap,
+                int teacherPenaltyListSize) throws IOException {
+            readEmptyLine();
+            readConstantLine("TEACHER_UNAVILABILITY_CONSTRAINTS:");
+            /**
+             * hocanın girdiği dersleri teachersCourseMap'e eklemek için ilk
+             * başta dersin hocasının kodunun map içinde bulup bulunmadıgına
+             * bakılır bulunmuyorsa yen bir list ile mape eklenir bulunuyorsada
+             * o elaman cekilir ve listeye ekleme yapılırç.
+             */
+            HashMap<String, List<Course>> teachersCourseMap = new HashMap<String, List<Course>>();
+            for (Course c : schedule.getCourseList()) {
+                String courseTeacherCode = c.getTeacher().getCode();
+                if (!teachersCourseMap.containsKey(courseTeacherCode)) {
+                    List<Course> teacherCourseList = new ArrayList<Course>();
+                    teacherCourseList.add(c);
+                    teachersCourseMap.put(courseTeacherCode, teacherCourseList);
+                } else {
+                    teachersCourseMap.get(courseTeacherCode).add(c);
+                }
+            }
+            for (int i = 0; i < teacherPenaltyListSize; i++) {
+                String line = bufferedReader.readLine();
+                String lineTokens[] = splitBySpacesOrTabs(line);
+                String teacherCode = lineTokens[0];
+                int dayIndex = Integer.parseInt(lineTokens[1]);
+                int timeslotIndex = Integer.parseInt(lineTokens[2]);
+                List<Course> courseList = teachersCourseMap.get(teacherCode);
+                for (Course c : courseList) {
+                    UnavailablePeriodPenalty penalty = new UnavailablePeriodPenalty();
+                    penalty.setCourse(c);
+                    Period period = periodMap.get(Arrays.asList(dayIndex, timeslotIndex));
+                    if (period == null) {
+                        throw new IllegalArgumentException("Read line (" + line + ") uses an unexisting period("
+                                + dayIndex + " " + timeslotIndex + ").");
+                    }
+                    penalty.setPeriod(period);
+                    schedule.getUnavailablePeriodPenaltyList().add(penalty);
+                }
+
+            }
         }
 
         private void createLectureList(CourseSchedule schedule) {
