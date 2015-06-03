@@ -82,7 +82,7 @@ public class CurriculumCourseWebAction {
         final Solver solver = (Solver) session.getAttribute(CurriculumCourseSessionAttributeName.SOLVER);
         if (solver != null) {
             solver.terminateEarly();
-            session.setAttribute(CurriculumCourseSessionAttributeName.SOLVER, solver.getBestSolution());
+            session.setAttribute(CurriculumCourseSessionAttributeName.SHOWN_SOLUTION, solver.getBestSolution());
             session.removeAttribute(CurriculumCourseSessionAttributeName.SOLVER);
         }
     }

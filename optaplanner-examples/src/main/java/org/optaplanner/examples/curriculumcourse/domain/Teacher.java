@@ -31,7 +31,9 @@ import org.optaplanner.examples.common.domain.AbstractPersistable;
 @Table(name = "Teacher")
 @NamedQueries({
     @NamedQuery(name = "Teacher.findTeacherByCode",
-            query = "SELECT t FROM Teacher t WHERE t.code=:code")
+            query = "SELECT t FROM Teacher t WHERE t.code=:code"),
+    @NamedQuery(name = "Teacher.findAll",
+            query = "SELECT t FROM Teacher t")
 })
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @XStreamAlias("Teacher")
@@ -40,7 +42,7 @@ public class Teacher extends AbstractPersistable {
     @Column(name = "code", unique = true)
     private String code;
     
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private TeacherDegree degree;
 
     @Column(name = "name")

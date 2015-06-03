@@ -40,7 +40,7 @@
                     <div class='span6'>
                         <center><h3 class="bg-info info-header">Çözümü Başlatılabilir İçerikler</h3></center>
                         <div class="list-group">
-
+                            <%--
                             <c:forEach var="content" items="${contents.importContents}" varStatus="i">
                                 <a href="CurriculumCourseLoadedServlet?content=${content}&AMP;type=new" class="list-group-item">
                                     ${content}
@@ -54,15 +54,25 @@
                                     </c:choose>
                                 </a>     
                             </c:forEach>
+                            --%>
+                            <a href="courseScheduleEdit.jsp" class="list-group-item">Kayıtları Düzenle</a>
+                            <a href="CurriculumCourseLoadedServlet" class="list-group-item">Ders Programını Çöz</a>
                         </div>
                     </div>
                     <div class='span6'>
                         <center><h3 class="info-header bg-info">Çözülmüş İçerikler</h3></center>
                         <div class="list-group">
                             <c:forEach var="content" items="${contents.exportContents}">
-                                <a href="CurriculumCourseLoadedServlet?content=${content}&AMP;type=solved"  class="list-group-item">
-                                    ${content}
-                                </a>
+                                <c:choose>
+                                    <c:when test="${content.contains('-unslv')}">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a href="CurriculumCourseLoadedServlet?content=${content}&AMP;type=solved"  class="list-group-item">
+                                            ${content}
+                                        </a>
+                                    </c:otherwise>
+                                </c:choose>
+
                             </c:forEach>
                         </div>
                     </div>

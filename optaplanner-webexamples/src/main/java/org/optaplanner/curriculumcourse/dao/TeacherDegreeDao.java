@@ -15,7 +15,9 @@
  */
 package org.optaplanner.curriculumcourse.dao;
 
+import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import org.optaplanner.examples.curriculumcourse.domain.TeacherDegree;
 
 /**
@@ -26,6 +28,22 @@ public class TeacherDegreeDao extends GenericDaoImp<TeacherDegree>{
 
     public TeacherDegreeDao(EntityManager em) {
         super(em);
+    }
+    
+    public List<TeacherDegree> findAll() {
+        Query query = em.createNamedQuery("TeacherDegree.findAll");
+        return query.getResultList();
+    }
+    
+    public TeacherDegree findByShortName(String shortName) {
+        Query query = em.createNamedQuery("TeacherDegree.findByShortName");
+        query.setParameter("shortName", shortName);
+        try {
+            return (TeacherDegree) query.getResultList().get(0);
+        }catch (Exception e) {
+            System.out.println(shortName + " : Böyle bir unvan bulunamadı");
+        }
+        return null;
     }
     
 }

@@ -32,8 +32,12 @@ import org.optaplanner.examples.common.domain.AbstractPersistable;
 @Entity(name = "TeacherDegree")
 @Table(name = "TeacherDegree")
 @NamedQueries({
+    @NamedQuery(name="TeacherDegree.findByName", 
+            query = "SELECT t FROM TeacherDegree t WHERE t.name=:name"),
     @NamedQuery(name = "TeacherDegree.findByShortName",
-            query = "SELECT t FROM TeacherDegree t WHERE t.shortName=:shorName")
+            query = "SELECT t FROM TeacherDegree t WHERE t.shortName=:shortName"),
+    @NamedQuery(name = "TeacherDegree.findAll",
+            query = "SELECT t FROM TeacherDegree t")
 })
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @XStreamAlias("TeacherDegree")
@@ -59,6 +63,12 @@ public class TeacherDegree extends AbstractPersistable{
     public void setShortName(String shorName) {
         this.shortName = shorName;
     }
+
+    @Override
+    public String toString() {
+        return name + "-" + shortName;
+    }
+    
     
     
 }
