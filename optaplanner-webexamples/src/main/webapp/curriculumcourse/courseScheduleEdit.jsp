@@ -28,7 +28,6 @@
                 </header>
             </div>
             
-            ${sessionScope.edittingCourseSchedule.name}
             <div class="row">
                 <div class="col-md-3">
                     <div class="jumbotron">
@@ -37,7 +36,7 @@
                 </div>
                 <div class="col-md-3">
                     <div class="jumbotron">
-                        <p><a class="btn btn-primary btn-lg" href="#" role="button">Derslik İşlemleri</a></p>
+                        <p><a class="btn btn-primary btn-lg" href="RoomsViewServlet" role="button">Derslik İşlemleri</a></p>
                     </div>
                 </div>
                 <div class="col-md-3">
