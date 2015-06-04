@@ -41,6 +41,15 @@ public class CurriculumDao extends GenericDaoImp<Curriculum>{
         return null;
     }
     
+    public List<Curriculum> findAll() {
+        Query query = em.createNamedQuery("Curriculum.findAll");
+        try {
+            return query.getResultList();
+        }catch(Exception e) {
+            return null;
+        }
+    }
+    
     
     
     

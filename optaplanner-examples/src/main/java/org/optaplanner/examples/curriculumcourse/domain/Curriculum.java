@@ -30,7 +30,9 @@ import org.optaplanner.examples.common.domain.AbstractPersistable;
 @Table(name = "Curriculum")
 @NamedQueries({
     @NamedQuery(name = "Curriculum.findByCode",
-            query = "SELECT c FROM Curriculum c WHERE c.code=:code")
+            query = "SELECT c FROM Curriculum c WHERE c.code=:code"),
+    @NamedQuery(name = "Curriculum.findAll",
+            query = "SELECT c FROM Curriculum c")
 })
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @XStreamAlias("Curriculum")

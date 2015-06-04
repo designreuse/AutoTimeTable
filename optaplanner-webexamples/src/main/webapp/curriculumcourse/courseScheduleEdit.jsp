@@ -41,7 +41,7 @@
                 </div>
                 <div class="col-md-3">
                     <div class="jumbotron">
-                        <p><a class="btn btn-primary btn-lg" href="#" role="button">Sınıf İşlemleri</a></p>
+                        <p><a class="btn btn-primary btn-lg" href="CurriculumsViewServlet" role="button">Sınıf İşlemleri</a></p>
                     </div>
                 </div>
                 <div class="col-md-3">
