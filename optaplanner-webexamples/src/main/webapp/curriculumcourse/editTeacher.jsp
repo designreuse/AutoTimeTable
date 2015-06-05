@@ -70,7 +70,7 @@
                             <td>${teacher.surname}</td>
                             <td>
                                 <a href="TeacherInfoEditServlet?teacherId=${teacher.id}" class="btn btn-warning" >Düzenle</a>
-                                <a href="#"  class="btn btn-info">Ders Günleri</a>
+                                <a href="TeacherPenaltyPeriods?teacherId=${teacher.id}" class="btn btn-info">Ders Günleri</a>
                                 <a href ="#" class="btn btn-primary">Dersleri</a>
                                 <a href="#" class="btn btn-danger">Sil</a>
                             </td>

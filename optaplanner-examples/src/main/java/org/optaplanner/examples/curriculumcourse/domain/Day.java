@@ -37,14 +37,16 @@ import org.optaplanner.examples.common.domain.AbstractPersistable;
 @Table(name = "Day")
 @NamedQueries({
     @NamedQuery(name = "Day.findByIndex",
-            query = "SELECT d FROM Day d WHERE d.dayIndex=:dayIndex")
+            query = "SELECT d FROM Day d WHERE d.dayIndex=:dayIndex"),
+    @NamedQuery(name = "Day.findAll",
+            query = "SELECT d FROM Day d ORDER BY d.dayIndex")
 })
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @XStreamAlias("Day")
 public class Day extends AbstractPersistable {
     
     @ElementCollection
-    private static final String[] WEEKDAYS = {"Mo", "Tu", "We", "Th", "Fr"};
+    public static final String[] WEEKDAYS = {"Pzt", "Sal", "Çar", "Per", "Cum"};
 
     @JoinColumn(name = "dayIndex", unique = true)
     private int dayIndex;

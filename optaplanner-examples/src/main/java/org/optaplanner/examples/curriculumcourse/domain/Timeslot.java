@@ -30,7 +30,9 @@ import org.optaplanner.examples.common.domain.AbstractPersistable;
 @Table(name = "Timeslot")
 @NamedQueries({
     @NamedQuery(name = "Timeslot.findByIndex",
-            query = "SELECT t FROM Timeslot t WHERE t.timeslotIndex=:timeslotIndex")
+            query = "SELECT t FROM Timeslot t WHERE t.timeslotIndex=:timeslotIndex"),
+    @NamedQuery(name = "Timeslot.findAll",
+            query = "SELECT t FROM Timeslot t ORDER BY t.timeslotIndex")
 })
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @XStreamAlias("Timeslot")

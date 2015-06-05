@@ -15,6 +15,7 @@
  */
 package org.optaplanner.curriculumcourse.dao;
 
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import org.optaplanner.examples.curriculumcourse.domain.Timeslot;
@@ -23,20 +24,31 @@ import org.optaplanner.examples.curriculumcourse.domain.Timeslot;
  *
  * @author gurhan
  */
-public class TimeslotDao extends GenericDaoImp<Timeslot>{
+public class TimeslotDao extends GenericDaoImp<Timeslot> {
 
     public TimeslotDao(EntityManager em) {
         super(em);
     }
-    
+
     public Timeslot findTimeslotByIndex(int timeSlotIndex) {
         Query query = em.createNamedQuery("Timeslot.findByIndex", Timeslot.class);
         query.setParameter("timeslotIndex", timeSlotIndex);
         try {
             return (Timeslot) query.getResultList().get(0);
-        }catch (Exception e) {
-            System.out.println("TimeslotDao Hata:"+e.getMessage());
+        } catch (Exception e) {
+            System.out.println("TimeslotDao Hata:" + e.getMessage());
         }
         return null;
+    }
+
+    public List<Timeslot> findAll() {
+        try {
+            Query query = em.createNamedQuery("Timeslot.findAll");
+            return query.getResultList();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
     }
 }

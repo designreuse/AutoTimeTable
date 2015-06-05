@@ -51,4 +51,15 @@ public class CourseDao extends GenericDaoImp<Course>{
         }
         return q.getResultList();
     }
+    
+    public List<Course> findCourseByTeacher(Long teacherID){
+        try {
+            Query query = em.createNamedQuery("Course.findByTeacher");
+            query.setParameter("teacherId",  teacherID);
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.optaplanner.examples.curriculumcourse.domain;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -21,11 +20,19 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import org.optaplanner.examples.common.domain.AbstractPersistable;
 
 @Entity(name = "UnavailablePeriodPenalty")
 @Table(name = "UnavailablePeriodPenalty")
+@NamedQueries({
+    @NamedQuery(name = "UnavailablePeriodPenalty.findByCourse",
+            query = "SELECT uvp FROM UnavailablePeriodPenalty uvp WHERE uvp.course.id=:courseId"),
+    @NamedQuery(name = "UnavailablePeriodPenalty.findByCourseAndDayAndPeriod",
+            query = "SELECT uvp FROM UnavailablePeriodPenalty uvp WHERE UVP.course.id=:courseId AND UVP.period.day.dayIndex=:dayIndex AND UVP.period.timeslot.timeslotIndex=:timeslotIndex")
+})
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @XStreamAlias("UnavailablePeriodPenalty")
 public class UnavailablePeriodPenalty extends AbstractPersistable {
