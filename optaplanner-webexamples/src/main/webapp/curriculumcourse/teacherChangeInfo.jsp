@@ -42,7 +42,7 @@
                     <label for="teacherDegree">Ünvan</label>
                     <select class="form-control" id="teacherDegree" name="teacherDegree" >
                         <c:forEach var="degree" items="${requestScope.degreeList}">
-                            <option value="${degree.shortName}" ${degree.shortName == teacher.degree.shortName ? 'selected="selected"':''}>${degree.name}</option>
+                            <option value="${degree.shortName}" ${degree.shortName == requestScope.teacher.degree.shortName ? 'selected="selected"':''}>${degree.name}</option>
                         </c:forEach>
                     </select>
                 </div>

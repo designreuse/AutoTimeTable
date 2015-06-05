@@ -52,7 +52,7 @@
                     </div>
                     <button type="submit" class="btn btn-default">Ekle</button>
                 </form>
-                <table class="table table-striped">
+                <table class="table table-striped table-bordered">
                     <thead>
                         <tr>
                             <th>Kodu</th>

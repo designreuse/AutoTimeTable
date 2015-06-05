@@ -18,6 +18,7 @@ package org.optaplanner.examples.curriculumcourse.domain;
 import java.util.List;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import java.util.ArrayList;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,9 +35,12 @@ import org.optaplanner.examples.common.domain.AbstractPersistable;
 @Entity(name = "Course")
 @Table(name = "Course")
 @NamedQueries({
-   @NamedQuery(
-        name = "Course.findCourseByCode", 
-        query = "SELECT c FROM Course c WHERE c.code = :code")
+    @NamedQuery(
+            name = "Course.findCourseByCode",
+            query = "SELECT c FROM Course c WHERE c.code = :code"),
+    @NamedQuery(
+            name = "Course.findAll",
+            query = "SELECT c FROM Course c")
 })
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @XStreamAlias("Course")
@@ -110,6 +114,9 @@ public class Course extends AbstractPersistable {
     }
 
     public List<Curriculum> getCurriculumList() {
+        if(curriculumList == null) {
+            curriculumList = new ArrayList<Curriculum>();
+        }
         return curriculumList;
     }
 

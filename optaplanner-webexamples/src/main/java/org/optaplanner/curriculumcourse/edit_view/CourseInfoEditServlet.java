@@ -15,6 +15,7 @@
  */
 package org.optaplanner.curriculumcourse.edit_view;
 
+import com.sun.corba.se.spi.protocol.RequestDispatcherDefault;
 import java.io.IOException;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -24,25 +25,36 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.optaplanner.curriculumcourse.dao.CourseDao;
 import org.optaplanner.curriculumcourse.dao.CurriculumDao;
+import org.optaplanner.curriculumcourse.dao.TeacherDao;
+import org.optaplanner.examples.curriculumcourse.domain.Course;
 import org.optaplanner.examples.curriculumcourse.domain.Curriculum;
+import org.optaplanner.examples.curriculumcourse.domain.Teacher;
 
 /**
  *
  * @author gurhan
  */
-@WebServlet("/curriculumcourse/CurriculumsViewServlet")
-public class CurriculumsViewServlet extends HttpServlet {
-    
+@WebServlet("/curriculumcourse/CourseInfoEditServlet")
+public class CourseInfoEditServlet extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("utf-8");
         EntityManager em = (EntityManager) req.getServletContext().getAttribute("entityManager");
-        CurriculumDao cDao = new CurriculumDao(em);
-        List<Curriculum> curriculumList = cDao.findAll();
+        CourseDao cDao = new CourseDao(em);
+        TeacherDao tDao = new TeacherDao(em);
+        CurriculumDao ccDao = new CurriculumDao(em);
+        String id = req.getParameter("courseId");
+        Course course = cDao.find(Course.class, Long.parseLong(id));
+        List<Teacher> teacherList = tDao.findTeachers(null);
+        List<Curriculum> curriculumList = ccDao.findAll();
+        req.setAttribute("course", course);
+        req.setAttribute("teacherList", teacherList);
         req.setAttribute("curriculumList", curriculumList);
-        RequestDispatcher rd = req.getRequestDispatcher("editCurricula.jsp");
+        RequestDispatcher rd = req.getRequestDispatcher("courseInfoEdit.jsp");
         rd.forward(req, resp);
     }
-    
+
 }
