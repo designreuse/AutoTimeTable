@@ -62,4 +62,13 @@ public class CourseDao extends GenericDaoImp<Course>{
         }
         return null;
     }
+    public List<Course> findTeacherIsNull() {
+        try {
+            Query query = em.createNamedQuery("Course.findTeacherIsNull");
+            return query.getResultList();
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

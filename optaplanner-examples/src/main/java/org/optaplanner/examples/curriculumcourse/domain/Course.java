@@ -44,6 +44,10 @@ import org.optaplanner.examples.common.domain.AbstractPersistable;
     @NamedQuery(
             name = "Course.findByTeacher",
             query = "SELECT c FROM Course c WHERE c.teacher.id=:teacherId"
+    ),
+    @NamedQuery(
+            name = "Course.findTeacherIsNull", 
+            query = "SELECT c FROM Course c WHERE c.teacher IS NULL"
     )
 })
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
