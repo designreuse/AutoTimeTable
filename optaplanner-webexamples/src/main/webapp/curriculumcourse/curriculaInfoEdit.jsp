@@ -33,6 +33,7 @@
                         <input type="text" value="${requestScope.curriculum.code}" name="curriculumCode" />
                     </div>
                     <button type="submit" class="btn btn-default">Düzenle</button>
+                    <a href="CurriculumsViewServlet" type="submit" class="btn btn-danger" >Geri Dön</a>
                 </form>
             </div>
         </div>

@@ -27,7 +27,7 @@
                         <h2>Dersler</h2>
                         <c:if test="${message != null}">
                             <h2><span class="label ${message.result == false ? 'label-danger' : 'label-success'} " style="width: 500px">${message.content}</span></h2>
-                        </c:if>
+                            </c:if>
                     </center>
                 </header>
             </div>
@@ -71,9 +71,11 @@
                 </div>
                 <div class="row">
                     <div class="col-md-7" ></div>
-                    <button type="submit" class="btn btn-success btn col-md-2" >Ekle</button>
+                    <button type="submit" class="btn btn-success btn col-md-1" >Ekle</button>
+                    <a href="courseScheduleEdit.jsp" type="submit" class="btn btn-danger btn col-md-1" >Geri Dön</a>
 
                 </div>
+                
             </form>
             <table class="table table-bordered table-striped">
                 <thead>

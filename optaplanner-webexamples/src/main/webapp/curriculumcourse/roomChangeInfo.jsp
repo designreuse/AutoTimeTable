@@ -36,6 +36,7 @@
                         <input type="text" class="form-control" id="roomCapacity" name="roomCapacity" placeholder="Sayı Girin..." value="${requestScope.room.capacity}">
                     </div>
                     <button type="submit" class="btn btn-default">Düzenle</button>
+                    <a href="RoomsViewServlet" type="submit" class="btn btn-danger" >Geri Dön</a>
                 </form>
             </div>
        </div>

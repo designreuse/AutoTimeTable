@@ -48,7 +48,8 @@
                 </c:forEach>
                 <div class="row">
                     <div class="col-md-6" ></div>
-                    <button type="submit" class="btn btn-success btn col-md-2" >Düzenle</button>
+                    <button type="submit" class="btn btn-success btn col-md-1" >Düzenle</button>
+                    <a href="TeachersViewServlet" type="submit" class="btn btn-danger col-md-1" >Geri Dön</a>
                 </div>
             </form>
         </div>

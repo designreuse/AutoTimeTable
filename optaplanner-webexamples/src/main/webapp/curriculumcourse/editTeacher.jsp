@@ -54,6 +54,7 @@
                         <input type="text" class="form-control" id="teacherSurname" name="teacherSurname" />
                     </div>
                     <button type="submit" class="btn btn-default">Ekle</button>
+                    <a href="courseScheduleEdit.jsp" type="submit" class="btn btn-danger btn" >Geri Dön</a>
                 </form>
                 <table class="table table-striped table-bordered">
                     <thead>

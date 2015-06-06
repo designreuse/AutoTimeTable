@@ -41,6 +41,8 @@
                     </c:forEach>
                 </select>
                 <input type="submit" class="btn btn-default" value="Dersi Ata" />
+                <a href="TeachersViewServlet" type="submit" class="btn btn-danger" >Geri Dön</a>
+
             </form>
             <table class="table table-striped table-bordered">
                 <thead>
@@ -57,6 +59,7 @@
                         <td>${course.curriculumList[0].code}</td>
                         <td>
                             <a href="RemoveAssigmentTheLesson?teacherId=${teacher.id}&courseId=${course.id}" class="btn btn-danger">Atamayı Kaldır</a>
+
                         </td>
                     </tr>
                 </c:forEach>

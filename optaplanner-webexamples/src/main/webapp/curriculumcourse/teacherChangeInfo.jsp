@@ -37,7 +37,7 @@
                     <label for="teacherCode">Sicil Noss</label>
                     <input type="text" class="form-control" id="teacherCode" name="teacherCode" value="${requestScope.teacher.code}">
                 </div>
-                
+
                 <div class="form-group">
                     <label for="teacherDegree">Ünvan</label>
                     <select class="form-control" id="teacherDegree" name="teacherDegree" >
@@ -55,6 +55,8 @@
                     <input type="text" class="form-control" id="teacherSurname" name="teacherSurname" value="${requestScope.teacher.surname}" />
                 </div>
                 <button type="submit" class="btn btn-default">Düzenle</button>
+                <a href="TeachersViewServlet" type="submit" class="btn btn-danger" >Geri Dön</a>
+
             </form>      
         </div>
     </body>

@@ -39,6 +39,7 @@
                         <input type="text" class="form-control" id="roomCapacity" name="roomCapacity" placeholder="Sayı Girin..." >
                     </div>
                     <button type="submit" class="btn btn-default">Ekle</button>
+                    <a href="courseScheduleEdit.jsp" type="submit" class="btn btn-danger" >Geri Dön</a>
                 </form>
                 <table class="table table-striped table-bordered">
                     <thead>

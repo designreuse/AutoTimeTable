@@ -68,8 +68,8 @@
                     </div>
                     <div class="row">
                         <div class="col-md-7" ></div>
-                        <button type="submit" class="btn btn-success btn col-md-2" >Ekle</button>
-
+                        <button type="submit" class="btn btn-success btn col-md-1" >Ekle</button>
+                        <a href="courseScheduleEdit.jsp" type="submit" class="btn btn-danger btn col-md-1" >Geri Dön</a>
                     </div>
             </form>
         </div>
