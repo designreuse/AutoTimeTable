@@ -17,11 +17,13 @@ package org.optaplanner.curriculumcourse.edit_view;
 
 import java.io.IOException;
 import javax.persistence.EntityManager;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.optaplanner.curriculumcourse.Message;
 import org.optaplanner.curriculumcourse.dao.RoomDao;
 import org.optaplanner.examples.curriculumcourse.domain.Room;
 
@@ -34,7 +36,7 @@ public class RoomEditSaveServlet extends HttpServlet{
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        Message message = new Message();
         EntityManager em = (EntityManager) req.getServletContext().getAttribute("entityManager");
         RoomDao tDao = new RoomDao(em);
         Room room;
@@ -50,11 +52,16 @@ public class RoomEditSaveServlet extends HttpServlet{
             room.setCode(req.getParameter("roomCode"));
             room.setCapacity(Integer.parseInt(req.getParameter("roomCapacity")));
             tDao.createOrUpdate(room);
+            message.setResult(true);
+            message.setContent("Değişikler başarıyla kaydedildi.");
         } catch (Exception e) {
-            System.out.println("Eklenemedi");
             e.printStackTrace();
+            message.setResult(false);
+            message.setContent("Bir sorun oluştu");
         }
-        resp.sendRedirect("RoomsViewServlet");
+        req.setAttribute("message", message);
+        RequestDispatcher rd = req.getRequestDispatcher("RoomsViewServlet");
+        rd.forward(req, resp);
     }
     
 }

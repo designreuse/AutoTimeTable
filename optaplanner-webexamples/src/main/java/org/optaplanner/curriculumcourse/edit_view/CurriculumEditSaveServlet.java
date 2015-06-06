@@ -17,11 +17,13 @@ package org.optaplanner.curriculumcourse.edit_view;
 
 import java.io.IOException;
 import javax.persistence.EntityManager;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.optaplanner.curriculumcourse.Message;
 import org.optaplanner.curriculumcourse.dao.CurriculumDao;
 import org.optaplanner.examples.curriculumcourse.domain.Curriculum;
 
@@ -34,7 +36,8 @@ public class CurriculumEditSaveServlet extends HttpServlet{
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-         req.setCharacterEncoding("utf-8");
+        req.setCharacterEncoding("utf-8");
+        Message message = new Message();
         EntityManager em = (EntityManager) req.getServletContext().getAttribute("entityManager");
         CurriculumDao cDao = new CurriculumDao(em);
         String id = req.getParameter("curriculumId");
@@ -47,11 +50,16 @@ public class CurriculumEditSaveServlet extends HttpServlet{
         try {
             curricula.setCode(req.getParameter("curriculumCode"));
             cDao.createOrUpdate(curricula);
+            message.setContent("Değişikler başarıyla kaydedildi.");
+            message.setResult(true);
         } catch(Exception e) {
-            System.out.println("Sınıf eklenemedi");
             e.printStackTrace();
-        } 
-        resp.sendRedirect("CurriculumsViewServlet");
+            message.setContent("Bir sorun oluştu.");
+            message.setResult(false);
+        }
+        req.setAttribute("message", message);
+        RequestDispatcher rd = req.getRequestDispatcher("CurriculumsViewServlet");
+        rd.forward(req, resp);
     }
     
 }

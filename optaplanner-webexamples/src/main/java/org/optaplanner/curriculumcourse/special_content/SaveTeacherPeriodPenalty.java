@@ -98,6 +98,7 @@ public class SaveTeacherPeriodPenalty extends HttpServlet {
             m.setContent("Bir sorun oluştu");
         }
         req.setAttribute("message", m);
+        
         RequestDispatcher rd = req.getRequestDispatcher("TeacherPenaltyPeriods?teacherId=" + teacherId);
         rd.forward(req, resp);
     }

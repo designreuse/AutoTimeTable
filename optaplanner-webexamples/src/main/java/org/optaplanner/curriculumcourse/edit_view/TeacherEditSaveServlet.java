@@ -17,11 +17,13 @@ package org.optaplanner.curriculumcourse.edit_view;
 
 import java.io.IOException;
 import javax.persistence.EntityManager;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.optaplanner.curriculumcourse.Message;
 import org.optaplanner.curriculumcourse.dao.TeacherDao;
 import org.optaplanner.curriculumcourse.dao.TeacherDegreeDao;
 import org.optaplanner.examples.curriculumcourse.domain.Teacher;
@@ -37,6 +39,7 @@ public class TeacherEditSaveServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("utf-8");
+        Message message = new Message();
         EntityManager em = (EntityManager) req.getServletContext().getAttribute("entityManager");
         TeacherDegreeDao tdDao = new TeacherDegreeDao(em);
         TeacherDao tDao = new TeacherDao(em);
@@ -56,11 +59,16 @@ public class TeacherEditSaveServlet extends HttpServlet {
             teacher.setName(req.getParameter("teacherName"));
             teacher.setSurname(req.getParameter("teacherSurname"));
             tDao.createOrUpdate(teacher);
+            message.setResult(true);
+            message.setContent("Değişikler başarıyla kaydedildi");
         } catch (Exception e) {
-            System.out.println("Eklenemedi");
             e.printStackTrace();
+            message.setResult(false);
+            message.setContent("Bir sorun oluştu");
         }
-        resp.sendRedirect("TeachersViewServlet");
+        req.setAttribute("message", message);
+        RequestDispatcher rd = req.getRequestDispatcher("TeachersViewServlet");
+        rd.forward(req, resp);
 
     }
 

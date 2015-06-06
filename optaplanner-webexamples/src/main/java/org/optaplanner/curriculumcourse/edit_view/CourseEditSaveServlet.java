@@ -19,11 +19,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.optaplanner.curriculumcourse.Message;
 import org.optaplanner.curriculumcourse.dao.CourseDao;
 import org.optaplanner.curriculumcourse.dao.CurriculumDao;
 import org.optaplanner.curriculumcourse.dao.TeacherDao;
@@ -42,6 +44,7 @@ public class CourseEditSaveServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("utf-8");
         EntityManager em = (EntityManager) req.getServletContext().getAttribute("entityManager");
+        Message message = new Message();
         String id = req.getParameter("courseId");
         String teacherId = req.getParameter("courseTeacher");
         String curriculumId = req.getParameter("courseCurriculum");
@@ -67,12 +70,16 @@ public class CourseEditSaveServlet extends HttpServlet {
             addedCurriculum.add(ccDao.find(Curriculum.class, Long.parseLong(curriculumId)));
             course.setCurriculumList(addedCurriculum);
             cDao.createOrUpdate(course);
-            
+            message.setResult(true);
+            message.setContent("Değişikler Başarıyla Kaydedildi");
         } catch (Exception e) {
-            System.out.println("Course Eklenemedi");
             e.printStackTrace();
+            message.setResult(false);
+            message.setContent("Bir sorun oluştu");
         }
-        resp.sendRedirect("CoursesViewServlet");
+        req.setAttribute("message", message);
+        RequestDispatcher rd = req.getRequestDispatcher("CoursesViewServlet");
+        rd.forward(req, resp);
         
     }
     

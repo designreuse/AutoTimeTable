@@ -14,7 +14,7 @@
         <link href="<%=application.getContextPath()%>/twitterbootstrap/css/bootstrap.min.css" rel="stylesheet" />
         <link href="<%=application.getContextPath()%>/twitterbootstrap/css/bootstrap-responsive.css" rel="stylesheet" />
         <link href="<%=application.getContextPath()%>/website/css/optaplannerWebexamples.css" rel="stylesheet"/>
-        <title>Derslik Düzenleme Sayfası</title>
+        <title>Sınıf Düzenleme Sayfası</title>
     </head>
 
     <body>
@@ -24,7 +24,10 @@
                 <header class="main-page-header" style="margin-bottom: 20px">
                     <center style="margin-top: 15px"> 
                         <img src="../website/img/atauni.png" alt="Resim Bulunamadı" class="img-circle" /> 
-                        <h2>Derslikler</h2>
+                        <h2>Sınıflar</h2>
+                        <c:if test="${message != null}">
+                            <h2><span class="label ${message.result == false ? 'label-danger' : 'label-success'} " style="width: 500px">${message.content}</span></h2>
+                        </c:if>
                     </center>
                 </header>
             </div>

@@ -25,6 +25,9 @@
                     <center style="margin-top: 15px"> 
                         <img src="../website/img/atauni.png" alt="Resim Bulunamadı" class="img-circle" /> 
                         <h2>Dersler</h2>
+                        <c:if test="${message != null}">
+                            <h2><span class="label ${message.result == false ? 'label-danger' : 'label-success'} " style="width: 500px">${message.content}</span></h2>
+                        </c:if>
                     </center>
                 </header>
             </div>
