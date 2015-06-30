@@ -66,7 +66,7 @@ public class GenericDaoImp<T> extends LoggingMain implements GenericDao<T> {
     @Override
     public T createOrUpdate(T t) {
         tx.begin();
-        em.merge(t);
+        t = em.merge(t);
         tx.commit();
         return t;
     }

@@ -170,8 +170,21 @@ end
 
 rule "isCorrectRoom"
     when
-        
         Lecture (isCorrectRoom())
     then
         scoreHolder.addSoftConstraintMatch(kcontext,100)
+end
+
+rule "isCorrectTimeSlot"
+    when
+        Lecture (!isCorrectTimeSlot())
+    then
+        scoreHolder.addSoftConstraintMatch(kcontext, -30)
+end
+
+rule "isCorrectRoomTimeSlot"
+    when
+        Lecture (!isCorrectRoomTimeslot())
+    then
+        scoreHolder.addSoftConstraintMatch(kcontext, -30)
 end

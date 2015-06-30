@@ -20,14 +20,34 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import javax.persistence.EntityManager;
 import javax.servlet.http.HttpSession;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.SolverFactory;
 import org.optaplanner.core.api.solver.event.BestSolutionChangedEvent;
 import org.optaplanner.core.api.solver.event.SolverEventListener;
+import org.optaplanner.curriculumcourse.dao.CourseDao;
+import org.optaplanner.curriculumcourse.dao.CurriculumDao;
+import org.optaplanner.curriculumcourse.dao.DayDao;
+import org.optaplanner.curriculumcourse.dao.LectureDao;
+import org.optaplanner.curriculumcourse.dao.PeriodDao;
+import org.optaplanner.curriculumcourse.dao.RoomDao;
+import org.optaplanner.curriculumcourse.dao.TeacherDao;
+import org.optaplanner.curriculumcourse.dao.TimeslotDao;
+import org.optaplanner.curriculumcourse.dao.UnavailablePeriodPenaltyDao;
+import org.optaplanner.examples.curriculumcourse.domain.Course;
 import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
+import org.optaplanner.examples.curriculumcourse.domain.Curriculum;
+import org.optaplanner.examples.curriculumcourse.domain.Day;
+import org.optaplanner.examples.curriculumcourse.domain.Lecture;
+import org.optaplanner.examples.curriculumcourse.domain.Period;
+import org.optaplanner.examples.curriculumcourse.domain.Room;
+import org.optaplanner.examples.curriculumcourse.domain.Teacher;
+import org.optaplanner.examples.curriculumcourse.domain.Timeslot;
+import org.optaplanner.examples.curriculumcourse.domain.UnavailablePeriodPenalty;
 import org.optaplanner.examples.curriculumcourse.persistence.CurriculumCourseImporter;
 
 /**
@@ -43,19 +63,15 @@ public class CurriculumCourseWebAction {
         SolverFactory solverFactory = SolverFactory.createFromXmlResource("org/optaplanner/examples/curriculumcourse/solver/curriculumCourseSolverConfig.xml");
         Solver solver = solverFactory.buildSolver();
         session.setAttribute(CurriculumCourseSessionAttributeName.SOLVER, solver);
-
-        CurriculumCourseImporter.CurriculumCourseInputBuilder course = new CurriculumCourseImporter.CurriculumCourseInputBuilder();
-        File file = new File(session.getServletContext().getRealPath("/") + File.separator + "import" + File.separator + contentName +".ctt");
-        course.setInputFile(file);
-        course.setBufferedReader(new BufferedReader(new FileReader(file)));
-        CourseSchedule solution = (CourseSchedule) course.readSolution();
+        CourseSchedule solution = buildScheduleFromDb(session);
+        System.out.println(solution.getTeacherList().size());
         session.setAttribute(CurriculumCourseSessionAttributeName.SHOWN_SOLUTION, solution);
     }
 
     public void solve(final HttpSession session) {
         final Solver solver = (Solver) session.getAttribute(CurriculumCourseSessionAttributeName.SOLVER);
         final CourseSchedule unsolvedSolution = (CourseSchedule) session.getAttribute(CurriculumCourseSessionAttributeName.SHOWN_SOLUTION);
-      
+        
         solver.addEventListener(new SolverEventListener<CourseSchedule>() {
 
             @Override
@@ -70,20 +86,56 @@ public class CurriculumCourseWebAction {
 
             @Override
             public void run() {
-               
                 solver.solve(unsolvedSolution);
-                
-                
+
             }
         });
     }
- 
+
     public void terminateEarly(HttpSession session) {
         final Solver solver = (Solver) session.getAttribute(CurriculumCourseSessionAttributeName.SOLVER);
         if (solver != null) {
             solver.terminateEarly();
             session.setAttribute(CurriculumCourseSessionAttributeName.SHOWN_SOLUTION, solver.getBestSolution());
-            session.removeAttribute(CurriculumCourseSessionAttributeName.SOLVER);
         }
+    }
+
+    private CourseSchedule buildScheduleFromDb(HttpSession session) {
+        EntityManager em = (EntityManager) session.getServletContext().getAttribute("entityManager");
+        CourseDao cDao = new CourseDao(em);
+        TeacherDao tDao = new TeacherDao(em);
+        UnavailablePeriodPenaltyDao uvpDao = new UnavailablePeriodPenaltyDao(em);
+        CurriculumDao ccDAo = new CurriculumDao(em);
+        RoomDao rDao = new RoomDao(em);
+        PeriodDao pDao = new PeriodDao(em);
+        DayDao dDao = new DayDao(em);
+        TimeslotDao tsDao = new TimeslotDao(em);
+        LectureDao lDao = new LectureDao(em);
+
+        List<Teacher> teacherList = tDao.findTeachers(null);
+        List<Course> courseList = cDao.findCourses(null);
+        List<Room> roomList = rDao.findRooms(null);
+        List<Day> dayList = dDao.findAll();
+        List<Timeslot> tsList = tsDao.findAll();
+        List<Period> periodList = pDao.findAll();
+        List<Curriculum> curriculumList = ccDAo.findAll();
+        List<UnavailablePeriodPenalty> uvpList = uvpDao.findAll();
+        List<Lecture> lectureList = lDao.findAllPeriodsNull();
+        
+       
+        
+        CourseSchedule solution = new CourseSchedule();
+        solution.setId(0L);
+        solution.setCourseList(courseList);
+        solution.setTeacherList(teacherList);
+        solution.setRoomList(roomList);
+        solution.setDayList(dayList);
+        solution.setTimeslotList(tsList);
+        solution.setCurriculumList(curriculumList);
+        solution.setPeriodList(periodList);
+        solution.setLectureList(lectureList);
+        solution.setUnavailablePeriodPenaltyList(uvpList);
+        
+        return solution;
     }
 }

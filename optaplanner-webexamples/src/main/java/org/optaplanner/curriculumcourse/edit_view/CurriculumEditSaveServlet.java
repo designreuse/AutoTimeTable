@@ -49,6 +49,13 @@ public class CurriculumEditSaveServlet extends HttpServlet{
         }
         try {
             curricula.setCode(req.getParameter("curriculumCode"));
+            boolean isNigt;
+            if (req.getParameter("educationType").equals("night")) {
+                isNigt = true;
+            }else {
+                isNigt = false;
+            }
+            curricula.setNightClass(isNigt);
             cDao.createOrUpdate(curricula);
             message.setContent("Değişikler başarıyla kaydedildi.");
             message.setResult(true);

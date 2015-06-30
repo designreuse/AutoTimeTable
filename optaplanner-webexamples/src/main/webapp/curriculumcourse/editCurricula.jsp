@@ -36,6 +36,13 @@
                     <label for="curriculumCode">Kodu</label>
                     <input type="text" class="form-control" id="roomCode" name="curriculumCode" >
                 </div>
+                <div class="form-group">
+                    <label for="educationType">Öğrenim Tipi</label>
+                    <select name="educationType" id="educationType" class="form-control">
+                        <option value="notNight">Örgün Öğretim</option>
+                        <option value="night">İkinci Öğretim</option>
+                    </select>
+                </div>
                 <button type="submit" class="btn btn-default">Ekle</button>
                 <a href="courseScheduleEdit.jsp" type="submit" class="btn btn-danger btn" >Geri Dön</a>
             </form>
@@ -43,11 +50,13 @@
                 <thead>
                     <tr>
                         <th>Kodu</th>
+                        <th>Öğrenim Tipi</th>
                     </tr>
                 </thead>
                 <c:forEach items="${requestScope.curriculumList}" var="curricula">
                     <tr>
                         <td>${curricula.code}</td>
+                        <td>${curricula.nightClass == false ? 'Örgün Öğretim':'İkinci Öğretim'}</td>
                         <td>
                             <a href="CurriculumInfoEditServlet?curriculumId=${curricula.id}" class="btn btn-warning" >Düzenle</a>
                             <a href="#"  class="btn btn-info">Sınıf Dersleri</a>

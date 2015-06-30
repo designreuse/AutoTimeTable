@@ -15,6 +15,7 @@
  */
 package org.optaplanner.curriculumcourse.dao;
 
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import org.optaplanner.examples.curriculumcourse.domain.Period;
@@ -37,6 +38,16 @@ public class PeriodDao extends GenericDaoImp<Period>{
             return (Period) query.getResultList().get(0);
         } catch (Exception e) {
             System.out.println("Period dao hata:" + e.getMessage());
+        }
+        return null;
+    }
+    
+    public List<Period> findAll() {
+        try {
+            Query query = em.createNamedQuery("Period.findAll");
+            return query.getResultList();
+        }catch(Exception e) {
+            e.printStackTrace();
         }
         return null;
     }

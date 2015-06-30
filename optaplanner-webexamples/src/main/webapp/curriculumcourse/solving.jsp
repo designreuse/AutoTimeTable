@@ -29,7 +29,7 @@
                 <h1>Curriculum Course</h1>
             </header>
             <p>Çözüm başlatıldı her 2 saniyede bir sayfa yenilecenek</p>
-            <p>Deger: <c:out value="${solver.solving}" /></p>
+            <p>Devam ediyor: <c:out value="${solver.solving}" /></p>
             <div>
              <button class="btn" onclick="window.location.href='terminateEarly.jsp'"><i class="icon-stop"></i> Erkenden Sonlandır</button>
             </div>

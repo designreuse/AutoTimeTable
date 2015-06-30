@@ -62,17 +62,17 @@ public class CurriculumCourseLoadedServlet extends HttpServlet {
         resp.setCharacterEncoding("utf-8");
         HttpSession session = req.getSession();
 
-        String contentName = req.getParameter("content");
+        
         String type = req.getParameter("type");
 
 
         if (type.equals("new")) {
-            String path = req.getServletContext().getRealPath("/");
+            String contentName = "Yazılım Mühendisliği";
             new CurriculumCourseWebAction().setup(session, contentName);
             session.setAttribute("content", contentName);
 
             solution = (CourseSchedule) session.getAttribute(CurriculumCourseSessionAttributeName.SHOWN_SOLUTION);
-
+            
             courses = solution.getCourseList();
             days = solution.getDayList();
             rooms = solution.getRoomList();
@@ -93,8 +93,7 @@ public class CurriculumCourseLoadedServlet extends HttpServlet {
             EntityManager em = (EntityManager) session.getServletContext().getAttribute("entityManager");
             CourseScheduleDao csDao = new CourseScheduleDao(em);
             
-            solution = csDao.findCourseScheduleByName(contentName);
-            System.out.println(solution.getLectureList().get(1).getPeriod()+":"+solution.getLectureList().get(1).getCourse());
+            solution = csDao.findCourseScheduleByName(req.getParameter("content"));
             courses = solution.getCourseList();
             days = solution.getDayList();
             rooms = solution.getRoomList();

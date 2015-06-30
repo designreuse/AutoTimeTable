@@ -15,7 +15,6 @@
  */
 package org.optaplanner.curriculumcourse;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import javax.persistence.EntityManager;
@@ -101,8 +100,10 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
         periodDao = new PeriodDao(em);
         tdDao = new TeacherDegreeDao(em);
 
-        if (csName == null) {
+        if (csName == null || csName.trim().equals("")) {
+            csName = "Yazılım Mühendisliği";
             solution = (CourseSchedule) session.getAttribute(CurriculumCourseSessionAttributeName.SHOWN_SOLUTION);
+            solution.setName(csName);
             System.out.println("yeni id:" + solution.getId());
         } else {
 

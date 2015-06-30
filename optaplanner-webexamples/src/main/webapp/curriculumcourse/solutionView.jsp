@@ -41,14 +41,14 @@
             for (i = 0; i < tdnumb; i++) {
                 thList[i] = $('table thead tr:eq(0) th:eq(' + i + ')').html().trim();
             }
-            perSize = parseInt("${rooms.size()}");
+            perSize = parseInt("${timeSlots.size()}");
 
         <c:forEach var = "lecture" items = "${lectures}" >
             roomLabel = "${lecture.room.label}";
             col = thList.indexOf(roomLabel) - 2;
             dayIndex = ${lecture.day.dayIndex};
             timeSlotIndex = ${lecture.period.timeslot.timeslotIndex};
-            row = (perSize * dayIndex) + timeSlotIndex;
+            row = (perSize* dayIndex) + timeSlotIndex;
             cell = $('table tbody tr:eq(' + row + ') td:eq(' + col + ')');
             s = "${lecture.course.name} <br />${lecture.course.teacher.degree.shortName} ${lecture.course.teacher.name}  ${lecture.course.teacher.surname} <br /> ${lecture.course.lectureSize} : ${lecture.lectureIndexInCourse} <br />";
             <c:forEach var = "curriculum" items = "${lecture.course.curriculumList}" >
@@ -149,6 +149,7 @@
                     <button  class="btn btn-default" onClick ="$('#myt').tableExport({type: 'png', escape: 'false'});" >Export png </button>
                     <a href="CurriculumCourseDeleteServlet?id=${solution.id}" class="btn btn-default">Ders Programını Sil</a>
                     <p style="margin-top: 10px;">Maliyet: <%=score == null ? "" : score.isFeasible() ? -score.getSoftScore() + " $" : "Infeasible"%></p>
+                    ${days.size()} - ${timeSlots.size()}
                     <table border="1" id="myt" class="table table-bordered">
                         <thead>
                             <tr>

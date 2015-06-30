@@ -31,11 +31,6 @@
                         <h2>Atatürk Üniversitesi Ders Hazırlama Programı </h2>
                     </center>
                 </header>
-
-                <ul>
-                    <li><a href="CurriculumCourseLoadedServlet">Ders Programını oluşturmak için tıklayın</a></li>
-                </ul>
-
                 <div class='row-fluid'>
                     <div class='span6'>
                         <center><h3 class="bg-info info-header">Çözümü Başlatılabilir İçerikler</h3></center>
@@ -56,7 +51,7 @@
                             </c:forEach>
                             --%>
                             <a href="courseScheduleEdit.jsp" class="list-group-item">Kayıtları Düzenle</a>
-                            <a href="CurriculumCourseLoadedServlet" class="list-group-item">Ders Programını Çöz</a>
+                            <a href="CurriculumCourseLoadedServlet?type=new" class="list-group-item">Ders Programını Çöz</a>
                         </div>
                     </div>
                     <div class='span6'>

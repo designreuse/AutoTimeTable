@@ -17,12 +17,18 @@
 package org.optaplanner.examples.curriculumcourse.domain;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import org.optaplanner.examples.common.domain.AbstractPersistable;
 
@@ -41,7 +47,16 @@ public class Room extends AbstractPersistable {
     private String code;
     @Column(name = "capacity")
     private int capacity;
-
+    
+    /**
+     * Uygun olmayan periyotları listede tut ders bunlardan biriyse
+     */
+    @OneToMany(cascade = {CascadeType.PERSIST})
+    @JoinTable(name = "RoomUnfitPeriodList",
+            joinColumns = @JoinColumn(name = "room"),
+            inverseJoinColumns = @JoinColumn(name = "period"))
+    private List<Period> unfitPeriods;
+    
     public String getCode() {
         return code;
     }
@@ -60,6 +75,17 @@ public class Room extends AbstractPersistable {
 
     public String getLabel() {
         return code;
+    }
+
+    public List<Period> getUnfitPeriods() {
+        if(unfitPeriods == null) {
+            unfitPeriods = new ArrayList<Period>();
+        }
+        return unfitPeriods;
+    }
+
+    public void setUnfitPeriods(List<Period> unfitPeriods) {
+        this.unfitPeriods = unfitPeriods;
     }
 
     @Override

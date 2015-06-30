@@ -16,7 +16,6 @@
 package org.optaplanner.curriculumcourse.special_content;
 
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.servlet.RequestDispatcher;
@@ -29,37 +28,34 @@ import org.optaplanner.curriculumcourse.Message;
 import org.optaplanner.curriculumcourse.dao.CourseDao;
 import org.optaplanner.curriculumcourse.dao.DayDao;
 import org.optaplanner.curriculumcourse.dao.PeriodDao;
-import org.optaplanner.curriculumcourse.dao.TeacherDao;
+import org.optaplanner.curriculumcourse.dao.RoomDao;
 import org.optaplanner.curriculumcourse.dao.TimeslotDao;
 import org.optaplanner.curriculumcourse.dao.UnavailablePeriodPenaltyDao;
-import org.optaplanner.examples.curriculumcourse.domain.Course;
-import org.optaplanner.examples.curriculumcourse.domain.Teacher;
-import org.optaplanner.examples.curriculumcourse.domain.UnavailablePeriodPenalty;
+import org.optaplanner.examples.curriculumcourse.domain.Period;
+import org.optaplanner.examples.curriculumcourse.domain.Room;
 
 /**
  *
  * @author gurhan
  */
-@WebServlet("/curriculumcourse/SaveTeacherPeriodPenalty")
-public class SaveTeacherPeriodPenalty extends HttpServlet {
+@WebServlet("/curriculumcourse/SaveRoomPeriodPenalty")
+public class SaveRoomPeriodPenalty extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Message m = new Message();
-        Long teacherId = Long.parseLong(req.getParameter("teacherId"));
+        Long roomId = Long.parseLong(req.getParameter("roomId"));
         try {
             req.setCharacterEncoding("utf-8");
             EntityManager em = (EntityManager) req.getServletContext().getAttribute("entityManager");
-            TeacherDao tDao = new TeacherDao(em);
-            UnavailablePeriodPenaltyDao uvpDao = new UnavailablePeriodPenaltyDao(em);
-            CourseDao cDao = new CourseDao(em);
+            RoomDao rDao = new RoomDao(em);
             DayDao dDao = new DayDao(em);
             TimeslotDao tsDao = new TimeslotDao(em);
             PeriodDao pDao = new PeriodDao(em);
+            Room room = rDao.find(Room.class, roomId);
             int timeSlotSize = tsDao.findAll().size();
             int daySize = dDao.findAll().size();
-            Teacher teacher = tDao.find(Teacher.class, teacherId);
-            List<Course> teacherCourseList = cDao.findCourseByTeacher(teacherId);
+            List<Period> roomUnfitPeriodList = room.getUnfitPeriods();
             for (int dayIndex = 0; dayIndex < daySize; dayIndex++) {
                 for (int timeSlotIndex = 0; timeSlotIndex < timeSlotSize; timeSlotIndex++) {
                     String parameter = "isDaysPeriodPenalty-" + dayIndex + "-" + timeSlotIndex;
@@ -69,37 +65,52 @@ public class SaveTeacherPeriodPenalty extends HttpServlet {
                      * den kontrol et eğer deger dönerse değeri sil dönmezse bir
                      * şey yapma
                      */
+                    System.out.println(parameter);
                     if (value == null) {
-                        for (Course course : teacherCourseList) {
-                            UnavailablePeriodPenalty unvPenalty = uvpDao.findUvpByCourseAndPeriod(course.getId(), dayIndex, timeSlotIndex);
-                            if (unvPenalty != null) {
-                                uvpDao.delete(UnavailablePeriodPenalty.class, unvPenalty.getId());
+                        for (Period period : roomUnfitPeriodList) {
+                            if(period.getDay().getDayIndex() == dayIndex && 
+                                    period.getTimeslot().getTimeslotIndex() == timeSlotIndex) {
+                                roomUnfitPeriodList.remove(period);
+  
+                                break;
                             }
                         }
-                    } else if (value != null) {
-                        for (Course course : teacherCourseList) {
-                            UnavailablePeriodPenalty unvPenalty = uvpDao.findUvpByCourseAndPeriod(course.getId(), dayIndex, timeSlotIndex);
-                            if (unvPenalty == null) {
-                                unvPenalty = new UnavailablePeriodPenalty();
-                                unvPenalty.setCourse(course);
-                                unvPenalty.setPeriod(pDao.findPeriodByIndexes(dayIndex, timeSlotIndex));
-                                uvpDao.save(unvPenalty);
+                    } else {
+                        boolean isThere = false;
+                        for (Period period : roomUnfitPeriodList) {
+                             if(period.getDay().getDayIndex() == dayIndex && 
+                                    period.getTimeslot().getTimeslotIndex() == timeSlotIndex) {
+                                isThere = true;
+                                break;
                             }
+                        }
+                        if(isThere == false) {
+                            Period period = pDao.findPeriodByIndexes(dayIndex, timeSlotIndex);
+                            roomUnfitPeriodList.add(period);
                         }
                     }
+                    
                 }
             }
+            rDao.createOrUpdate(room);
             m.setResult(true);
-            m.setContent("Değişikler başarıyla kaydedildi.");
-        }catch (Exception e) {
+            m.setContent("Değişikler Başarıyla Kaydedildi");
+        } catch (Exception e) {
             e.printStackTrace();
+            m.setContent("Bir Sorun oluştu");
             m.setResult(false);
-            m.setContent("Bir sorun oluştu");
         }
         req.setAttribute("message", m);
         
-        RequestDispatcher rd = req.getRequestDispatcher("TeacherPenaltyPeriods?teacherId=" + teacherId);
+        RequestDispatcher rd = req.getRequestDispatcher("RoomPenaltyPeriods?roomId=" + roomId);
         rd.forward(req, resp);
     }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doPost(req, resp);
+    }
+    
+    
 
 }

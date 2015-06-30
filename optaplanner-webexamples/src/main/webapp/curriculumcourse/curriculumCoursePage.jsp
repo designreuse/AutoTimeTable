@@ -18,7 +18,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <script src="../twitterbootstrap/js/jquery.js"></script>
         <link href='../website/css/optaplannerWebexamples.css' rel='styleSheet' type='text/css' />
-       
+
         <title>JSP Page</title>
     </head>
 
@@ -46,7 +46,7 @@
             for (i = 0; i < tdnumb; i++) {
                 thList[i] = $('table thead tr:eq(0) th:eq(' + i + ')').html().trim();
             }
-            perSize = parseInt("${rooms.size()}");
+            perSize = parseInt("${timeSlots.size()}");
 
         <c:forEach var = "lecture" items = "${lectures}" >
             roomLabel = "${lecture.room.label}";
@@ -130,17 +130,18 @@
 
     </script>
 
-
+    
     <body>
         <form action="CurriculumCourseSaveServlet" method="post">
             <input type="hidden" id="changeList" name="changeList"/>
             <c:if test="${solver.solving == false}">
                 <input type="submit" value="Dışarı Aktar" id="exportButton"/>
             </c:if>
+            
         </form>
-
+        ${size}
         <p style="margin-top: 10px;">Cost: <%=score == null ? "" : score.isFeasible() ? -score.getSoftScore() + " $" : "Infeasible"%></p>
-        <c:out value="${rooms.size()}" />
+        <c:out value="${lectures.size()}" />
         <c:out value="${timeSlots.size()}" />
         <c:out value="${days.size()}" />
         <table border="1" id="myt" class="table table-bordered">

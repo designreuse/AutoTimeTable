@@ -23,6 +23,8 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
@@ -34,6 +36,12 @@ import org.optaplanner.examples.curriculumcourse.domain.solver.RoomStrengthWeigh
 
 @Entity(name = "Lecture")
 @Table(name = "Lecture")
+@NamedQueries({
+    @NamedQuery(name = "Lecture.findAll",
+            query = "SELECT l FROM Lecture l"),
+    @NamedQuery(name = "Lecture.findAllPeriodsNull",
+            query = "SElECT l FROM Lecture l WHERE l.period IS NULL and l.room IS NULL")
+})
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @PlanningEntity(difficultyWeightFactoryClass = LectureDifficultyWeightFactory.class,
         movableEntitySelectionFilter = MovableLectureSelectionFilter.class)
@@ -145,12 +153,45 @@ public class Lecture extends AbstractPersistable {
                 && r.getCode().equals(room.getCode()) ? true : false;
     }
 
+    public boolean isCorrectTimeSlot() {
+        if (course.getCurriculumList() != null && course.getCurriculumList().size() != 0) {
+            try {
+                if (course.getCurriculumList().get(0).isNightClass()) {
+                    if (period.getTimeslot().getTimeslotIndex() >= 9) {
+                        return true;
+                    }
+                } else {
+                    if (period.getTimeslot().getTimeslotIndex() <= 10) {
+                        return true;
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("hataaa");
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public boolean isCorrectRoomTimeslot() {
+        try {
+            return !room.getUnfitPeriods().contains(period);
+        } catch (Exception e) {
+
+        }
+        return false;
+    }
+
     public boolean isCorrectRoom() {
         try {
             return course.getRoomDeps().contains(room);
         } catch (NullPointerException e) {
             return false;
         }
+    }
+
+    public void setId(int i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

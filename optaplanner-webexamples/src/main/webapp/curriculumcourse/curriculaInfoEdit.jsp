@@ -32,6 +32,13 @@
                         <label for="curriculumCode">Sınıf Kodu</label>
                         <input type="text" value="${requestScope.curriculum.code}" name="curriculumCode" />
                     </div>
+                    <div class="form-group">
+                        <label for="educationType">Öğrenim Tipi</label>
+                        <select name="educationType" id="educationType" class="form-control">
+                            <option value="notNight" ${curiculum.isNightClass == false ? 'selected="selected"':''}>Örgün Öğretim</option>
+                            <option value="night" ${curiculum.isNightClass == true ? 'selected="selected"':''}>İkinci Öğretim</option>
+                        </select>
+                    </div>
                     <button type="submit" class="btn btn-default">Düzenle</button>
                     <a href="CurriculumsViewServlet" type="submit" class="btn btn-danger" >Geri Dön</a>
                 </form>

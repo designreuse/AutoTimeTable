@@ -28,9 +28,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.optaplanner.curriculumcourse.Message;
 import org.optaplanner.curriculumcourse.dao.CourseDao;
 import org.optaplanner.curriculumcourse.dao.CurriculumDao;
+import org.optaplanner.curriculumcourse.dao.LectureDao;
 import org.optaplanner.curriculumcourse.dao.TeacherDao;
 import org.optaplanner.examples.curriculumcourse.domain.Course;
 import org.optaplanner.examples.curriculumcourse.domain.Curriculum;
+import org.optaplanner.examples.curriculumcourse.domain.Lecture;
 import org.optaplanner.examples.curriculumcourse.domain.Teacher;
 
 /**
@@ -39,7 +41,7 @@ import org.optaplanner.examples.curriculumcourse.domain.Teacher;
  */
 @WebServlet("/curriculumcourse/CourseEditSaveServlet")
 public class CourseEditSaveServlet extends HttpServlet {
-    
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("utf-8");
@@ -51,6 +53,7 @@ public class CourseEditSaveServlet extends HttpServlet {
         CourseDao cDao = new CourseDao(em);
         TeacherDao tDao = new TeacherDao(em);
         CurriculumDao ccDao = new CurriculumDao(em);
+        LectureDao lDao = new LectureDao(em);
         Course course;
         if (id == null || id.trim().equals("")) {
             course = new Course();
@@ -58,7 +61,7 @@ public class CourseEditSaveServlet extends HttpServlet {
             course = cDao.find(Course.class, Long.parseLong(id));
         }
         List<Curriculum> addedCurriculum = new ArrayList<Curriculum>();
-        
+
         try {
             String studentSize = req.getParameter("courseStudentSize").trim();
             String lectureSize = req.getParameter("courseLectureSize").trim();
@@ -67,9 +70,18 @@ public class CourseEditSaveServlet extends HttpServlet {
             course.setLectureSize(Integer.parseInt(lectureSize));
             course.setStudentSize(Integer.parseInt(studentSize));
             course.setTeacher(tDao.find(Teacher.class, Long.parseLong(teacherId)));
+
             addedCurriculum.add(ccDao.find(Curriculum.class, Long.parseLong(curriculumId)));
             course.setCurriculumList(addedCurriculum);
-            cDao.createOrUpdate(course);
+            course = cDao.createOrUpdate(course);
+            System.out.println("courseId:"+course.getId());
+            for (int i = 0; i < course.getLectureSize(); i++) {
+                Lecture lecture = new Lecture();
+                lecture.setCourse(course);
+                lecture.setLectureIndexInCourse(i);
+                lDao.createOrUpdate(lecture);
+            }
+
             message.setResult(true);
             message.setContent("Değişikler Başarıyla Kaydedildi");
         } catch (Exception e) {
@@ -80,7 +92,7 @@ public class CourseEditSaveServlet extends HttpServlet {
         req.setAttribute("message", message);
         RequestDispatcher rd = req.getRequestDispatcher("CoursesViewServlet");
         rd.forward(req, resp);
-        
+
     }
-    
+
 }

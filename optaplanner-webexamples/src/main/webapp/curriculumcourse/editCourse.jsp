@@ -99,7 +99,7 @@
                         <td>${course.curriculumList[0].code}</td>
                         <td>
                             <a href="CourseInfoEditServlet?courseId=${course.id}" class="btn btn-warning" >Düzenle</a>
-                            <a href="#"  class="btn btn-info">Oda Bağımlılıkları</a>
+                            <a href="CourseRoomDep?courseId=${course.id}"  class="btn btn-info">Oda Bağımlılıkları</a>
                             <a href="#" class="btn btn-danger">Sil</a>
                         </td>
                     </tr>

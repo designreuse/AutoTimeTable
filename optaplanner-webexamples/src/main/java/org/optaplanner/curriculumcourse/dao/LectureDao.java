@@ -15,7 +15,9 @@
  */
 package org.optaplanner.curriculumcourse.dao;
 
+import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import org.optaplanner.examples.curriculumcourse.domain.Lecture;
 
 /**
@@ -26,6 +28,25 @@ public class LectureDao extends GenericDaoImp<Lecture>{
 
     public LectureDao(EntityManager em) {
         super(em);
+    }
+    
+    public List<Lecture> findAll() {
+        try {
+            Query query = em.createNamedQuery("Lecture.findAll");
+            return query.getResultList();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public List<Lecture> findAllPeriodsNull() {
+        try {
+            Query query = em.createNamedQuery("Lecture.findAllPeriodsNull");
+            return query.getResultList();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
     
 }

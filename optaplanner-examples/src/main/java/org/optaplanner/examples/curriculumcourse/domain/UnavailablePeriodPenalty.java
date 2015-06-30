@@ -28,6 +28,8 @@ import org.optaplanner.examples.common.domain.AbstractPersistable;
 @Entity(name = "UnavailablePeriodPenalty")
 @Table(name = "UnavailablePeriodPenalty")
 @NamedQueries({
+    @NamedQuery(name = "UnavailablePeriodPenalty.findAll",
+            query = "SELECT uvp FROM UnavailablePeriodPenalty uvp"),
     @NamedQuery(name = "UnavailablePeriodPenalty.findByCourse",
             query = "SELECT uvp FROM UnavailablePeriodPenalty uvp WHERE uvp.course.id=:courseId"),
     @NamedQuery(name = "UnavailablePeriodPenalty.findByCourseAndDayAndPeriod",

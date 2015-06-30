@@ -52,5 +52,14 @@ public class UnavailablePeriodPenaltyDao extends GenericDaoImp<UnavailablePeriod
         }
         return null;
     }
-
+    
+    public List<UnavailablePeriodPenalty> findAll() {
+        try {
+            Query query = em.createNamedQuery("UnavailablePeriodPenalty.findAll");
+            return query.getResultList();
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

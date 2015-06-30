@@ -40,7 +40,8 @@ public class Curriculum extends AbstractPersistable {
 
     @Column(name = "code")
     private String code;
-
+    @Column(name = "nightClass")
+    private boolean nightClass;
     public String getCode() {
         return code;
     }
@@ -53,9 +54,17 @@ public class Curriculum extends AbstractPersistable {
         return code;
     }
 
+    public boolean isNightClass() {
+        return nightClass;
+    }
+
+    public void setNightClass(boolean nightClass) {
+        this.nightClass = nightClass;
+    }
+    
+
     @Override
     public String toString() {
         return code;
     }
-
 }

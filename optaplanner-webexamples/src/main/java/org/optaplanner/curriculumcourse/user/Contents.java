@@ -73,8 +73,12 @@ public class Contents {
         } else {
             CourseScheduleDao csDao = new CourseScheduleDao((EntityManager) context.getAttribute("entityManager"));
             List<CourseSchedule> courseSchedules = csDao.findCourseSchedules(null);
-            for (CourseSchedule c : courseSchedules) {
-                contents.add(c.getName());
+            try {
+                for (CourseSchedule c : courseSchedules) {
+                    contents.add(c.getName());
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
 
         }

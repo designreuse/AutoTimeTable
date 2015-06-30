@@ -54,7 +54,7 @@
                             <td>${room.capacity}</td>
                             <td>
                                 <a href="RoomInfoEditServlet?roomId=${room.id}" class="btn btn-warning" >Düzenle</a>
-                                <a href="#"  class="btn btn-info">Derslik Günleri</a>
+                                <a href="RoomPenaltyPeriods?roomId=${room.id}"  class="btn btn-info">Derslik Günleri</a>
                                 <a href="#" class="btn btn-danger">Sil</a>
                             </td>
                         </tr>

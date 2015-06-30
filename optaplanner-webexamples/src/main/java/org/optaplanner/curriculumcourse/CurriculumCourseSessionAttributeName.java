@@ -20,6 +20,6 @@ package org.optaplanner.curriculumcourse;
  * @author gurhan
  */
 public class CurriculumCourseSessionAttributeName {
-    public static final String SOLVER = "curriculumcourse.solver";
+    public static final String SOLVER = "solver";
     public static final String SHOWN_SOLUTION = "curriculumcourse.shownSolution";
 }

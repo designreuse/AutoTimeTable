@@ -31,7 +31,9 @@ import org.optaplanner.examples.common.domain.AbstractPersistable;
 @NamedQueries({
     @NamedQuery(name = "Period.findByIndex",
             query = "SELECT p FROM Period p WHERE p.day.dayIndex = :dayIndex "
-                    + "and p.timeslot.timeslotIndex = :timeslotIndex")
+                    + "and p.timeslot.timeslotIndex = :timeslotIndex"),
+    @NamedQuery(name = "Period.findAll",
+            query = "SELECT p FROM Period p")
 })
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @XStreamAlias("Period")
@@ -66,6 +68,28 @@ public class Period extends AbstractPersistable {
     public String toString() {
         return day + "-" + timeslot;
     }
- 
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null) {
+            return false;
+        }
+        if(getClass() != obj.getClass()) {
+            return false;
+        }
+        final Period other = (Period) obj;
+        if((this.day.getId() == null) ? (other.day.getId() != null) : !this.day.getId().equals(other.day.getId())) {
+            return false;
+        }
+        if(this.day.getDayIndex() != other.day.getDayIndex()) {
+            return false;
+        }
+        if((this.timeslot.getId() == null) ? (other.timeslot.getId() != null) : !this.timeslot.getId().equals(other.timeslot.getId())) {
+            return false;
+        }
+        if(this.timeslot.getTimeslotIndex() != other.timeslot.getTimeslotIndex()) {
+            return false;
+        }
+        return true;
+    }
 }
