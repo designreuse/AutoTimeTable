@@ -27,7 +27,7 @@ import org.optaplanner.examples.curriculumcourse.domain.Timeslot;
 public class TimeslotDao extends GenericDaoImp<Timeslot> {
 
     public TimeslotDao(EntityManager em) {
-        super(em);
+        super(em, Timeslot.class);
     }
 
     public Timeslot findTimeslotByIndex(int timeSlotIndex) {

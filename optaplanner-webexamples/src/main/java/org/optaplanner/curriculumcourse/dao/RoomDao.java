@@ -18,6 +18,7 @@ package org.optaplanner.curriculumcourse.dao;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import org.optaplanner.curriculumcourse.exception.NoSuchRoomException;
 import org.optaplanner.examples.curriculumcourse.domain.Room;
 import org.optaplanner.examples.curriculumcourse.domain.Teacher;
 
@@ -28,16 +29,16 @@ import org.optaplanner.examples.curriculumcourse.domain.Teacher;
 public class RoomDao extends GenericDaoImp<Room>{
 
     public RoomDao(EntityManager em) {
-        super(em);
+        super(em, Room.class);
     }
-    public Room findRoomByCode(String code) {
+    public Room findRoomByCode(String code) throws NoSuchRoomException {
 
         try {
             return findRooms(code).get(0);
         } catch (Exception e) {
             System.out.println("Room dao:" + e.getMessage());
+            throw new NoSuchRoomException();
         }
-        return null;
     }
 
     public List<Room> findRooms(String code) {

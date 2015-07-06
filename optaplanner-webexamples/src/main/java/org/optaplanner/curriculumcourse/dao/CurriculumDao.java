@@ -27,7 +27,7 @@ import org.optaplanner.examples.curriculumcourse.domain.Curriculum;
 public class CurriculumDao extends GenericDaoImp<Curriculum>{
 
     public CurriculumDao(EntityManager em) {
-        super(em);
+        super(em, Curriculum.class);
     }
     
     public Curriculum findCurriculumByCode(String code) {

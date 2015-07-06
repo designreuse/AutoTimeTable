@@ -29,7 +29,7 @@ public class GenericDaoImp<T> extends LoggingMain implements GenericDao<T> {
     protected EntityManagerFactory emf;
     protected EntityManager em;
     protected EntityTransaction tx;
-    
+    protected Class<T> type;
     
     
     /*
@@ -37,8 +37,9 @@ public class GenericDaoImp<T> extends LoggingMain implements GenericDao<T> {
     işlem yapsın.Session entity manager ise context listener kullanılarak yazılsın
     ve context destroy edilirken silinsin
     */
-    public GenericDaoImp(EntityManager em) {
+    public GenericDaoImp(EntityManager em, Class<T> type) {
         this.em = em;
+        this.type = type;
         this.tx = em.getTransaction();
     }
 
@@ -59,10 +60,10 @@ public class GenericDaoImp<T> extends LoggingMain implements GenericDao<T> {
     }
 
     @Override
-    public T find(Class type, Object id) {
+    public T find(Object id) {
         return (T) this.em.find(type, id);
     }
-
+    
     @Override
     public T createOrUpdate(T t) {
         tx.begin();
@@ -74,7 +75,7 @@ public class GenericDaoImp<T> extends LoggingMain implements GenericDao<T> {
     
 
     @Override
-    public void delete(Class type, Object id) {
+    public void delete(Object id) {
         Object ref = this.em.getReference(type, id);
         tx.begin();
         em.remove(ref);

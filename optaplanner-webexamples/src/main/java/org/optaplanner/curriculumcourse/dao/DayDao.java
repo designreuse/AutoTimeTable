@@ -18,6 +18,7 @@ package org.optaplanner.curriculumcourse.dao;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.servlet.http.HttpServletRequest;
 import org.optaplanner.examples.curriculumcourse.domain.Day;
 
 /**
@@ -27,7 +28,7 @@ import org.optaplanner.examples.curriculumcourse.domain.Day;
 public class DayDao extends GenericDaoImp<Day> {
 
     public DayDao(EntityManager em) {
-        super(em);
+        super(em,Day.class);
     }
 
     public Day findDayByIndex(int dayIndex) {

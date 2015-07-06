@@ -27,7 +27,7 @@ import org.optaplanner.examples.curriculumcourse.domain.Period;
 public class PeriodDao extends GenericDaoImp<Period>{
 
     public PeriodDao(EntityManager em) {
-        super(em);
+        super(em, Period.class);
     }
     
     public Period findPeriodByIndexes(int dayIndex, int timeslotIndex) {

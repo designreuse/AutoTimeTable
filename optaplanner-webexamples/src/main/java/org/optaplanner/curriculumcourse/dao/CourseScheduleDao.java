@@ -28,7 +28,7 @@ import org.optaplanner.examples.curriculumcourse.domain.Curriculum;
 public class CourseScheduleDao extends GenericDaoImp<CourseSchedule> {
 
     public CourseScheduleDao(EntityManager em) {
-        super(em);
+        super(em, CourseSchedule.class);
     }
 
     public CourseSchedule findCourseScheduleByName(String code) {

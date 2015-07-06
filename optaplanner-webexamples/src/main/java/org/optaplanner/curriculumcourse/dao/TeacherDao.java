@@ -18,6 +18,7 @@ package org.optaplanner.curriculumcourse.dao;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import org.optaplanner.curriculumcourse.exception.NoSuchTeacherException;
 import org.optaplanner.examples.curriculumcourse.domain.Teacher;
 
 /**
@@ -27,32 +28,22 @@ import org.optaplanner.examples.curriculumcourse.domain.Teacher;
 public class TeacherDao extends GenericDaoImp<Teacher> {
 
     public TeacherDao(EntityManager em) {
-        super(em);
+        super(em, Teacher.class);
     }
 
-    public Teacher findTeacherByCode(String code) {
-
+    public Teacher findTeacher(String code) throws NoSuchTeacherException {
+        Query query = em.createNamedQuery("Teacher.findTeacherByCode");
+        query.setParameter("code", code);
         try {
-            return findTeachers(code).get(0);
+            return (Teacher) query.getResultList().get(0);
         } catch (Exception e) {
-            System.out.println("Teacher dao:" + e.getMessage());
+            throw new NoSuchTeacherException();
         }
-        return null;
+    }
+    
+    public List<Teacher> findAll() {
+        Query query = em.createNamedQuery("Teacher.findAll");
+        return query.getResultList();
     }
 
-    public List<Teacher> findTeachers(String code) {
-        Query query;
-        if (code != null) {
-            query = em.createNamedQuery("Teacher.findTeacherByCode");
-            query.setParameter("code", code);
-        } else {
-            query = em.createNamedQuery("Teacher.findAll");
-        }
-        try {
-            return query.getResultList();
-        } catch (Exception e) {
-            System.out.println("Teacher dao:" + e.getMessage());
-        }
-        return null;
-    }
 }

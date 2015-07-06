@@ -13,31 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.optaplanner.curriculumcourse;
+package org.optaplanner.curriculumcourse.special_content.teacher;
 
 import java.io.IOException;
 import javax.persistence.EntityManager;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.optaplanner.curriculumcourse.dao.CourseScheduleDao;
-import org.optaplanner.curriculumcourse.service.CourseScheduleService;
-import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
+import org.optaplanner.curriculumcourse.Message;
+import org.optaplanner.curriculumcourse.dao.CourseDao;
+import org.optaplanner.curriculumcourse.dao.TeacherDao;
+import org.optaplanner.curriculumcourse.service.TeacherService;
+import org.optaplanner.examples.curriculumcourse.domain.Course;
+import org.optaplanner.examples.curriculumcourse.domain.Teacher;
 
 /**
  *
  * @author gurhan
  */
-@WebServlet("/curriculumcourse/CurriculumCourseDeleteServlet")
-public class CurriculumCourseDeleteServlet extends HttpServlet{
+@WebServlet("/curriculumcourse/RemoveAssigmentTheLesson")
+public class RemoveAssigmentTheLesson extends TeacherSpecialServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        CourseScheduleService csSesrvice = new CourseScheduleService(req, resp);
-        csSesrvice.courseScheduleDelete();
+        teacherService = new TeacherService(req, resp);
+        teacherService.removeAssigmentTheLesson();
     }
-    
 }

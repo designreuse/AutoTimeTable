@@ -112,8 +112,8 @@ public class CurriculumCourseWebAction {
         TimeslotDao tsDao = new TimeslotDao(em);
         LectureDao lDao = new LectureDao(em);
 
-        List<Teacher> teacherList = tDao.findTeachers(null);
-        List<Course> courseList = cDao.findCourses(null);
+        List<Teacher> teacherList = tDao.findAll();
+        List<Course> courseList = cDao.findAll();
         List<Room> roomList = rDao.findRooms(null);
         List<Day> dayList = dDao.findAll();
         List<Timeslot> tsList = tsDao.findAll();

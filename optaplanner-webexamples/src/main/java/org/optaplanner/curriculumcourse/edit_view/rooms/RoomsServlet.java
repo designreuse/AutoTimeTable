@@ -13,30 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.optaplanner.curriculumcourse.dao;
+package org.optaplanner.curriculumcourse.edit_view.rooms;
 
-import java.util.HashMap;
-import java.util.List;
-import javax.persistence.Parameter;
-
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import org.optaplanner.curriculumcourse.service.RoomService;
 
 /**
  *
  * @author gurhan
  */
-public interface GenericDao<T> {
-
-    public T save(T tz);
-
-    public T find(Object id);
-
-    public T update(T t);
-    
-    public T createOrUpdate(T t);
-
-    public void delete(Object id);
-    
-    public boolean isObjectManaged(T t);
-    
+@WebServlet("/Rooms")
+public class RoomsServlet extends HttpServlet{
+    protected RoomService roomService;
 }
-

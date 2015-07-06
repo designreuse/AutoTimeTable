@@ -17,6 +17,8 @@ package org.optaplanner.curriculumcourse;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -45,6 +47,10 @@ import org.optaplanner.curriculumcourse.dao.RoomDao;
 import org.optaplanner.curriculumcourse.dao.TeacherDao;
 import org.optaplanner.curriculumcourse.dao.TeacherDegreeDao;
 import org.optaplanner.curriculumcourse.dao.TimeslotDao;
+import org.optaplanner.curriculumcourse.exception.NoSuchCourseException;
+import org.optaplanner.curriculumcourse.exception.NoSuchRoomException;
+import org.optaplanner.curriculumcourse.exception.NoSuchTeacherException;
+import org.optaplanner.curriculumcourse.service.CourseScheduleService;
 import org.optaplanner.examples.curriculumcourse.domain.TeacherDegree;
 import org.optaplanner.examples.curriculumcourse.domain.UnavailablePeriodPenalty;
 import org.optaplanner.examples.curriculumcourse.persistence.CurriculumCourseDao;
@@ -79,218 +85,11 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, NoSuchCourseException, NoSuchTeacherException, NoSuchRoomException {
 
-        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("utf-8");
-        HttpSession session = request.getSession(false);
+        CourseScheduleService csService = new CourseScheduleService(request, response);
+        csService.courseScheduleSave();
 
-        //eğer solutioınview sayfasından gelinmişse csname not null olacak
-        String csName = request.getParameter("courseScheduleName");
-
-        EntityManager em = (EntityManager) session.getServletContext().getAttribute("entityManager");
-        teacherDao = new TeacherDao(em);
-        courseDao = new CourseDao(em);
-        curriculumDao = new CurriculumDao(em);
-        dayDao = new DayDao(em);
-        tsDao = new TimeslotDao(em);
-        csDao = new CourseScheduleDao(em);
-        roomDao = new RoomDao(em);
-        lectureDao = new LectureDao(em);
-        periodDao = new PeriodDao(em);
-        tdDao = new TeacherDegreeDao(em);
-
-        if (csName == null || csName.trim().equals("")) {
-            csName = "Yazılım Mühendisliği";
-            solution = (CourseSchedule) session.getAttribute(CurriculumCourseSessionAttributeName.SHOWN_SOLUTION);
-            solution.setName(csName);
-            System.out.println("yeni id:" + solution.getId());
-        } else {
-
-            solution = csDao.findCourseScheduleByName(csName);
-        }
-        String[] changeList = convertToList(request.getParameter("changeList"));
-        System.out.println("dizi:" + Arrays.toString(changeList));
-        if (changeList != null && changeList.length > 0) {
-            saveChanges(changeList);
-        }
-        // String path = request.getServletContext().getRealPath("/") + "export";
-        //File file = new File(path + File.separator + content + ".xml");
-        // CurriculumCourseDao dao = new CurriculumCourseDao(path);
-        //dao.writeSolution(solution, file);
-
-        if (csName == null) {
-
-            readySubClasses(solution);
-            setNullLectureAndPenalty(solution);
-
-        } else {
-            csDao.getEm().clear();
-            setNullLectureAndPenalty(solution);
-
-            solution.setId(0L);
-        }
-        checkScheduleName(solution);
-        csDao.createOrUpdate(solution);
-
-        response.sendRedirect("index.jsp");
-
-    }
-
-    /**
-     * Alt sınıflardan idleri çeker.
-     *
-     * @param solution
-     */
-    private void readySubClasses(CourseSchedule solution) {
-
-        for (Course c : solution.getCourseList()) {
-            Course managedCourse = courseDao.findCourseByCode(c.getCode());
-            if (managedCourse != null) {
-                c.setId(managedCourse.getId());
-            } else {
-                //optaplanner id atamıssa sil onu bırak eclipselink atsın
-                c.setId(null);
-            }
-
-        }
-
-        for (Teacher t : solution.getTeacherList()) {
-            Teacher managedTeacher = teacherDao.findTeacherByCode(t.getCode());
-            if (managedTeacher != null) {
-                t.setId(managedTeacher.getId());
-            } else {
-                //optaplanner id atamıssa sil onu bırak eclipselink atsın
-                t.setId(null);
-            }
-            t.setDegree(tdDao.find(TeacherDegree.class, t.getDegree().getId()));
-        }
-
-        for (Curriculum c : solution.getCurriculumList()) {
-            Curriculum managedCurriculum = curriculumDao.findCurriculumByCode(c.getCode());
-            if (managedCurriculum != null) {
-                c.setId(managedCurriculum.getId());
-            } else {
-                //optaplanner id atamıssa sil onu bırak eclipselink atsın
-                c.setId(null);
-            }
-        }
-
-        for (Day d : solution.getDayList()) {
-            Day managedDay = dayDao.findDayByIndex(d.getDayIndex());
-            if (managedDay != null) {
-                d.setId(managedDay.getId());
-            } else {
-                //optaplanner id atamıssa sil onu bırak eclipselink atsın
-                d.setId(null);
-            }
-        }
-
-        for (Timeslot t : solution.getTimeslotList()) {
-            Timeslot managetTimeslot = tsDao.findTimeslotByIndex(t.getTimeslotIndex());
-            if (managetTimeslot != null) {
-                t.setId(managetTimeslot.getId());
-            } else {
-                //optaplanner id atamıssa sil onu bırak eclipselink atsın
-                t.setId(null);
-            }
-        }
-
-        for (Room r : solution.getRoomList()) {
-            Room managedRoom = roomDao.findRoomByCode(r.getCode());
-            if (managedRoom != null) {
-                System.out.println(managedRoom.getCode() + "->" + managedRoom.getId());
-                r.setId(managedRoom.getId());
-            } else {
-                //optaplanner id atamıssa sil onu bırak eclipselink atsın
-                r.setId(null);
-            }
-        }
-
-    }
-
-    private void setNullLectureAndPenalty(CourseSchedule solution) {
-        for (Lecture l : solution.getLectureList()) {
-            l.setId(null);
-        }
-        for (UnavailablePeriodPenalty up : solution.getUnavailablePeriodPenaltyList()) {
-            up.setId(null);
-        }
-    }
-
-    private void checkScheduleName(CourseSchedule solution) {
-        String name = solution.getName();
-        if (name.contains("-")) {
-            name = name.substring(0, name.indexOf("-") - 1);
-        }
-        int index = csDao.nextCourseScheduleNameIndex(name);
-        solution.setName(name + " - " + index);
-    }
-
-    /**
-     * Kendisine gönderilen listedeki değişikleri solution nesnesine kaydeder.
-     *
-     * @param changeList
-     */
-    private void saveChanges(String[] changeList) {
-        for (String s : changeList) {
-            String[] args = s.split(":");
-            String course = args[0];
-            int lectureIndexInCourse = Integer.parseInt(args[1]);
-
-            String[] timeArgs = args[2].split("x");
-
-            Day day;
-            int dayIndex = Integer.parseInt(timeArgs[0]);
-            day = dayDao.findDayByIndex(dayIndex);
-
-            Timeslot timeSlot;
-            int timeSlotIndex = Integer.parseInt(timeArgs[1]);
-            timeSlot = tsDao.findTimeslotByIndex(timeSlotIndex);
-
-            Period period;
-            period = periodDao.findPeriodByIndexes(day.getDayIndex(), timeSlot.getTimeslotIndex());
-
-            System.out.println("bak bura");
-            System.out.println(Arrays.toString(solution.getRoomList().toArray()));
-            String roomCode = solution.getRoomList().get(Integer.parseInt(timeArgs[2])).getCode();
-            Room room;
-            room = roomDao.findRoomByCode(roomCode);
-
-            for (Lecture l : solution.getLectureList()) {
-                if (l.getCourse().getCode().equals(course) && l.getLectureIndexInCourse() == lectureIndexInCourse) {
-                    l.setRoom(room);
-                    l.setPeriod(period);
-                    break;
-                }
-            }
-        }
-    }
-
-    private String[] convertToList(String s) {
-
-        s = s.substring(1, s.length() - 1);
-        if (s.length() == 0) {
-            return null;
-        }
-        s = s.replace("\"", "");
-        String[] array = s.split(",");
-        return array;
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        System.out.println("get calisti");
     }
 
     /**
@@ -305,7 +104,15 @@ public class CurriculumCourseSaveServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         System.out.println("post calıstı");
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (NoSuchCourseException ex) {
+            Logger.getLogger(CurriculumCourseSaveServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchTeacherException ex) {
+            Logger.getLogger(CurriculumCourseSaveServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchRoomException ex) {
+            Logger.getLogger(CurriculumCourseSaveServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

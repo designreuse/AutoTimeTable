@@ -13,31 +13,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.optaplanner.curriculumcourse;
+package org.optaplanner.curriculumcourse.edit_view.teachers;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import javax.persistence.EntityManager;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.optaplanner.curriculumcourse.dao.CourseScheduleDao;
-import org.optaplanner.curriculumcourse.service.CourseScheduleService;
-import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
+import org.optaplanner.curriculumcourse.dao.TeacherDao;
+import org.optaplanner.curriculumcourse.dao.TeacherDegreeDao;
+import org.optaplanner.curriculumcourse.service.TeacherService;
+import org.optaplanner.examples.curriculumcourse.domain.Teacher;
+import org.optaplanner.examples.curriculumcourse.domain.TeacherDegree;
 
 /**
  *
  * @author gurhan
  */
-@WebServlet("/curriculumcourse/CurriculumCourseDeleteServlet")
-public class CurriculumCourseDeleteServlet extends HttpServlet{
+@WebServlet("/curriculumcourse/TeachersViewServlet")
+public class TeachersViewServlet extends TeachersServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        CourseScheduleService csSesrvice = new CourseScheduleService(req, resp);
-        csSesrvice.courseScheduleDelete();
+        processRequest(req, resp);
     }
-    
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        processRequest(req, resp);
+    }
+
+    protected void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        teacherService = new TeacherService(req, resp);
+        teacherService.allTeachersList();
+    }
 }

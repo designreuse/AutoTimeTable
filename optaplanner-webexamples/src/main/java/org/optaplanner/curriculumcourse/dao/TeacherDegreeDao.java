@@ -27,7 +27,7 @@ import org.optaplanner.examples.curriculumcourse.domain.TeacherDegree;
 public class TeacherDegreeDao extends GenericDaoImp<TeacherDegree>{
 
     public TeacherDegreeDao(EntityManager em) {
-        super(em);
+        super(em, TeacherDegree.class);
     }
     
     public List<TeacherDegree> findAll() {

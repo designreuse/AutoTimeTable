@@ -13,30 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.optaplanner.curriculumcourse.dao;
+package org.optaplanner.curriculumcourse.edit_view.teachers;
 
-import java.util.HashMap;
-import java.util.List;
-import javax.persistence.Parameter;
-
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.optaplanner.curriculumcourse.service.TeacherService;
 
 /**
  *
  * @author gurhan
  */
-public interface GenericDao<T> {
+@WebServlet("/teachers")
+public class TeachersServlet extends HttpServlet{
+    protected TeacherService teacherService;
 
-    public T save(T tz);
-
-    public T find(Object id);
-
-    public T update(T t);
-    
-    public T createOrUpdate(T t);
-
-    public void delete(Object id);
-    
-    public boolean isObjectManaged(T t);
+   
     
 }
-

@@ -13,31 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.optaplanner.curriculumcourse;
+package org.optaplanner.curriculumcourse.edit_view.curriculums;
 
 import java.io.IOException;
 import javax.persistence.EntityManager;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.optaplanner.curriculumcourse.dao.CourseScheduleDao;
-import org.optaplanner.curriculumcourse.service.CourseScheduleService;
-import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
+import org.optaplanner.curriculumcourse.Message;
+import org.optaplanner.curriculumcourse.service.CurriculumService;
 
 /**
  *
  * @author gurhan
  */
-@WebServlet("/curriculumcourse/CurriculumCourseDeleteServlet")
-public class CurriculumCourseDeleteServlet extends HttpServlet{
+@WebServlet("/curriculumcourse/CurriculumEditSaveServlet")
+public class CurriculumEditSaveServlet extends CurriculumServlet{
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        CourseScheduleService csSesrvice = new CourseScheduleService(req, resp);
-        csSesrvice.courseScheduleDelete();
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        curriculumService = new CurriculumService(req, resp);
+        curriculumService.editSave();
     }
     
 }

@@ -27,7 +27,7 @@ import org.optaplanner.examples.curriculumcourse.domain.UnavailablePeriodPenalty
 public class UnavailablePeriodPenaltyDao extends GenericDaoImp<UnavailablePeriodPenalty> {
 
     public UnavailablePeriodPenaltyDao(EntityManager em) {
-        super(em);
+        super(em, UnavailablePeriodPenalty.class);
     }
 
     public List<UnavailablePeriodPenalty> findUvpByCourse(Long courseId) {

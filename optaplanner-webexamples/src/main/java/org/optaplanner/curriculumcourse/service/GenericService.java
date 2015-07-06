@@ -13,30 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.optaplanner.curriculumcourse.dao;
+package org.optaplanner.curriculumcourse.service;
 
-import java.util.HashMap;
 import java.util.List;
-import javax.persistence.Parameter;
-
 
 /**
  *
  * @author gurhan
  */
-public interface GenericDao<T> {
-
-    public T save(T tz);
-
-    public T find(Object id);
-
-    public T update(T t);
-    
+public interface GenericService <T>{
+    public T find(String id);
+    public T find(Long id);
     public T createOrUpdate(T t);
-
-    public void delete(Object id);
-    
-    public boolean isObjectManaged(T t);
-    
+    public void delete(T t);
+    public void delete(Long id);
+    public void editSave();
 }
-

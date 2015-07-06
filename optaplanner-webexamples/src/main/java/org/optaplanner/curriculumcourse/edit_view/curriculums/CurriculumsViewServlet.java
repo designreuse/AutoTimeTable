@@ -13,31 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.optaplanner.curriculumcourse;
+package org.optaplanner.curriculumcourse.edit_view.curriculums;
 
 import java.io.IOException;
+import java.util.List;
 import javax.persistence.EntityManager;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.optaplanner.curriculumcourse.dao.CourseScheduleDao;
-import org.optaplanner.curriculumcourse.service.CourseScheduleService;
-import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
+import org.optaplanner.curriculumcourse.dao.CurriculumDao;
+import org.optaplanner.curriculumcourse.service.CurriculumService;
+import org.optaplanner.examples.curriculumcourse.domain.Curriculum;
 
 /**
  *
  * @author gurhan
  */
-@WebServlet("/curriculumcourse/CurriculumCourseDeleteServlet")
-public class CurriculumCourseDeleteServlet extends HttpServlet{
-
+@WebServlet("/curriculumcourse/CurriculumsViewServlet")
+public class CurriculumsViewServlet extends CurriculumServlet {
+    
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        CourseScheduleService csSesrvice = new CourseScheduleService(req, resp);
-        csSesrvice.courseScheduleDelete();
+        req.setCharacterEncoding("utf-8");
+        curriculumService =  new CurriculumService(req, resp);
+        curriculumService.allCurriculumList();
     }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+    
     
 }

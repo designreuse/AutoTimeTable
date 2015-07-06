@@ -27,7 +27,7 @@ import org.optaplanner.examples.curriculumcourse.domain.Lecture;
 public class LectureDao extends GenericDaoImp<Lecture>{
 
     public LectureDao(EntityManager em) {
-        super(em);
+        super(em, Lecture.class);
     }
     
     public List<Lecture> findAll() {

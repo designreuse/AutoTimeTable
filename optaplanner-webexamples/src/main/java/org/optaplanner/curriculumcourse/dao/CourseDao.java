@@ -18,55 +18,53 @@ package org.optaplanner.curriculumcourse.dao;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import org.optaplanner.curriculumcourse.exception.NoSuchCourseException;
 import org.optaplanner.examples.curriculumcourse.domain.Course;
 
 /**
  *
  * @author gurhan
  */
-public class CourseDao extends GenericDaoImp<Course>{
+public class CourseDao extends GenericDaoImp<Course> {
 
     public CourseDao(EntityManager em) {
-        super(em);
+        super(em, Course.class);
     }
-    
-    public Course findCourseByCode(String code) {
-        
+
+    public Course findCourseByCode(String code) throws NoSuchCourseException {
+
         try {
-            return findCourses(code).get(0);
-        }catch(Exception e) {
-            System.out.println("Course Dao Hata:"+e.getMessage());
+            Query query = em.createNamedQuery("Course.findCourseByCode");
+            query.setParameter(":code", code);
+            return (Course) query.getSingleResult();
+        } catch (Exception e) {
+            System.out.println("Course Dao Hata:" + e.getMessage());
+            throw new NoSuchCourseException();
         }
-        return null;
-        
+
     }
-    
-    public List<Course> findCourses(String code) {
-        Query q;
-        if (code != null) {
-             q = em.createNamedQuery("Course.findCourseByCode", Course.class);
-             q.setParameter("code", code);
-        } else {
-            q = em.createNamedQuery("Course.findAll", Course.class);
-        }
+
+    public List<Course> findAll() {
+        Query q = em.createNamedQuery("Course.findAll", Course.class);
         return q.getResultList();
     }
-    
-    public List<Course> findCourseByTeacher(Long teacherID){
+
+    public List<Course> findCourseByTeacher(Long teacherID) {
         try {
             Query query = em.createNamedQuery("Course.findByTeacher");
-            query.setParameter("teacherId",  teacherID);
+            query.setParameter("teacherId", teacherID);
             return query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
+
     public List<Course> findTeacherIsNull() {
         try {
             Query query = em.createNamedQuery("Course.findTeacherIsNull");
             return query.getResultList();
-        }catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
