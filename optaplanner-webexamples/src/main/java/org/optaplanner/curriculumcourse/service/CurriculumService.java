@@ -31,20 +31,22 @@ import org.optaplanner.examples.curriculumcourse.domain.Curriculum;
  *
  * @author gurhan
  */
-public class CurriculumService extends GenericServiceImpl<Curriculum>{
+public class CurriculumService extends GenericServiceImpl<Curriculum> {
+
     private CurriculumDao cDao;
+
     public CurriculumService(HttpServletRequest req, HttpServletResponse resp) throws UnsupportedEncodingException {
         super(req, resp, Curriculum.class);
         cDao = new CurriculumDao(em);
     }
-    
+
     public void curriculumInfo() throws ServletException, IOException {
         Curriculum curriculum = cDao.find(req.getAttribute("curriculumId"));
         req.setAttribute("curriculum", curriculum);
         RequestDispatcher rd = req.getRequestDispatcher("curriculaInfoEdit.jsp");
         rd.forward(req, resp);
     }
-    
+
     public void allCurriculumList() throws ServletException, IOException {
         List<Curriculum> curriculumList = cDao.findAll();
         req.setAttribute("curriculumList", curriculumList);
@@ -55,29 +57,35 @@ public class CurriculumService extends GenericServiceImpl<Curriculum>{
     @Override
     public void editSave() {
         String id = req.getParameter("curriculumId");
-        Curriculum curricula; 
-        if (id == null || id.trim().equals("")) {
-            curricula = new Curriculum();
-        } else {
-            curricula = cDao.find(Long.parseLong(id));
-        }
+        Curriculum curricula;
         try {
-            curricula.setCode(req.getParameter("curriculumCode"));
-            boolean isNigt;
-            if (req.getParameter("educationType").equals("night")) {
-                isNigt = true;
-            }else {
-                isNigt = false;
+            if (id == null || id.trim().equals("")) {
+                //curricula = new Curriculum();
+                createCurriculas();
+
+            } else {
+                curricula = cDao.find(Long.parseLong(id));
+
+                curricula.setCode(req.getParameter("curriculumCode"));
+                boolean isNigt;
+                if (req.getParameter("educationType").equals("night")) {
+                    isNigt = true;
+                } else {
+                    isNigt = false;
+                }
+                curricula.setNightClass(isNigt);
+                cDao.createOrUpdate(curricula);
+
             }
-            curricula.setNightClass(isNigt);
-            cDao.createOrUpdate(curricula);
-            message.setContent("Değişikler başarıyla kaydedildi.");
-            message.setResult(true);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             message.setContent("Bir sorun oluştu.");
             message.setResult(false);
         }
+        
+        message.setContent("Değişikler başarıyla kaydedildi.");
+        message.setResult(true);
+
         req.setAttribute("message", message);
         RequestDispatcher rd = req.getRequestDispatcher("CurriculumsViewServlet");
         try {
@@ -88,7 +96,46 @@ public class CurriculumService extends GenericServiceImpl<Curriculum>{
             Logger.getLogger(CurriculumService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
-    
+
+    private void createCurriculas() {
+        char[] branchNames = new char[]{'A', 'B', 'C', 'D'};
+        String curriculumLevel = req.getParameter("curriculumLevel");
+        int numberOfBranch = Integer.parseInt(req.getParameter("numberOfBranch"));
+        boolean isCheckedNight = req.getParameter("isCheckedNight") != null;
+        boolean isCheckedTr = req.getParameter("isCheckedTr") != null;
+        boolean isCheckedPercent30Eng = req.getParameter("isCheckedPercent30Eng") != null;
+        boolean isCheckedEng = req.getParameter("isCheckedEng") != null;
+
+        String code;
+        for (int i = 0; i < numberOfBranch; i++) {
+            if (isCheckedTr) {
+                code = "GUN-" + curriculumLevel + "-" + branchNames[i];
+                createCurriculum(code, isCheckedNight);
+            }
+            if (isCheckedPercent30Eng) {
+                code = "%30-GUN" + curriculumLevel + "-" + branchNames[i];
+                createCurriculum(code, isCheckedNight);
+            }
+            if (isCheckedEng) {
+                code = "%100-GUN" + curriculumLevel + "-" + branchNames[i];
+                createCurriculum(code, isCheckedNight);
+            }
+
+        }
+    }
+
+    private void createCurriculum(String name, boolean isCheckedNight) {
+        Curriculum curriculum = new Curriculum(name, false);
+        cDao.createOrUpdate(curriculum);
+        if (isCheckedNight) {
+            createTheNightCurriculum(name);
+        }
+    }
+
+    private void createTheNightCurriculum(String name) {
+        name = name.replace("GUN", "GECE");
+        Curriculum curriculum = new Curriculum(name, true);
+        cDao.createOrUpdate(curriculum);
+    }
+
 }

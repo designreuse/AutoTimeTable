@@ -27,20 +27,20 @@ import javax.servlet.annotation.WebListener;
  * @author gurhan
  */
 @WebListener
-public class AppContextListener implements ServletContextListener{
-   
+public class AppContextListener implements ServletContextListener {
+
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-       EntityManagerFactory emf = Persistence.createEntityManagerFactory("optaplanner-web-pu");
-       EntityManager em = emf.createEntityManager();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("optaplanner-web-pu");
+        EntityManager em = emf.createEntityManager();
         sce.getServletContext().setAttribute("entityManager", em);
         sce.getServletContext().setAttribute("entityManagerFactory", emf);
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        EntityManagerFactory emf = (EntityManagerFactory)sce.getServletContext().getAttribute("entityManagerFactory");
-        EntityManager em = (EntityManager)sce.getServletContext().getAttribute("entityManager");
+        EntityManagerFactory emf = (EntityManagerFactory) sce.getServletContext().getAttribute("entityManagerFactory");
+        EntityManager em = (EntityManager) sce.getServletContext().getAttribute("entityManager");
     }
-    
+
 }

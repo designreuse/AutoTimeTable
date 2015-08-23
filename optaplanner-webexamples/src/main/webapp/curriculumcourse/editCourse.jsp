@@ -12,11 +12,22 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="<%=application.getContextPath()%>/twitterbootstrap/css/bootstrap.css" rel="stylesheet" />
         <link href="<%=application.getContextPath()%>/twitterbootstrap/css/bootstrap.min.css" rel="stylesheet" />
+        <script src="<%=application.getContextPath()%>/twitterbootstrap/js/jquery.js"></script>
         <link href="<%=application.getContextPath()%>/twitterbootstrap/css/bootstrap-responsive.css" rel="stylesheet" />
         <link href="<%=application.getContextPath()%>/website/css/optaplannerWebexamples.css" rel="stylesheet"/>
         <title>Ders Düzenleme Sayfası</title>
     </head>
-
+    <script >
+         $(document).ready(function () {
+             if($("#checkLab").is(':checked')) {
+                 $("labLectureSize").show();
+                 $("labRoomDeps").show();
+             } else {
+                 $("labLectureSize").hide();
+                 $("labRoomDeps").hide();
+             }
+         });
+    </script>
     <body>
         <div class="container-fluid">
             <jsp:include page="header.jsp" />
@@ -70,12 +81,29 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="form-group col-md-3">
+                        <label for="checkLab">Dersin Teorisi Var</label>
+                        <input type="checkbox" class="checkbox" name="checkLab" id="checkLab"/>
+                    </div>
+                    <div class="form-group col-md-3" id="labLectureSize">
+                        <label for="labLectureSize">Teori Saati</label>
+                        <input type="text" name="labLectureSize"  class="form-control"/>
+                    </div>
+                </div>
+                <div class="row" id="labRoomDeps">
+                    <label>Teori Dersleri İçin Derslikleri Seçin</label>
+                    <c:forEach var="room" items="${roomList}" varStatus="i">
+                        <div class="checkb  ox checkbox-inline">
+                            <input type="checkbox" name="isSelectedRoom-${room.code}" ${isRoomSelectArray[i.index] == true ? 'checked' :''}>${room.code}</input>
+                        </div>
+                    </c:forEach>
+                </div>
+                <div class="row">
                     <div class="col-md-7" ></div>
                     <button type="submit" class="btn btn-success btn col-md-1" >Ekle</button>
                     <a href="courseScheduleEdit.jsp" type="submit" class="btn btn-danger btn col-md-1" >Geri Dön</a>
 
                 </div>
-                
             </form>
             <table class="table table-bordered table-striped">
                 <thead>

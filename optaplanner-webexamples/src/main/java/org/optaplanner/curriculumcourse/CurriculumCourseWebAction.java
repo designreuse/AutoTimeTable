@@ -38,6 +38,7 @@ import org.optaplanner.curriculumcourse.dao.RoomDao;
 import org.optaplanner.curriculumcourse.dao.TeacherDao;
 import org.optaplanner.curriculumcourse.dao.TimeslotDao;
 import org.optaplanner.curriculumcourse.dao.UnavailablePeriodPenaltyDao;
+import org.optaplanner.curriculumcourse.exception.NoSuchRoomException;
 import org.optaplanner.examples.curriculumcourse.domain.Course;
 import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
 import org.optaplanner.examples.curriculumcourse.domain.Curriculum;
@@ -58,7 +59,7 @@ public class CurriculumCourseWebAction {
 
     private static ExecutorService solvingExecutor = Executors.newFixedThreadPool(4);
 
-    public void setup(HttpSession session, String contentName) throws FileNotFoundException, IOException {
+    public void setup(HttpSession session, String contentName) throws FileNotFoundException, IOException, NoSuchRoomException {
         terminateEarly(session);
         SolverFactory solverFactory = SolverFactory.createFromXmlResource("org/optaplanner/examples/curriculumcourse/solver/curriculumCourseSolverConfig.xml");
         Solver solver = solverFactory.buildSolver();
@@ -100,7 +101,7 @@ public class CurriculumCourseWebAction {
         }
     }
 
-    private CourseSchedule buildScheduleFromDb(HttpSession session) {
+    private CourseSchedule buildScheduleFromDb(HttpSession session) throws NoSuchRoomException {
         EntityManager em = (EntityManager) session.getServletContext().getAttribute("entityManager");
         CourseDao cDao = new CourseDao(em);
         TeacherDao tDao = new TeacherDao(em);
@@ -114,7 +115,7 @@ public class CurriculumCourseWebAction {
 
         List<Teacher> teacherList = tDao.findAll();
         List<Course> courseList = cDao.findAll();
-        List<Room> roomList = rDao.findRooms(null);
+        List<Room> roomList = rDao.findAll();
         List<Day> dayList = dDao.findAll();
         List<Timeslot> tsList = tsDao.findAll();
         List<Period> periodList = pDao.findAll();

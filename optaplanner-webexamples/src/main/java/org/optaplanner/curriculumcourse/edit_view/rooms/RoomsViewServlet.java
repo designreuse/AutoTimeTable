@@ -16,17 +16,14 @@
 package org.optaplanner.curriculumcourse.edit_view.rooms;
 
 import java.io.IOException;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.servlet.RequestDispatcher;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.optaplanner.curriculumcourse.dao.RoomDao;
+import org.optaplanner.curriculumcourse.exception.NoSuchRoomException;
 import org.optaplanner.curriculumcourse.service.RoomService;
-import org.optaplanner.examples.curriculumcourse.domain.Room;
 
 /**
  *
@@ -38,7 +35,11 @@ public class RoomsViewServlet extends RoomsServlet{
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         roomService = new RoomService(req, resp);
-        roomService.allRoomList();
+        try {
+            roomService.allRoomList();
+        } catch (NoSuchRoomException ex) {
+            Logger.getLogger(RoomsViewServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

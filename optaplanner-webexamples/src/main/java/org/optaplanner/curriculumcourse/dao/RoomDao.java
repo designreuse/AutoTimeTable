@@ -20,40 +20,29 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import org.optaplanner.curriculumcourse.exception.NoSuchRoomException;
 import org.optaplanner.examples.curriculumcourse.domain.Room;
-import org.optaplanner.examples.curriculumcourse.domain.Teacher;
 
 /**
  *
  * @author gurhan
  */
-public class RoomDao extends GenericDaoImp<Room>{
+public class RoomDao extends GenericDaoImp<Room> {
 
     public RoomDao(EntityManager em) {
         super(em, Room.class);
     }
-    public Room findRoomByCode(String code) throws NoSuchRoomException {
 
-        try {
-            return findRooms(code).get(0);
-        } catch (Exception e) {
-            System.out.println("Room dao:" + e.getMessage());
-            throw new NoSuchRoomException();
-        }
+    public List<Room> findAll() {
+        Query query = em.createNamedQuery("Room.findAll");
+        return query.getResultList();
     }
 
-    public List<Room> findRooms(String code) {
-        Query query;
-        if (code != null) {
-            query = em.createNamedQuery("Room.findByCode");
-            query.setParameter("code", code);
-        } else {
-            query = em.createNamedQuery("Room.findAll");
-        }
+    public Room findRoom(String code) throws NoSuchRoomException {
+        Query query = em.createNamedQuery("Room.findByCode");
+        query.setParameter("code", code);
         try {
-            return query.getResultList();
-        } catch (Exception e) {
-            System.out.println("Room dao:" + e.getMessage());
+            return (Room) query.getSingleResult();
+        }catch (Exception e) {
+            throw new NoSuchRoomException();
         }
-        return null;
     }
 }

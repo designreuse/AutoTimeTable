@@ -45,7 +45,7 @@ public class GenericServiceImpl<T> implements GenericService<T> {
         this.req = req;
         req.setCharacterEncoding("utf-8");
         this.resp = resp;
-        em = (EntityManager) req.getServletContext().getAttribute("enttiyManager");
+        em = (EntityManager) req.getServletContext().getAttribute("entityManager");
         genericDao = new GenericDaoImp(em, cls);
     }
 

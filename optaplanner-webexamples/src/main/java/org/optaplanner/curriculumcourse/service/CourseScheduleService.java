@@ -18,7 +18,6 @@ package org.optaplanner.curriculumcourse.service;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
-import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -44,7 +43,6 @@ import org.optaplanner.examples.curriculumcourse.domain.Lecture;
 import org.optaplanner.examples.curriculumcourse.domain.Period;
 import org.optaplanner.examples.curriculumcourse.domain.Room;
 import org.optaplanner.examples.curriculumcourse.domain.Teacher;
-import org.optaplanner.examples.curriculumcourse.domain.TeacherDegree;
 import org.optaplanner.examples.curriculumcourse.domain.Timeslot;
 import org.optaplanner.examples.curriculumcourse.domain.UnavailablePeriodPenalty;
 
@@ -190,7 +188,7 @@ public class CourseScheduleService extends GenericServiceImpl<CourseSchedule> {
         }
 
         for (Room r : solution.getRoomList()) {
-            Room managedRoom = rDao.findRoomByCode(r.getCode());
+            Room managedRoom = rDao.findRoom(r.getCode());
             if (managedRoom != null) {
                 System.out.println(managedRoom.getCode() + "->" + managedRoom.getId());
                 r.setId(managedRoom.getId());
@@ -248,7 +246,7 @@ public class CourseScheduleService extends GenericServiceImpl<CourseSchedule> {
             System.out.println(Arrays.toString(solution.getRoomList().toArray()));
             String roomCode = solution.getRoomList().get(Integer.parseInt(timeArgs[2])).getCode();
             Room room;
-            room = rDao.findRoomByCode(roomCode);
+            room = rDao.findRoom(roomCode);
 
             for (Lecture l : solution.getLectureList()) {
                 if (l.getCourse().getCode().equals(course) && l.getLectureIndexInCourse() == lectureIndexInCourse) {

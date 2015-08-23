@@ -31,6 +31,7 @@ import org.optaplanner.curriculumcourse.dao.DayDao;
 import org.optaplanner.curriculumcourse.dao.PeriodDao;
 import org.optaplanner.curriculumcourse.dao.RoomDao;
 import org.optaplanner.curriculumcourse.dao.TimeslotDao;
+import org.optaplanner.curriculumcourse.exception.NoSuchRoomException;
 import org.optaplanner.examples.curriculumcourse.domain.Course;
 import org.optaplanner.examples.curriculumcourse.domain.Day;
 import static org.optaplanner.examples.curriculumcourse.domain.Day.WEEKDAYS;
@@ -60,8 +61,8 @@ public class RoomService extends GenericServiceImpl<Room> implements RoomSpecial
         pDao = new PeriodDao(em);
     }
 
-    public void allRoomList() throws ServletException, IOException {
-        List<Room> roomList = rDao.findRooms(null);
+    public void allRoomList() throws ServletException, IOException, NoSuchRoomException {
+        List<Room> roomList = rDao.findAll();
         req.setAttribute("roomList", roomList);
         RequestDispatcher rd = req.getRequestDispatcher("editRoom.jsp");
         rd.forward(req, resp);
@@ -116,7 +117,7 @@ public class RoomService extends GenericServiceImpl<Room> implements RoomSpecial
 
     @Override
     public void getCourseRoomDeps() {
-        List<Room> roomList = rDao.findRooms(null);
+        List<Room> roomList = rDao.findAll();
         Course course = cDao.find(Long.parseLong(req.getParameter("courseId")));
         List<Room> courseDeps = course.getRoomDeps();
 
@@ -147,7 +148,7 @@ public class RoomService extends GenericServiceImpl<Room> implements RoomSpecial
         Long courseId = Long.parseLong(req.getParameter("courseId"));
         RequestDispatcher rd = req.getRequestDispatcher("CourseRoomDep?courseId=" + courseId);
         try {
-            List<Room> roomList = rDao.findRooms(null);
+            List<Room> roomList = rDao.findAll();
             Course course = cDao.find(courseId);
             for (Room room : roomList) {
                 String value = req.getParameter("isSelectedRoom-" + room.getCode());

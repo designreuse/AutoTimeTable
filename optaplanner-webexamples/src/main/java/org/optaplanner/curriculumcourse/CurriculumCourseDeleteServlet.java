@@ -16,16 +16,12 @@
 package org.optaplanner.curriculumcourse;
 
 import java.io.IOException;
-import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.optaplanner.curriculumcourse.dao.CourseScheduleDao;
 import org.optaplanner.curriculumcourse.service.CourseScheduleService;
-import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
 
 /**
  *

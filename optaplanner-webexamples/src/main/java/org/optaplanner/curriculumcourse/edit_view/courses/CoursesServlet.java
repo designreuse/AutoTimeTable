@@ -23,7 +23,7 @@ import org.optaplanner.curriculumcourse.service.CourseService;
  *
  * @author gurhan
  */
-@WebServlet("Courses")
+@WebServlet("/Courses")
 public class CoursesServlet extends HttpServlet{
     protected CourseService courseService;
 }

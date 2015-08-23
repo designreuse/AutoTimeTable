@@ -16,10 +16,13 @@
 package org.optaplanner.curriculumcourse;
 
 import java.awt.Color;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -30,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 import org.optaplanner.curriculumcourse.dao.CourseScheduleDao;
+import org.optaplanner.curriculumcourse.exception.NoSuchRoomException;
 import org.optaplanner.examples.curriculumcourse.domain.Course;
 import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
 import org.optaplanner.examples.curriculumcourse.domain.Day;
@@ -57,7 +61,7 @@ public class CurriculumCourseLoadedServlet extends HttpServlet {
     HashMap<String, Color> colorOfCourses;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, FileNotFoundException {
         req.setCharacterEncoding("utf-8");
         resp.setCharacterEncoding("utf-8");
         HttpSession session = req.getSession();
@@ -68,7 +72,11 @@ public class CurriculumCourseLoadedServlet extends HttpServlet {
 
         if (type.equals("new")) {
             String contentName = "Yazılım Mühendisliği";
-            new CurriculumCourseWebAction().setup(session, contentName);
+            try {
+                new CurriculumCourseWebAction().setup(session, contentName);
+            } catch (NoSuchRoomException ex) {
+                Logger.getLogger(CurriculumCourseLoadedServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
             session.setAttribute("content", contentName);
 
             solution = (CourseSchedule) session.getAttribute(CurriculumCourseSessionAttributeName.SHOWN_SOLUTION);

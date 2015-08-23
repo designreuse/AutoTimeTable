@@ -42,6 +42,15 @@ public class Curriculum extends AbstractPersistable {
     private String code;
     @Column(name = "nightClass")
     private boolean nightClass;
+    
+    public Curriculum() {
+        
+    }
+    
+    public Curriculum(String code, boolean nightClass) {
+        this.code = code;
+        this.nightClass = nightClass;
+    }
     public String getCode() {
         return code;
     }

@@ -29,6 +29,7 @@ import org.optaplanner.curriculumcourse.Message;
 import org.optaplanner.curriculumcourse.dao.CourseDao;
 import org.optaplanner.curriculumcourse.dao.CurriculumDao;
 import org.optaplanner.curriculumcourse.dao.LectureDao;
+import org.optaplanner.curriculumcourse.dao.RoomDao;
 import org.optaplanner.curriculumcourse.dao.TeacherDao;
 import org.optaplanner.examples.curriculumcourse.domain.Course;
 import org.optaplanner.examples.curriculumcourse.domain.Curriculum;
@@ -45,6 +46,7 @@ public class CourseService extends GenericServiceImpl<Course> {
     private CourseDao cDao;
     private CurriculumDao ccDao;
     private LectureDao lDao;
+    private RoomDao rDao;
     private Message message;
 
     public CourseService(HttpServletRequest req, HttpServletResponse resp) throws UnsupportedEncodingException {
@@ -53,6 +55,7 @@ public class CourseService extends GenericServiceImpl<Course> {
         cDao = new CourseDao(em);
         ccDao = new CurriculumDao(em);
         lDao = new LectureDao(em);
+        rDao = new RoomDao(em);
         message = new Message();
     }
 
@@ -60,6 +63,7 @@ public class CourseService extends GenericServiceImpl<Course> {
         req.setAttribute("courseList", cDao.findAll());
         req.setAttribute("teacherList", tDao.findAll());
         req.setAttribute("curriculumList", ccDao.findAll());
+        req.setAttribute("roomList", rDao.findAll());
         RequestDispatcher rd = req.getRequestDispatcher("editCourse.jsp");
         rd.forward(req, resp);
     }
