@@ -15,18 +15,21 @@
         <script src="<%=application.getContextPath()%>/twitterbootstrap/js/jquery.js"></script>
         <link href="<%=application.getContextPath()%>/twitterbootstrap/css/bootstrap-responsive.css" rel="stylesheet" />
         <link href="<%=application.getContextPath()%>/website/css/optaplannerWebexamples.css" rel="stylesheet"/>
+        <script src="<%=application.getContextPath()%>/twitterbootstrap/js/jquery.min.js"></script>        
+        <script src="<%=application.getContextPath()%>/twitterbootstrap/js/bootstrap.min.js"></script>
         <title>Ders Düzenleme Sayfası</title>
     </head>
     <script >
-         $(document).ready(function () {
-             if($("#checkLab").is(':checked')) {
-                 $("labLectureSize").show();
-                 $("labRoomDeps").show();
-             } else {
-                 $("labLectureSize").hide();
-                 $("labRoomDeps").hide();
-             }
-         });
+        $(document).ready(function () {
+            $("#hidelab").hide();
+            $("#checkLab").change(function () {
+                if($(this).is(':checked')) {
+                    $("#hidelab").show();
+                } else {
+                    $("#hidelab").hide();
+                }
+            });
+        });
     </script>
     <body>
         <div class="container-fluid">
@@ -42,69 +45,78 @@
                     </center>
                 </header>
             </div>
-            <form  action="CourseEditSaveServlet" method="POST" style="margin-left: 20px">
-                <div class="row">
-                    <div class="form-group col-md-3">
-                        <label for="courseCode">Kodu</label>
-                        <input type="text" class="form-control" id="courseCode" name="courseCode"/>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="courseName">Adı</label>
-                        <input type="text" class="form-control" id="courseName" name="courseName"/>
-                    </div>
+            <div class="row-fluid">
+                <div class="col-md-6">
+                    <button type="submit" class="btn btn-default" data-toggle="modal" data-target="#myModal">Ekle</button>
+                    <a href="courseScheduleEdit.jsp" type="submit" class="btn btn-danger btn" >Geri Dön</a>
+                </div>
+            </div>  
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <form action="CourseEditSaveServlet" method="POST">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Ders Bilgileri</h4>
+                            </div>
+                            <div class="modal-body">
 
-                    <div class="form-group col-md-3">
-                        <label for="courseLectureSize">Ders Saati</label>
-                        <input type="text" class="form-control" id="courseLectureSize" name="courseLectureSize"/>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-3">
-                        <label for="courseStudentSize">Öğrenci Sayısı</label>
-                        <input type="text" class="form-control" id="courseStudentSize" name="courseStudentSize"/>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="courseTeacher">Öğretim Elemanı</label>
-                        <select class="form-control" id="courseTeacher" name="courseTeacher" >
-                            <c:forEach var="teacher" items="${requestScope.teacherList}">
-                                <option value="${teacher.id}">${teacher.degree.shortName} ${teacher.name} ${teacher.surname}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="courseCurriculum">Sınıf</label>
-                        <select class="form-control" id="courseCurriculum" name="courseCurriculum" >
-                            <c:forEach var="curriculum" items="${requestScope.curriculumList}">
-                                <option value="${curriculum.id}">${curriculum.code}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-3">
-                        <label for="checkLab">Dersin Teorisi Var</label>
-                        <input type="checkbox" class="checkbox" name="checkLab" id="checkLab"/>
-                    </div>
-                    <div class="form-group col-md-3" id="labLectureSize">
-                        <label for="labLectureSize">Teori Saati</label>
-                        <input type="text" name="labLectureSize"  class="form-control"/>
-                    </div>
-                </div>
-                <div class="row" id="labRoomDeps">
-                    <label>Teori Dersleri İçin Derslikleri Seçin</label>
-                    <c:forEach var="room" items="${roomList}" varStatus="i">
-                        <div class="checkb  ox checkbox-inline">
-                            <input type="checkbox" name="isSelectedRoom-${room.code}" ${isRoomSelectArray[i.index] == true ? 'checked' :''}>${room.code}</input>
-                        </div>
-                    </c:forEach>
-                </div>
-                <div class="row">
-                    <div class="col-md-7" ></div>
-                    <button type="submit" class="btn btn-success btn col-md-1" >Ekle</button>
-                    <a href="courseScheduleEdit.jsp" type="submit" class="btn btn-danger btn col-md-1" >Geri Dön</a>
+                                <div class="form-group">
+                                    <label for="courseCode">Kodu</label>
+                                    <input type="text" class="form-control" id="courseCode" name="courseCode"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="courseName">Adı</label>
+                                    <input type="text" class="form-control" id="courseName" name="courseName"/>
+                                </div>
 
+                                <div class="form-group">
+                                    <label for="courseLectureSize">Ders Saati</label>
+                                    <input type="text" class="form-control" id="courseLectureSize" name="courseLectureSize"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="courseStudentSize">Öğrenci Sayısı</label>
+                                    <input type="text" class="form-control" id="courseStudentSize" name="courseStudentSize"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="courseTeacher">Öğretim Elemanı</label>
+                                    <select class="form-control" id="courseTeacher" name="courseTeacher" >
+                                        <c:forEach var="teacher" items="${requestScope.teacherList}">
+                                            <option value="${teacher.id}">${teacher.degree.shortName} ${teacher.name} ${teacher.surname}</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                                <label>Dersi Alacak Sınıfları Seçin</label>
+                                <c:forEach var="curriculum" items="${curriculumList}" varStatus="i">
+                                    <div class="checkb  ox checkbox-inline">
+                                        <input type="checkbox" name="isSelected-${curriculum.code}" value="${curriculum.code}">${curriculum.code}</input>
+                                    </div>
+                                </c:forEach>
+                                <div class="form-group">
+                                    <label for="checkLab">Dersin Teorisi Var mı ?</label>
+                                    <input type="checkbox" class="checkbox" name="checkLab" id="checkLab"/>
+                                </div>
+                                <div id="hidelab">
+                                    <div class="form-group" id="labLectureSize">
+                                        <label for="labLectureSize">Teori Saati</label>
+                                        <input type="text" name="labLectureSize"  class="form-control"/>
+                                    </div>
+                                    <label>Teori Dersleri İçin Derslikleri Seçin</label>
+                                    <c:forEach var="room" items="${roomList}" varStatus="i">
+                                        <div class="checkb  ox checkbox-inline">
+                                            <input type="checkbox" name="isSelectedRoom-${room.code}">${room.code}</input>
+                                        </div>
+                                    </c:forEach>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </form>
+            </div>
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
